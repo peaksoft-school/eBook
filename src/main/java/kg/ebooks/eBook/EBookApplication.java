@@ -9,7 +9,6 @@ public class EBookApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EBookApplication.class, args);
 		System.out.println("Ийгилик достор!");
-		System.out.println("Salam NurlanBey");
 	}
 
 }
