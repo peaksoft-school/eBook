@@ -1,7 +1,7 @@
 package kg.ebooks.eBook.db.domain.model.users;
 
-import kg.ebooks.eBook.db.domain.model.Basket;
-import kg.ebooks.eBook.db.domain.model.SelectedBooks;
+import kg.ebooks.eBook.db.domain.model.others.Basket;
+import kg.ebooks.eBook.db.domain.model.others.SelectedBooks;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

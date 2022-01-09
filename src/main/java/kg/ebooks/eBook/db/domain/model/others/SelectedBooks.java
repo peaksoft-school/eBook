@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.db.domain.model;
+package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import lombok.AllArgsConstructor;
@@ -11,25 +11,26 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.PERSIST;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * created by Beksultan Mamatkadyr uulu
  * project : eBook
  * 9/1/22
- * Sunday 10:32
+ * Sunday 10:35
  */
 @Entity
-@Table(name = "baskets")
+@Table(name = "selected_books")
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
-public class Basket {
+public class SelectedBooks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long basketId;
+    private Long selectedBooksId;
 
     @ManyToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private List<Book> books;
 
     private int quantityOfBooks;
+
 }

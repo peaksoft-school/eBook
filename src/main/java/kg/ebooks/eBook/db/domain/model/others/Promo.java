@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.db.domain.model;
+package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import lombok.AllArgsConstructor;

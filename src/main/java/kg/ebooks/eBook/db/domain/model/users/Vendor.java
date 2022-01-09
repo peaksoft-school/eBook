@@ -1,8 +1,8 @@
 package kg.ebooks.eBook.db.domain.model.users;
 
-import kg.ebooks.eBook.db.domain.model.Address;
+import kg.ebooks.eBook.db.domain.model.others.Address;
 import kg.ebooks.eBook.db.domain.model.books.Book;
-import kg.ebooks.eBook.db.domain.model.Promo;
+import kg.ebooks.eBook.db.domain.model.others.Promo;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,10 +1,7 @@
 package kg.ebooks.eBook.db.domain.model.books;
 
-import kg.ebooks.eBook.db.domain.model.Genre;
-import kg.ebooks.eBook.db.domain.model.Image;
-import kg.ebooks.eBook.db.domain.model.books.AudioBook;
-import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
-import kg.ebooks.eBook.db.domain.model.books.PaperBook;
+import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.domain.model.others.Image;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
