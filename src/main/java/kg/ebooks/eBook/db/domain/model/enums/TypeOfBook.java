@@ -3,12 +3,11 @@ package kg.ebooks.eBook.db.domain.model.enums;
 /**
  * created by Beksultan Mamatkadyr uulu
  * project : eBook
- * 8/1/22
- * Saturday 21:52
+ * 10/1/22
+ * Monday 16:15
  */
-public enum Country {
-    KYRGYZSTAN,
-    RUSSIA,
-    KAZAKHSTAN,
-    UNITED_KINGDOM
+public enum TypeOfBook {
+    PAPER_BOOK,
+    ELECTRONIC_BOOK,
+    AUDIO_BOOK
 }

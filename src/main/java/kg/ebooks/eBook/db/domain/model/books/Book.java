@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.books;
 
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.others.Image;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
@@ -68,16 +69,19 @@ public class Book {
 
     private BigDecimal discount;
 
+    @NotNull(message = "you have to define type of book")
+    private TypeOfBook typeOfBook;
+
     @NotBlank(message = "you have to define description to this book")
     private String description;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     private AudioBook audioBook;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     private ElectronicBook electronicBook;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = LAZY, cascade = ALL)
     private PaperBook paperBook;
 
 }
