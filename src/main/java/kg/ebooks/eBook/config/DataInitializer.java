@@ -4,16 +4,11 @@ import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
 import kg.ebooks.eBook.db.domain.model.books.PaperBook;
-import kg.ebooks.eBook.db.domain.model.enums.Authority;
-import kg.ebooks.eBook.db.domain.model.enums.Country;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
-import kg.ebooks.eBook.db.domain.model.others.*;
-import kg.ebooks.eBook.db.domain.model.users.Admin;
-import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
-import kg.ebooks.eBook.db.domain.model.users.Client;
-import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import kg.ebooks.eBook.repository.*;
+import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.domain.model.others.Image;
+import kg.ebooks.eBook.db.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -22,7 +17,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Collections;
 
 @Component
 public class DataInitializer {
@@ -107,4 +101,3 @@ public class DataInitializer {
     }
 }
 
-}
