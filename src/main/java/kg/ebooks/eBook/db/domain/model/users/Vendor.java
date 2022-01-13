@@ -27,7 +27,7 @@ import static javax.persistence.FetchType.*;
 @Getter @Setter
 public class Vendor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long vendorId;
 
     @NotBlank(message = "you have to define a first name for the vendor")

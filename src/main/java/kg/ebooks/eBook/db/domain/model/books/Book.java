@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -70,6 +71,7 @@ public class Book {
     private BigDecimal discount;
 
     @NotNull(message = "you have to define type of book")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private TypeOfBook typeOfBook;
 
     @NotBlank(message = "you have to define description to this book")
