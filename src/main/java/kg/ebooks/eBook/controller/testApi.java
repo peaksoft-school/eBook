@@ -7,12 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Controller
-@RequestMapping
+@RequestMapping("/test")
 public class testApi {
 
     @GetMapping
     public String showHello() {
         return "Hello";
     }
-
 }
