@@ -20,7 +20,7 @@ import java.util.Collections;
  */
 @Entity
 @Table(name = "authenticatoin_info")
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 public class AuthenticationInfo implements UserDetails {
     @Id
@@ -67,5 +67,8 @@ public class AuthenticationInfo implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public AuthenticationInfo() {
     }
 }

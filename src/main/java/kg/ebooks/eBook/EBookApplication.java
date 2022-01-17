@@ -3,6 +3,7 @@ package kg.ebooks.eBook;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.Admin;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
+import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.repository.AdminRepository;
 import kg.ebooks.eBook.db.repository.SecurityRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -41,5 +42,18 @@ public class EBookApplication {
             );
             adminRepository.save(admin);
         };
+
+//        Client client = new Client(
+//                null,
+//                "Ruslan",
+//                "ruslan@gmail.com",
+//                true,
+//                "basket",
+//                "selected books",
+//                "authenticationInfo"
+//
+//        );
+//
+
     }
 }
