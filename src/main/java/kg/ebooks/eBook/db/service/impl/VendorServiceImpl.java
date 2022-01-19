@@ -1,8 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
-import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.VendorService;
 import lombok.RequiredArgsConstructor;

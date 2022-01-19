@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.controller;
 
 
+//import io.swagger.v3.oas.annotations.Operation;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientController {
 
-private  final ClientService clientService;
+    private  final ClientService clientService;
 
 
     @GetMapping
