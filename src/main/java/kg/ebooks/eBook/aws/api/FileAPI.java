@@ -26,6 +26,7 @@ public class FileAPI {
     @PostMapping("/upload/{typeOfFile}")
     public FileInfo uploadFile(@PathVariable String typeOfFile,
                                @RequestParam MultipartFile file) {
+        System.out.println("works");
         return switch (typeOfFile) {
             case "image" -> fileService.uploadFile(FolderName.IMAGES, file);
             case "audio" -> fileService.uploadFile(FolderName.AUDIO_FILES, file);
