@@ -21,7 +21,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter @Setter
 public class Admin {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long adminId;
 
     @NotBlank(message = "you have to define a first name for the admin")
