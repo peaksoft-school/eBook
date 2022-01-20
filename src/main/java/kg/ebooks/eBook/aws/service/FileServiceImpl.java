@@ -2,6 +2,7 @@ package kg.ebooks.eBook.aws.service;
 
 import com.amazonaws.AmazonServiceException;
 import kg.ebooks.eBook.aws.bucket.FolderName;
+import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
 import kg.ebooks.eBook.aws.working_with_files.FileStore;
@@ -31,16 +32,24 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileInfo uploadFile(FolderName folderName, MultipartFile multipartFile) {
 
+        if (folderName == FolderName.AUDIO_FRAGMENTS_FILES) {
+            if (multipartFile.getSize() >= 10000000) {
+                log.error("fragment should be maximum 10 megabytes : your audio is bigger than maximum value");
+                throw new InvalidFileException(
+                        "fragment should be maximum 10 megabytes : your audio is bigger than maximum value"
+                );
+            }
+        }
         if (multipartFile.isEmpty()) {
             log.error("file must not be null {}", multipartFile.getSize());
-            throw new IllegalStateException(
+            throw new InvalidFileException(
                     "cannot upload empty file [ " + multipartFile.getSize() + " ]"
             );
         }
 
         if (!getMimeTypes(folderName).contains(multipartFile.getContentType())) {
             log.error("file should be like {} this files", getMimeTypes(folderName));
-            throw new IllegalStateException(
+            throw new InvalidFileException(
                     "file should be an " + folderName.name()
             );
         }
@@ -54,7 +63,7 @@ public class FileServiceImpl implements FileService {
             fileStore.save(folderName.getPath(), fileName, Optional.of(metadata), multipartFile.getInputStream());
             log.info("successfully upload file to amazon s3 server :: file name = {}", fileName);
         } catch (AmazonServiceException | IOException e) {
-            throw new IllegalStateException(
+            throw new AmazonServiceException (
                     "failed to save file to Amazon s3 server"
             );
         }
@@ -68,7 +77,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public byte[] downloadFile(Long fileId) {
         FileInfo fileInfo = fileRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalStateException(
+                .orElseThrow(() -> new InvalidFileException (
                         "CANNOT DOWNLOAD FILE \n reason: file does not exists"
                 ));
         log.info("downloading file [{}]", fileInfo.getFileName());
@@ -78,7 +87,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteFile(Long fileId) {
         FileInfo fileInfo = fileRepository.findById(fileId)
-                .orElseThrow(() -> new IllegalStateException(
+                .orElseThrow(() -> new InvalidFileException(
                         "file with id = " + fileId + " does not exists"
                 ));
         try {
@@ -86,7 +95,7 @@ public class FileServiceImpl implements FileService {
             log.info("successfully deleted from to database :: file name = {}", fileInfo.getFileName());
         } catch (AmazonServiceException e) {
             log.info("failed to delete file from amazon s3 bucket");
-            throw new IllegalStateException(
+            throw new AmazonServiceException (
                     "failed to delete file from amazon s3 bucket"
             );
         }
