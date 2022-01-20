@@ -59,7 +59,7 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/clients/authentication").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
         http.logout().logoutUrl("/api/logout") //URL-адрес, запускающий выход из системы (по умолчанию "/logout").
                 .logoutSuccessUrl("/api/authentication");
 

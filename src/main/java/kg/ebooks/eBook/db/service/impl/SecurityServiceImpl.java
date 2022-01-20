@@ -15,6 +15,10 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("sec");
+        System.out.println();
+        System.out.println(repository.findAuthenticationInfoByEmail("elnura").get().getEmail());
+        System.out.println();
         return repository.findAuthenticationInfoByEmail(username)
                 .orElseThrow(() -> new IllegalStateException(
                         String.format("user with email = %s not found", username)

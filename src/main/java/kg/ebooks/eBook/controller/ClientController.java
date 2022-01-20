@@ -3,8 +3,10 @@ package kg.ebooks.eBook.controller;
 
 //import io.swagger.v3.oas.annotations.Operation;
 
+import com.amazonaws.services.pinpoint.model.MessageResponse;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.dto.JwtResponse;
 import kg.ebooks.eBook.db.dto.SigninRequest;
 import kg.ebooks.eBook.db.service.ClientService;
@@ -19,25 +21,25 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/clients")
+@RequestMapping("/api")
 @CrossOrigin
 @RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtUtils jwtUtils;
 
 
     @PostMapping("/authentication")
-    public ResponseEntity<?> authUser(@RequestBody SigninRequest loginRequest) {
+    public ResponseEntity<?> authClient(@RequestBody SigninRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
@@ -54,6 +56,17 @@ public class ClientController {
                 authenticationInfo.getAuthority()));
     }
 
+//    @PostMapping("/register")
+////    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
+//    public ResponseEntity<?> saveClient(@RequestBody Client client) {
+//        try {
+//            clientService.saveClient(client);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+//
 //    @GetMapping
 ////    @Operation(summary = "Все пользователи", description = "Позволяет получить всех пользователей из базы данных")
 //    public ResponseEntity<List<Client>> getAllUsers() {
@@ -63,33 +76,8 @@ public class ClientController {
 //            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //        }
 //    }
-
-    //  @PostMapping("/register")
-//    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
-//    public ResponseEntity<?> saveClient(@RequestBody SignupRequest signupRequest) {
-//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().
-//                path("/api/register").toUriString());
-//        AuthenticationInfo authenticationInfo
-//                = new AuthenticationInfo(
-//                signupRequest.getEmail(),
-//                authenticationInfo.getPassword()
-
-
-//        @PostMapping("")
-//        public ResponseEntity<?> saveUser(@RequestBody SignupRequest signupRequest) {
-//            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().
-//                    path("/api/admin").toUriString());
-//
-//            User user = new User(
-//                    signupRequest.getEmail(),
-//                    passwordEncoder.encode(signupRequest.getPassword()));
-//
-//            List<Role> roleList = new ArrayList<>();
-//            for (String role : signupRequest.getRoles()) {
-//                roleList.add(roleService.   getByRoleName(role));
-//            }
-//            user.setRole(roleList);
-//            return ResponseEntity.created(uri).body(userService.saveUser(user));
-//        }
 }
+
+
+
 

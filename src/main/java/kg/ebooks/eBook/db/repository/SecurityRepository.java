@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface SecurityRepository extends JpaRepository<AuthenticationInfo, Long> {
 
-    @Query("SELECT a FROM AuthenticationInfo a WHERE a.email = ?1")
+    @Query("SELECT a FROM AuthenticationInfo a WHERE a.email = :email")
     Optional<AuthenticationInfo> findAuthenticationInfoByEmail(String email);
  }

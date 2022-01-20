@@ -71,4 +71,18 @@ public class AuthenticationInfo implements UserDetails {
 
     public AuthenticationInfo() {
     }
+
+    @Override
+    public String toString() {
+        return "AuthenticationInfo{" +
+                "authenticationInfoId=" + authenticationInfoId +
+                ", authority=" + authority +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", isAccountNonExpired=" + isAccountNonExpired +
+                ", isAccountNonLocked=" + isAccountNonLocked +
+                ", isCredentialsNonExpired=" + isCredentialsNonExpired +
+                ", isEnabled=" + isEnabled +
+                '}';
+    }
 }
