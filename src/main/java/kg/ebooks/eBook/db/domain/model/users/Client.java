@@ -45,4 +45,10 @@ public class Client {
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
+
+    public Client(Long clientId, String name, String email) {
+        this.clientId = clientId;
+        this.name = name;
+        this.email = email;
+    }
 }
