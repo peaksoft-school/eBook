@@ -6,7 +6,8 @@ import org.apache.http.entity.ContentType;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static kg.ebooks.eBook.aws.bucket.BucketName.AWS_BUCKET_NAME;
+import static kg.ebooks.eBook.aws.bucket.BucketName.AWS_BOOKS;
+import static kg.ebooks.eBook.aws.bucket.BucketName.AWS_FRAGMENTS;
 import static org.apache.http.entity.ContentType.*;
 
 
@@ -20,23 +21,30 @@ import static org.apache.http.entity.ContentType.*;
 public enum FolderName {
 
     IMAGES(
-            String.format("%s/%s", AWS_BUCKET_NAME.getBucketName(), "IMAGES"),
+            String.format("%s/%s", AWS_BOOKS.getBucketName(), "IMAGES"),
             Set.of(IMAGE_PNG, IMAGE_JPEG, IMAGE_SVG, IMAGE_GIF)
     ),
 
     AUDIO_FILES(
-            String.format("%s/%s", AWS_BUCKET_NAME.getBucketName(), "AUDIO_FILES"),
+            String.format("%s/%s", AWS_BOOKS.getBucketName(), "AUDIO_FILES"),
             Set.of( create("audio/basic"),
                     create("audio/mpeg"),
-                    create("audio/mp4"),
                     create("audio/mp3"),
                     create("audio/vnd.wav"))
     ),
     PDF_FILES(
-            String.format("%s/%s", AWS_BUCKET_NAME.getBucketName(), "PDF_FILES"),
+            String.format("%s/%s", AWS_BOOKS.getBucketName(), "PDF_FILES"),
             Set.of(
                     ContentType.create("application/pdf")
             )
+    ),
+
+    AUDIO_FRAGMENTS_FILES(
+            String.format("%s/%s", AWS_FRAGMENTS.getBucketName(), "AUDIO_FRAGMENTS"),
+            Set.of( create("audio/basic"),
+                    create("audio/mpeg"),
+                    create("audio/mp3"),
+                    create("audio/vnd.wav"))
     );
 
     private String path;

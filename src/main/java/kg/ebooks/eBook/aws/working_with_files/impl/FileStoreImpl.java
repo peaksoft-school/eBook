@@ -60,7 +60,7 @@ public class FileStoreImpl implements FileStore {
             S3ObjectInputStream objectContent = object.getObjectContent();
             return IOUtils.toByteArray(objectContent);
         } catch (AmazonServiceException | IOException amazonServiceException) {
-            throw new IllegalStateException(
+            throw new AmazonServiceException (
                     String.format("failed to download file [%s] from amazon", key)
             );
         }
@@ -72,7 +72,7 @@ public class FileStoreImpl implements FileStore {
             s3.deleteObject(filePath, fileName);
         } catch (AmazonServiceException ex) {
             log.info("failed to delete file = {} from amazon s3 bucket", fileName);
-            throw new IllegalStateException(
+            throw new AmazonServiceException (
                     String.format("failed to delete file [%s] from amazon", fileName)
             );
         }

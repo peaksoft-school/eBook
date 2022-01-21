@@ -40,6 +40,11 @@ public class FileAPI {
         };
     }
 
+    @PostMapping("/upload/fragment/audio")
+    public FileInfo uploadFragmentFile(@RequestParam MultipartFile file) {
+        return fileService.uploadFile(FolderName.AUDIO_FRAGMENTS_FILES, file);
+    }
+
     @GetMapping("/download/{fileId}")
     public byte[] downloadFile(@PathVariable Long fileId) {
         return fileService.downloadFile(fileId);
