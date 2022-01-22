@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.books;
 
+import kg.ebooks.eBook.aws.model.FileInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +21,13 @@ import javax.persistence.*;
 public class ElectronicBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long electronicBookId;
+    private Long id;
 
+    @Column(length = 10000)
+    private String fragment;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private FileInfo electronicBook;
     // TODO: 8/1/22 add fragment to electronic book
     // TODO: 8/1/22 add electronic book
-
 }
