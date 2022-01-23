@@ -1,58 +1,51 @@
-package kg.ebooks.eBook.controller;
+package kg.ebooks.eBook.api;
 
-//import io.swagger.v3.oas.annotations.Operation;
+
+import io.swagger.v3.oas.annotations.Operation;
+
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
-import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import kg.ebooks.eBook.db.dto.JwtResponse;
-import kg.ebooks.eBook.db.dto.SigninRequest;
-import kg.ebooks.eBook.db.service.VendorService;
+import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.jwt.JwtUtils;
+import kg.ebooks.eBook.db.domain.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api2")
+@RequestMapping("/api/authentication")
 @CrossOrigin
 @RequiredArgsConstructor
-public class VendorController {
+public class AuthController {
 
-    private final VendorService vendorService;
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    @PostMapping("/authentication")
-    public ResponseEntity<?> authVendor(@RequestBody SigninRequest loginRequest) {
 
+
+    @PostMapping()
+    @Operation(summary = "Прохождение аутентификации", description = "Позволяет пройти аутентификацию")
+    public ResponseEntity<?> authApi(@RequestBody SigninRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
                         loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
+        return ok(new JwtResponse(jwt,   //return ResponseEntity.ok
                 authenticationInfo.getEmail(),
                 authenticationInfo.getAuthority()));
     }
-
-//    @PostMapping("/register")
-////    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
-//    public ResponseEntity<?> saveVendor(@RequestBody Vendor vendor) {
-//        try {
-//            vendorService.saveVendor(vendor);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
 }
+
+
+
+

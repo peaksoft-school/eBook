@@ -58,7 +58,8 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/clients/authentication").permitAll()
+                .antMatchers("/api/authentication").permitAll()
+                .antMatchers("v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().permitAll();
         http.logout().logoutUrl("/api/logout") //URL-адрес, запускающий выход из системы (по умолчанию "/logout").
                 .logoutSuccessUrl("/api/authentication");
@@ -66,33 +67,4 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(authTokenFilter,
                 UsernamePasswordAuthenticationFilter.class);
     }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(authenticationProvider());
-//    }
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.authorizeRequests().antMatchers("/login").permitAll();
-//        http.authorizeRequests().anyRequest().authenticated();
-////        http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
-////        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-//    }
-//
-//    @Bean
-//    public DaoAuthenticationProvider authenticationProvider() {
-//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-//        authenticationProvider.setUserDetailsService(securityService);
-//        authenticationProvider.setPasswordEncoder(passwordEncoder);
-//        return authenticationProvider;
-//    }
-//
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
 }

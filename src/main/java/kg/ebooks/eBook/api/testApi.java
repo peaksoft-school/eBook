@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.controller;
+package kg.ebooks.eBook.api;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
