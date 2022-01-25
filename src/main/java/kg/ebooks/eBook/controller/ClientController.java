@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("")
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
+
+@RestController("/api/v2/client")
 @RequestMapping("")
 public class ClientController {
 
@@ -20,33 +23,50 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Client>> getAllTodos() {
-        List<Client> clients = clientService.getClients();
-        return new ResponseEntity<>(clients, HttpStatus.OK);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Client>> getAllClients() {
+        try {
+            return new ResponseEntity<>(clientService.getClients(), OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(BAD_GATEWAY);
+        }
     }
 
-    @GetMapping({"/{id}"})
-    public ResponseEntity<Client> getClient(@PathVariable Long id) {
-        return new ResponseEntity<>(clientService.getClientById(id), HttpStatus.OK);
+    @GetMapping({"/getById/{id}"})
+    public ResponseEntity<Client> getClient(@PathVariable("id") Long id) {
+        try {
+            return new ResponseEntity<>(clientService.getClientById(id), OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(BAD_GATEWAY);
+        }
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public ResponseEntity<Client> saveClient(@RequestBody Client client) {
-        Client client1 = clientService.saveClient(client);
-        return new ResponseEntity<>(client1, HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(clientService.saveClient(client), OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(CREATED);
+
+        }
     }
 
-    @PutMapping({"/{clientId}"})
+    @PutMapping({"/update/{clientId}"})
     public ResponseEntity<Client> updateClient(@PathVariable("clientId") Long id, @RequestBody Client client) {
-        clientService.updateClient(id, client);
-        return new ResponseEntity<>(clientService.getClientById(id), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(clientService.updateClient(id, client), OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(BAD_GATEWAY);
+        }
     }
 
-    @DeleteMapping({"/{clientId}"})
+    @DeleteMapping({"/delete/{clientId}"})
     public ResponseEntity<Client> deleteClient(@PathVariable("clientId") Long id) {
-        clientService.deleteClientById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            return new ResponseEntity<>(clientService.getClientById(id), OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(NO_CONTENT);
+        }
     }
 
 }

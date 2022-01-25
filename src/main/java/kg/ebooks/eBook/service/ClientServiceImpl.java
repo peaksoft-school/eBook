@@ -23,6 +23,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
+
     @Override
     public List<Client> getClients() {
         List<Client> clients = new ArrayList<>();
@@ -47,7 +48,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client saveClient(Client client) {
         Optional<Client> empty = clientRepository.findByEmail(client.getEmail());
-        if (empty.isEmpty()) {
+        if (!empty.isEmpty()) {
             return clientRepository.save(client);
         } else {
             throw new ClientNotFoundException(" not found exception ");
@@ -60,10 +61,6 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findById(id)
                 .map(client1 -> {
                     log.debug("Update Client with id " + id + " does not exists");
-                    client1.setName(client.getName());
-                    client1.setEmail(client.getEmail());
-                    client1.setBasket(client.getBasket());
-                    client1.setSelectedBooks(client.getSelectedBooks());
                     client1.setAuthenticationInfo(client.getAuthenticationInfo());
                     return clientRepository.save(client1);
                 })
@@ -82,5 +79,6 @@ public class ClientServiceImpl implements ClientService {
             );
         }
         clientRepository.deleteById(id);
+
     }
 }
