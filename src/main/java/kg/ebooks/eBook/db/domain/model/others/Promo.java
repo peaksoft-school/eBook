@@ -42,7 +42,7 @@ public class Promo {
     private LocalDate finishingDay;
 
     @NotNull(message = "you have to define percent of promo code")
-    @Size(min = 1, max = 100, message = "incorrect type of percent, you have to define percent between 1 and 100 : 1 <= percent >= 100")
+//    @Size(min = 1, max = 100, message = "incorrect type of percent, you have to define percent between 1 and 100 : 1 <= percent >= 100")
     private Byte percent;
 
     @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})

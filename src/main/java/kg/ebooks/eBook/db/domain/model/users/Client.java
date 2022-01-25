@@ -24,7 +24,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter @Setter
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long clientId;
 
     @NotBlank(message = "you have to define a first name for the CLient")
