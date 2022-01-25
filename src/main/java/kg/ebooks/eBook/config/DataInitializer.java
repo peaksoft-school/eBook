@@ -27,7 +27,7 @@ import java.util.List;
 @Component
 public class DataInitializer {
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,

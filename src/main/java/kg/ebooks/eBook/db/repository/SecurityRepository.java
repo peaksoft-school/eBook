@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AuthenticationInfoRepository
-        extends JpaRepository<AuthenticationInfo, Long> {
+public interface SecurityRepository extends JpaRepository<AuthenticationInfo, Long> {
 
-    @Query("SELECT a FROM AuthenticationInfo a WHERE a.email = ?1")
-    Optional<AuthenticationInfo> findByEmail(String email);
-}
+    @Query("SELECT a FROM AuthenticationInfo a WHERE a.email = :email")
+    Optional<AuthenticationInfo> findAuthenticationInfoByEmail(String email);
+ }

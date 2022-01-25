@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -45,15 +46,14 @@ public class Vendor {
     @NotBlank(message = "you have to define a phone number for the vendor")
     private String phoneNumber;
 
-    @NotBlank(message = "you have to define a name of branch for the vendor")
     private String nameOfBranch;
 
     @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<Book> booksToSale;
+    private List<Book> booksToSale = new ArrayList();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
 
     @OneToMany(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<Promo> promoCodes;
+    private List<Promo> promoCodes = new ArrayList();;
 }

@@ -20,7 +20,7 @@ import java.util.Collections;
  */
 @Entity
 @Table(name = "authenticatoin_info")
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
 @Getter @Setter
 public class AuthenticationInfo implements UserDetails {
     @Id
@@ -28,11 +28,12 @@ public class AuthenticationInfo implements UserDetails {
     private Long authenticationInfoId;
     private Authority authority;
     private String password;
+    @Column(unique = true)
     private String email;
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
+    private boolean isAccountNonExpired = true;
+    private boolean isAccountNonLocked = true;
+    private boolean isCredentialsNonExpired = true;
+    private boolean isEnabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -67,5 +68,22 @@ public class AuthenticationInfo implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isEnabled;
+    }
+
+    public AuthenticationInfo() {
+    }
+
+    @Override
+    public String toString() {
+        return "AuthenticationInfo{" +
+                "authenticationInfoId=" + authenticationInfoId +
+                ", authority=" + authority +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", isAccountNonExpired=" + isAccountNonExpired +
+                ", isAccountNonLocked=" + isAccountNonLocked +
+                ", isCredentialsNonExpired=" + isCredentialsNonExpired +
+                ", isEnabled=" + isEnabled +
+                '}';
     }
 }
