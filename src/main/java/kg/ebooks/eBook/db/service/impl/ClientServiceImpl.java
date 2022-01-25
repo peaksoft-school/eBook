@@ -29,6 +29,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public SignupRequestClnt registerClient(SignupRequestClnt signupRequest) {
+        log.info("Saving new user {} to the database", signupRequest.getEmail());
         Optional<Client> userByEmail = clientRepository.findUserByEmail(signupRequest.getEmail());
         if (userByEmail.isPresent()) {
             throw new IllegalStateException(

@@ -2,7 +2,6 @@ package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import kg.ebooks.eBook.db.domain.dto.SignupRequestVndr;
-import kg.ebooks.eBook.db.domain.model.users.Vendor;
 //import kg.ebooks.eBook.db.domain.dto.JwtResponse;
 //import kg.ebooks.eBook.db.domain.dto.SigninRequest;
 import kg.ebooks.eBook.db.service.ClientService;
@@ -26,7 +25,7 @@ public class VendorController {
 
     @PostMapping("/signup/vendor")
     @Operation(summary = "Прохождение регистрации", description = "Позволяет пройти регистрацию продавцу")
-    public Vendor registerVendor(@RequestBody SignupRequestVndr signupRequest) {
+    public SignupRequestVndr registerVendor(@RequestBody SignupRequestVndr signupRequest) {
         return vendorService.registerVendor(signupRequest);
     }
 }
