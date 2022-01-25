@@ -28,6 +28,7 @@ public class AuthenticationInfo implements UserDetails {
     private Long authenticationInfoId;
     private Authority authority;
     private String password;
+    @Column(unique = true)
     private String email;
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;

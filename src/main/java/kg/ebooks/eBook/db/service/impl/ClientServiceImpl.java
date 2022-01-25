@@ -3,7 +3,9 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
+import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
+import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.service.ClientService;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +27,27 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationInfoRepository authenticationInfoRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public SignupRequestClnt registerClient(SignupRequestClnt signupRequest) {
-        log.info("Saving new user {} to the database", signupRequest.getEmail());
-        Optional<Client> userByEmail = clientRepository.findUserByEmail(signupRequest.getEmail());
-        if (userByEmail.isPresent()) {
+        String email = signupRequest.getEmail();
+        log.info("Saving new user {} to the database", email);
+
+        Optional<AuthenticationInfo> byEmail =
+                authenticationInfoRepository.findByEmail(email);
+
+        if (byEmail.isPresent()) {
             throw new IllegalStateException(
-                    "user with email = " + signupRequest.getEmail() + " has already exists"
+                    "user with email = " + email + "has already exists"
             );
         }
-
+        
         Client client = SignupRequestClntMapper.makeClient(signupRequest);
+        client.getAuthenticationInfo().setPassword(
+                passwordEncoder.encode(client.getAuthenticationInfo().getPassword())
+        );
         return SignupRequestClntMapper.makeSignupRequestsClnt(clientRepository.save(client));
     }
 }

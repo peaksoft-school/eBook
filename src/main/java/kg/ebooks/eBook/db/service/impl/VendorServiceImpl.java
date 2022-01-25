@@ -3,7 +3,9 @@ package kg.ebooks.eBook.db.service.impl;
 import kg.ebooks.eBook.db.domain.dto.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
+import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
+import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.VendorService;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +27,18 @@ public class VendorServiceImpl implements VendorService {
 
     private final VendorRepository vendorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationInfoRepository authenticationInfoRepository;
 
     @Override
     public SignupRequestVndr registerVendor(SignupRequestVndr signupRequest) {
-        log.info("Saving new user {} to the database", signupRequest.getEmail());
-        Optional<Vendor> userByEmail = vendorRepository.findUserByEmail(signupRequest.getEmail());
-        if (userByEmail.isPresent()) {
+        String email = signupRequest.getEmail();
+        log.info("Saving new user {} to the database", email);
+        Optional<AuthenticationInfo> byEmail =
+                authenticationInfoRepository.findByEmail(email);
+
+        if (byEmail.isPresent()) {
             throw new IllegalStateException(
-                    "vendor with email = " + signupRequest.getEmail() + " has already exists"
+                    "User with email = " + email + "has already exists"
             );
         }
         Vendor vendor = makeVendor(signupRequest);

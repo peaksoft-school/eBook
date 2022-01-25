@@ -46,7 +46,6 @@ public class Vendor {
     @NotBlank(message = "you have to define a phone number for the vendor")
     private String phoneNumber;
 
-    @NotBlank(message = "you have to define a name of branch for the vendor")
     private String nameOfBranch;
 
     @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
