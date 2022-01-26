@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.db.domain.dto;
+package kg.ebooks.eBook.db.domain.dto.security;
 
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import lombok.*;

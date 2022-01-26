@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.db.domain.dto;
+package kg.ebooks.eBook.db.domain.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

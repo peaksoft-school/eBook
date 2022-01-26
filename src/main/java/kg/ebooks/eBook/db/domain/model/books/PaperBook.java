@@ -22,8 +22,10 @@ import javax.persistence.*;
 public class PaperBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long paperBookId;
+    private Long id;
 
-    // TODO: 8/1/22 add paper book fragment
-    // TODO: 8/1/22 add paper book
+    @Column(length = 10000)
+    private String fragment;
+
+   // #I don't know how to do paper book?
 }

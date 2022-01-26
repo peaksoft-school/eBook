@@ -1,21 +1,15 @@
-package kg.ebooks.eBook.db.domain.dto;
+package kg.ebooks.eBook.db.domain.dto.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignupRequestVndr {
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
+public class SignupRequestClnt {
+    private String name;
     private String email;
     private String password;
 }
-
-
-
