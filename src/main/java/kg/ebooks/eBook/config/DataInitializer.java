@@ -1,5 +1,7 @@
 package kg.ebooks.eBook.config;
 
+import kg.ebooks.eBook.aws.bucket.FolderName;
+import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
@@ -13,13 +15,16 @@ import kg.ebooks.eBook.db.domain.model.users.Admin;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import kg.ebooks.eBook.db.repository.*;
+import kg.ebooks.eBook.db.repository.AdminRepository;
+import kg.ebooks.eBook.db.repository.ClientRepository;
+import kg.ebooks.eBook.db.repository.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +32,7 @@ import java.util.List;
 @Component
 public class DataInitializer {
 
-//    @Bean
+    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -35,25 +40,31 @@ public class DataInitializer {
         return args -> {
 
             //images
-            Image image1 = new Image();
-            image1.setImageName("educated image");
-            image1.setContent(new byte[10]); // test
+            FileInfo fileInfo1 = new FileInfo();
+            fileInfo1.setId(null);
+            fileInfo1.setFolderName(FolderName.IMAGES);
+            fileInfo1.setFileName("test");
 
-            Image image2 = new Image();
-            image2.setImageName("educated image 2");
-            image2.setContent(new byte[6]); // test
+            FileInfo fileInfo2 = new FileInfo();
+            fileInfo1.setId(null);
+            fileInfo1.setFolderName(FolderName.IMAGES);
+            fileInfo1.setFileName("test");
 
-            Image image3 = new Image();
-            image3.setImageName("educated image 3");
-            image3.setContent(new byte[12]); // test
+            FileInfo fileInfo3 = new FileInfo();
+            fileInfo1.setId(null);
+            fileInfo1.setFolderName(FolderName.IMAGES);
+            fileInfo1.setFileName("test");
 
-            Image image4 = new Image();
-            image4.setImageName("educated image 4");
-            image4.setContent(new byte[5]); // test
+            FileInfo fileInfo4 = new FileInfo();
+            fileInfo1.setId(null);
+            fileInfo1.setFolderName(FolderName.IMAGES);
+            fileInfo1.setFileName("test");
 
-            Image image5 = new Image();
-            image5.setImageName("educated image 5");
-            image5.setContent(new byte[7]); // test
+            FileInfo fileInfo5 = new FileInfo();
+            fileInfo1.setId(null);
+            fileInfo1.setFolderName(FolderName.IMAGES);
+            fileInfo1.setFileName("test");
+
 
             //genres
             Genre genre1 = new Genre();
@@ -78,108 +89,123 @@ public class DataInitializer {
 
             // audioBooks
             AudioBook audioBook = new AudioBook();
+            audioBook.setFragment(new FileInfo(null, FolderName.AUDIO_FILES, "test"));
+            audioBook.setDuration(LocalTime.of(19, 23, 12));
             // TODO: 10/1/22 set value to fields when finished audiobook
 
             // paper books
             PaperBook paperBook = new PaperBook();
+            paperBook.setFragment("Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             // TODO: 10/1/22 set value to fields when finished paper book
 
             //electronic books
 
-            ElectronicBook electronicBook = new ElectronicBook();
-            ElectronicBook electronicBook2 = new ElectronicBook();
+            ElectronicBook electronicBook = new ElectronicBook(
+                    null,
+                    "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
+                    new FileInfo()
+            );
+            ElectronicBook electronicBook2 = new ElectronicBook(
+                    null,
+                    "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
+                    new FileInfo()
+            );
             // TODO: 10/1/22 set value to fields when finished electronic book
 
             // book-educated
 
             Book educated = new Book();
-            educated.setImages(Arrays.asList(image1));
+            educated.setImages(Arrays.asList(fileInfo1));
             educated.setBookName("Educated");
-            educated.setAuthorFullName("Tara Westover");
+            educated.setAuthor("Tara Westover");
             educated.setGenre(genre2);
-            educated.setPublishingHouseName("Amazon"); //test
+            educated.setPublishingHouse("Amazon"); //test
             educated.setLanguage(Language.ENGLISH);
             educated.setDateOfIssue(LocalDate.of(2018, Month.FEBRUARY, 18));
             educated.setPageSize(420);
-            educated.setPrise(new BigDecimal("24.3"));
+            educated.setPrice(new BigDecimal("24.3"));
             educated.setBestSeller(true);
-            educated.setDiscount(new BigDecimal("3"));
-            educated.setDescription("This book is the best book i had ever read!");
+            educated.setDiscount((byte)50);
+            educated.setDescription("This book is the best book i had ever read! Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             educated.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
             educated.setAudioBook(audioBook);
+            educated.setStorageDate(LocalDate.of(2022, Month.JANUARY, 20));
 
+            System.err.println(educated);
             //book-first_teacher
 
             Book first_teacher = new Book();
-            first_teacher.setImages(Arrays.asList(image4));
+            first_teacher.setImages(Arrays.asList(fileInfo2));
             first_teacher.setBookName("First Teacher");
-            first_teacher.setAuthorFullName("CHYNGYZ AITMATOV");
+            first_teacher.setAuthor("CHYNGYZ AITMATOV");
             first_teacher.setGenre(genre4);
-            first_teacher.setPublishingHouseName("Amazon"); //test
+            first_teacher.setPublishingHouse("Amazon"); //test
             first_teacher.setLanguage(Language.ENGLISH);
             first_teacher.setDateOfIssue(LocalDate.of(2018, Month.JULY, 18));
             first_teacher.setPageSize(420);
-            first_teacher.setPrise(new BigDecimal("24.3"));
+            first_teacher.setPrice(new BigDecimal("24.3"));
             first_teacher.setBestSeller(true);
-            first_teacher.setDiscount(new BigDecimal("3"));
-            first_teacher.setDescription("This book is the best book i had ever read!");
+            first_teacher.setDiscount((byte)20);
+            first_teacher.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             first_teacher.setTypeOfBook(TypeOfBook.PAPER_BOOK);
             first_teacher.setPaperBook(paperBook);
-
+            first_teacher.setStorageDate(LocalDate.of(2018, Month.JULY, 18));
             //book-asia_lion
 
             Book asia_lion = new Book();
-            asia_lion.setImages(Arrays.asList(image5));
+            asia_lion.setImages(Arrays.asList(fileInfo3));
             asia_lion.setBookName("Азия арстаны");
-            asia_lion.setAuthorFullName("Нуржигит Кадырбеков");
+            asia_lion.setAuthor("Нуржигит Кадырбеков");
             asia_lion.setGenre(genre5);
-            asia_lion.setPublishingHouseName("Frunze"); //test
+            asia_lion.setPublishingHouse("Frunze"); //test
             asia_lion.setLanguage(Language.KYRGYZ);
             asia_lion.setDateOfIssue(LocalDate.of(2019, Month.JULY, 18));
             asia_lion.setPageSize(212);
-            asia_lion.setPrise(new BigDecimal("24.3"));
-            asia_lion.setBestSeller(true);
-            asia_lion.setDiscount(new BigDecimal("4"));
-            asia_lion.setDescription("This book is the best book i had ever read!");
+            asia_lion.setPrice(new BigDecimal("24.3"));
+            asia_lion.setBestSeller(false);
+            asia_lion.setDiscount((byte)20);
+            asia_lion.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             asia_lion.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
             asia_lion.setElectronicBook(electronicBook2);
+            asia_lion.setStorageDate(LocalDate.of(2019, Month.JULY, 18));
 
             //book-alykul_osmonov
 
             Book alykul_osmonov = new Book();
-            alykul_osmonov.setImages(Arrays.asList(image2));
+            alykul_osmonov.setImages(Arrays.asList(fileInfo4));
             alykul_osmonov.setBookName("Алыкул Осмонов");
-            alykul_osmonov.setAuthorFullName("Мундузбек Тентимишев");
+            alykul_osmonov.setAuthor("Мундузбек Тентимишев");
             alykul_osmonov.setGenre(genre1);
-            alykul_osmonov.setPublishingHouseName("Globus"); //test
+            alykul_osmonov.setPublishingHouse("Globus"); //test
             alykul_osmonov.setLanguage(Language.KYRGYZ);
             alykul_osmonov.setDateOfIssue(LocalDate.of(2016, Month.JULY, 18));
             alykul_osmonov.setPageSize(596);
-            alykul_osmonov.setPrise(new BigDecimal("1400"));
-            alykul_osmonov.setBestSeller(true);
-            alykul_osmonov.setDiscount(new BigDecimal("1"));
-            alykul_osmonov.setDescription("This book is the best book i had ever read!");
+            alykul_osmonov.setPrice(new BigDecimal("1400"));
+            alykul_osmonov.setBestSeller(false);
+            alykul_osmonov.setDiscount((byte)50);
+            alykul_osmonov.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             alykul_osmonov.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
             alykul_osmonov.setAudioBook(audioBook);
+            alykul_osmonov.setStorageDate(LocalDate.of(2016, Month.JULY, 18));
 
             //book-manas
 
             Book manas = new Book();
-            manas.setImages(Arrays.asList(image3));
+            manas.setImages(Arrays.asList(fileInfo5));
             manas.setBookName("Манас");
-            manas.setAuthorFullName("Редекция жамааты");
+            manas.setAuthor("Редекция жамааты");
             manas.setGenre(genre3);
-            manas.setPublishingHouseName("Frunze"); //test
+            manas.setPublishingHouse("Frunze"); //test
             manas.setLanguage(Language.RUSSIAN);
             manas.setDateOfIssue(LocalDate.of(2010, Month.JULY, 18));
             manas.setPageSize(212);
-            manas.setPrise(new BigDecimal("1500"));
+            manas.setPrice(new BigDecimal("1500"));
             manas.setBestSeller(true);
-            manas.setDiscount(new BigDecimal("90"));
-            manas.setDescription("This book is the best book i had ever read!");
+            manas.setDiscount((byte)50);
+            manas.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             manas.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
             manas.setElectronicBook(electronicBook);
-
+            manas.setStorageDate(LocalDate.of(2010, Month.JULY, 18));
             //selectedBooks
 
             SelectedBooks selectedBooks = new SelectedBooks();

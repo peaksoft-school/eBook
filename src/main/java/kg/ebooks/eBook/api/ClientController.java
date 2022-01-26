@@ -1,7 +1,7 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import kg.ebooks.eBook.db.domain.dto.SignupRequestClnt;
+import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.db.service.VendorService;
 import kg.ebooks.eBook.jwt.JwtUtils;
