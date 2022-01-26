@@ -8,6 +8,7 @@ package kg.ebooks.eBook.db.domain.mapper;
 public class SignupRequestClntMapper {
 
     public static Client makeClient(SignupRequestClnt signupRequestClnt) {
+
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
         authenticationInfo.setEmail(signupRequestClnt.getEmail());
         authenticationInfo.setPassword(signupRequestClnt.getPassword());

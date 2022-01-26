@@ -27,7 +27,7 @@ import java.util.List;
 @Component
 public class DataInitializer {
 
-//    @Bean
+    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -309,7 +309,6 @@ public class DataInitializer {
             admin1.setAuthenticationInfo(admin);
 
 
-
             //address
 
             Address address = new Address();
@@ -381,8 +380,6 @@ public class DataInitializer {
             //save-clients
             System.out.println(clientRepository.save(maria));
             System.out.println(clientRepository.save(elnura));
-
-
 
 
         };

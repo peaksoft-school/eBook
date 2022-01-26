@@ -3,7 +3,8 @@ package kg.ebooks.eBook;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
-import kg.ebooks.eBook.repository.ClientRepository;
+import kg.ebooks.eBook.db.repository.ClientRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,36 +16,34 @@ import org.springframework.stereotype.Component;
 public class EBookApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(EBookApplication.class, args);
         System.out.println("DON'T WORRY THIS IS JUST A TESTK");
-
     }
 
-@Bean
+
+//    @Bean
     CommandLineRunner commandLineRunner(ClientRepository clientRepository) {
+
         return args -> {
-
-            AuthenticationInfo authenticationInfo = new AuthenticationInfo();
-            authenticationInfo.setAuthenticationInfoId(null);
-            authenticationInfo.setAuthority(Authority.CLIENT);
-            authenticationInfo.setPassword("client");
-            authenticationInfo.setEmail("ruslan@gmail.com");
-            authenticationInfo.setCredentialsNonExpired(true);
-            authenticationInfo.setAccountNonExpired(true);
-            authenticationInfo.setAccountNonLocked(true);
-            authenticationInfo.setEnabled(true);
+            AuthenticationInfo client = new AuthenticationInfo();
+            client.setAuthority(Authority.CLIENT);
+            client.setEmail("client@gmail.com");
+            client.setPassword("$2a$12$FkNwQ4mn/D.cJnDggDKdlOWXvmeMsjZdQrNRy9euazS.kCsz2t8.W\n");
+            client.setAccountNonLocked(true);
+            client.setAccountNonExpired(true);
+            client.setCredentialsNonExpired(true);
 
 
-            Client client =
-                    new Client(null, "hello", "hello@gmail.com");
-            Client client1 =
-                    new Client();
-            client1.setName("client");
-            client1.setEmail("ruslan@gmail.com");
-            client1.setAuthenticationInfo(authenticationInfo);
+            Client maria = new Client();
+            maria.setName("Maria");
+            maria.setEmail("maria@gmail.com");
+            maria.setSubscriptionToNewsLetter(true);
+//            maria.setBasket(basket);
+//            maria.setSelectedBooks(selectedBooks2);
+            maria.setAuthenticationInfo(client);
 
-            System.out.println(clientRepository.save(client));
-            System.out.println(clientRepository.save(client1));
+            clientRepository.save(maria);
         };
     }
 }

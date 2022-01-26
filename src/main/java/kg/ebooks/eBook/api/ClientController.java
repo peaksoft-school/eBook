@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ClientController {
 
-    private final VendorService vendorService;
     private final ClientService clientService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
 
 
     @PostMapping("/signup/client")
