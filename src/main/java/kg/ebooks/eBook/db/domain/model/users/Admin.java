@@ -17,8 +17,10 @@ import static javax.persistence.FetchType.LAZY;
  */
 @Entity
 @Table(name = "admins")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

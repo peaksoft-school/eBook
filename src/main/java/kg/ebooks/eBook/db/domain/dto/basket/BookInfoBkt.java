@@ -15,24 +15,24 @@ public interface BookInfoBkt {
 
     Long getBookId();
 
-//    ⌘ one main photo
+    //    ⌘ one main photo
     FileInfo getImage();
 
-//    ⌘ book name
+    //    ⌘ book name
     String getBookName();
 
-//    ⌘ author of book
+    //    ⌘ author of book
     String getAuthor();
 //
 ////    ⌘ promo
 //    Promo getPromo();
 
-//    ⌘ discount
+    //    ⌘ discount
     byte getDiscount();
 
-//    ⌘ discount price
+    //    ⌘ discount price
     BigDecimal getDiscountPrice();
 
-//    ⌘ net prices
+    //    ⌘ net prices
     BigDecimal getNetPrice();
 }

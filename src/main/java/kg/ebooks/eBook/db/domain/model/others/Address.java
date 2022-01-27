@@ -18,8 +18,10 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "addresses")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

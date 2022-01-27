@@ -1,7 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
-import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BasketInfoImpl;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BookInfoBktImpl;
 import kg.ebooks.eBook.db.domain.model.books.Book;
@@ -12,7 +11,6 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;

@@ -13,17 +13,19 @@ import java.math.BigDecimal;
  * 23/1/22
  * Sunday 17:49
  */
-@Getter @Setter
+
+@Getter
+@Setter
 public class BookInfoBktImpl implements BookInfoBkt {
     //    #BOOKINFOBKT
     private Long bookId;
-//    ⌘ one main photo
+    //    ⌘ one main photo
     private FileInfo image;
     //    ⌘ book name
     private String bookName;
     //    ⌘ author of book
     private String author;
-//    //    ⌘ promo
+    //    //    ⌘ promo
 //    private Promo promo;
     //    ⌘ discount
     private byte discount;
