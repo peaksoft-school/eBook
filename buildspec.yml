@@ -7,11 +7,15 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - mvn clean package
+      - mvn clean package install
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
-    - target/eBook.jar
+    - target/bilingual.jar
   discard-paths: yes
+
+cache:
+  path:
+    - '/root/.m2/**/*'
