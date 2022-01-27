@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import kg.ebooks.eBook.db.domain.dto.security.JwtResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SigninRequest;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
-import kg.ebooks.eBook.jwt.JwtUtils;
+import kg.ebooks.eBook.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -6,7 +6,7 @@ import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 //import kg.ebooks.eBook.db.domain.dto.security.SigninRequest;
 import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.db.service.VendorService;
-import kg.ebooks.eBook.jwt.JwtUtils;
+import kg.ebooks.eBook.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.jwt;
+package kg.ebooks.eBook.config.jwt;
 
 import kg.ebooks.eBook.db.repository.SecurityRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.webjars.NotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

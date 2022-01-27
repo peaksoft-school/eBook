@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.jwt;
+package kg.ebooks.eBook.config.jwt;
 
 import io.jsonwebtoken.MalformedJwtException;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;

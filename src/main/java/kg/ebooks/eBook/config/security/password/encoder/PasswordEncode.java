@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.security.password.encoder;
+package kg.ebooks.eBook.config.security.password.encoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
