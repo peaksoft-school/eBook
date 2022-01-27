@@ -15,8 +15,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "images")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
 package kg.ebooks.eBook.db.domain.dto.basket.impl;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
-import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,8 @@ import java.util.List;
  * 23/1/22
  * Sunday 17:55
  */
-@Getter @Setter
+@Getter
+@Setter
 public class BasketInfoImpl implements BasketInfo {
     private Long basketId;
     private int quantityOfBooks;

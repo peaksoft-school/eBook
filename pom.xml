@@ -12,12 +12,15 @@
 	<artifactId>eBook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>eBook</name>
-	<description>E-commerce project </description>
+	<description>E-commerce project</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
@@ -123,6 +126,7 @@
                 </configuration>
             </plugin>
         </plugins>
+		<finalName>eBook</finalName>
 	</build>
 
 </project>

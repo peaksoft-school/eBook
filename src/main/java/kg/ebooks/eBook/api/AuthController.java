@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api/authentication")
+@RequestMapping("/api")
 @CrossOrigin
 @RequiredArgsConstructor
 public class AuthController {
@@ -30,7 +30,7 @@ public class AuthController {
 
 
 
-    @PostMapping()
+    @PostMapping("/authentication")
     @Operation(summary = "Прохождение аутентификации", description = "Позволяет пройти аутентификацию")
     public ResponseEntity<?> authApi(@RequestBody SigninRequest loginRequest) {
         Authentication authentication = authenticationManager

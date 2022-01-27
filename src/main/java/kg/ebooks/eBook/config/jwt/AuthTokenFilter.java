@@ -24,7 +24,6 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-
     private final SecurityRepository securityRepository;
 
     @Override
@@ -45,7 +44,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         filterChain.doFilter(request, response);

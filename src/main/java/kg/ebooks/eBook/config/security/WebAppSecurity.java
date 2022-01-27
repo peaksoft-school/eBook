@@ -22,11 +22,7 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
 
     private final SecurityService securityService;
     private final PasswordEncoder passwordEncoder;
-
-   // private final UserDetailsServiceImpl userDetailsService;
-
     private final AuthEntryPointJwt unauthorizedHandler;
-
     private final AuthTokenFilter authTokenFilter;
 
     @Override
@@ -41,10 +37,6 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(10);
-//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -53,7 +45,7 @@ public class WebAppSecurity extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/authentication").permitAll()
+                .antMatchers("/", "/api/authentication").permitAll()
                 .antMatchers("v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().permitAll();
         http.logout().logoutUrl("/api/logout") //URL-адрес, запускающий выход из системы (по умолчанию "/logout").

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
  * 23/1/22
  * Sunday 11:35
  */
+
+@CrossOrigin
 @RestController
 @RequestMapping("api/v2/books")
 @RequiredArgsConstructor

@@ -21,8 +21,10 @@ import static javax.persistence.FetchType.EAGER;
  */
 @Entity
 @Table(name = "selected_books")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class SelectedBooks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
