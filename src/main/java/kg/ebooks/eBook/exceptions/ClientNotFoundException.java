@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.exception;
+package kg.ebooks.eBook.exceptions;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
