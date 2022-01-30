@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -52,7 +54,7 @@ public class Book implements BookInfoBkt {
     @NotBlank(message = "Author full name is required!")
     private String author;
 
-    @ManyToOne(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @ManyToOne(fetch = LAZY, cascade = {DETACH, REFRESH, PERSIST})
     @NotNull(message = "book should have genre!")
     private Genre genre;
 

@@ -28,6 +28,4 @@ public class ElectronicBook {
 
     @OneToOne(cascade = CascadeType.ALL)
     private FileInfo electronicBook;
-    // TODO: 8/1/22 add fragment to electronic book
-    // TODO: 8/1/22 add electronic book
 }
