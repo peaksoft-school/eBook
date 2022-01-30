@@ -15,12 +15,12 @@ import java.math.BigDecimal;
  */
 @NoArgsConstructor
 @Getter @Setter
-public class BookMainDTO {
+public class BookDTO {
     private Long bookId;
     private FileInfo image;
     private String bookName;
     private String author;
-    private BigDecimal price;
+//    private BigDecimal price;
     private BigDecimal netPrice;
     private byte discount;
     private BigDecimal discountedPrice;

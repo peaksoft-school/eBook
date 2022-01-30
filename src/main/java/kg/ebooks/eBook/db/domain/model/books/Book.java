@@ -4,9 +4,7 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
-import kg.ebooks.eBook.db.domain.model.others.Image;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
-import kg.ebooks.eBook.db.domain.model.others.Promo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +18,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -106,7 +103,7 @@ public class Book implements BookInfoBkt {
     }
 
     @Override
-    public BigDecimal getDiscountPrice() {
+    public BigDecimal getDiscountedPrice() {
         BigDecimal bigDecimal = price.multiply(BigDecimal.valueOf(discount))
                 .divide(BigDecimal.valueOf(100));
         return price.subtract(bigDecimal);

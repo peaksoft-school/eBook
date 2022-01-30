@@ -16,8 +16,10 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "electronic_books")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ElectronicBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

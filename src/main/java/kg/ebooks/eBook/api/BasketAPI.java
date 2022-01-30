@@ -11,31 +11,33 @@ import org.springframework.web.bind.annotation.*;
  * 23/1/22
  * Sunday 11:35
  */
+
+@CrossOrigin
 @RestController
-@RequestMapping("api/v2/books")
+@RequestMapping("api/basket")
 @RequiredArgsConstructor
 public class BasketAPI {
 
     private final BasketService basketService;
 
-    @PostMapping("{clientId}/basket/add/{bookId}")
+    @PostMapping("{clientId}/add/book/{bookId}")
     public void addBookToBasket(@PathVariable Long clientId,
                                 @PathVariable Long bookId) {
         basketService.addBookToBasket(clientId, bookId);
     }
 
-    @DeleteMapping("{clientId}/basket/delete/{bookId}")
+    @DeleteMapping("{clientId}/delete/{bookId}/book")
     public void deleteBookFromBasket(@PathVariable Long clientId,
                                      @PathVariable Long bookId) {
         basketService.deleteBookFromBasket(clientId, bookId);
     }
 
-    @GetMapping("/{clientId}/basket/get")
+    @GetMapping("/{clientId}/get")
     public BasketInfo getBasketById(@PathVariable Long clientId) {
         return basketService.getBasketByClientId(clientId);
     }
 
-    @DeleteMapping("/{clientId}/basket/clean")
+    @DeleteMapping("/{clientId}/clean")
     public void cleanBacket(@PathVariable Long clientId) {
         basketService.cleanBasketByClientId(clientId);
     }

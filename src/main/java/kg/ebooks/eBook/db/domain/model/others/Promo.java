@@ -9,7 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,8 +24,10 @@ import static javax.persistence.FetchType.*;
  */
 @Entity
 @Table(name = "promo_codes")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Promo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

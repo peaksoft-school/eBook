@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.jwt;
+package kg.ebooks.eBook.config.jwt;
 
 import kg.ebooks.eBook.db.repository.SecurityRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.webjars.NotFoundException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,7 +24,6 @@ import java.io.IOException;
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final JwtUtils jwtUtils;
-
     private final SecurityRepository securityRepository;
 
     @Override
@@ -46,7 +44,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         filterChain.doFilter(request, response);

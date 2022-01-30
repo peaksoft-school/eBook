@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.api;
 
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
+import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreSV;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.service.GenreService;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/genres")
+@CrossOrigin
 @RequiredArgsConstructor
 public class GenreAPI {
 
@@ -29,7 +31,7 @@ public class GenreAPI {
     }
 
     @GetMapping("/get/{genreId}")
-    public Genre findGenreById(@PathVariable Long genreId) {
+    public GenreGetDTO findGenreById(@PathVariable Long genreId) {
         return genreService.findGenreById(genreId);
     }
 

@@ -1,6 +1,5 @@
 package kg.ebooks.eBook.db.service.impl;
 
-
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -27,7 +26,6 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationInfoRepository authenticationInfoRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public SignupRequestClnt registerClient(SignupRequestClnt signupRequest) {
@@ -42,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
                     "user with email = " + email + "has already exists"
             );
         }
-        
+
         Client client = SignupRequestClntMapper.makeClient(signupRequest);
         client.getAuthenticationInfo().setPassword(
                 passwordEncoder.encode(client.getAuthenticationInfo().getPassword())

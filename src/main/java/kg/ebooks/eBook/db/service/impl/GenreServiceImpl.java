@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
+import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreSV;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.GenreRepository;
@@ -42,19 +43,18 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findGenreById(Long genreId) {
+    public GenreGetDTO findGenreById(Long genreId) {
         return findById(genreId);
     }
 
     private Genre findById(Long genreId) {
-        Genre genre = genreRepository.findById(genreId)
+       return genreRepository.findById(genreId)
                 .orElseThrow(() -> {
                     log.error("genre with id = {} not found ", genreId);
                     return new DoesNotExistsException(
                             "genre with id = " + genreId + " does not exists"
                     );
                 });
-        return null;
     }
 
     @Override
