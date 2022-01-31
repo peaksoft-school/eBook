@@ -3,6 +3,8 @@ package kg.ebooks.eBook.aws.bucket;
 import lombok.AllArgsConstructor;
 import org.apache.http.entity.ContentType;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,29 +24,29 @@ public enum FolderName {
 
     IMAGES(
             String.format("%s/%s", AWS_BOOKS.getBucketName(), "IMAGES"),
-            Set.of(IMAGE_PNG, IMAGE_JPEG, IMAGE_SVG, IMAGE_GIF)
+            new HashSet<>(Arrays.asList(IMAGE_PNG, IMAGE_JPEG, IMAGE_SVG, IMAGE_GIF))
     ),
 
     AUDIO_FILES(
             String.format("%s/%s", AWS_BOOKS.getBucketName(), "AUDIO_FILES"),
-            Set.of( create("audio/basic"),
+            new HashSet<>(Arrays.asList(create("audio/basic"),
                     create("audio/mpeg"),
                     create("audio/mp3"),
-                    create("audio/vnd.wav"))
+                    create("audio/vnd.wav")))
     ),
     PDF_FILES(
             String.format("%s/%s", AWS_BOOKS.getBucketName(), "PDF_FILES"),
-            Set.of(
+            new HashSet<>(Arrays.asList(
                     ContentType.create("application/pdf")
-            )
+            ))
     ),
 
     AUDIO_FRAGMENTS_FILES(
             String.format("%s/%s", AWS_FRAGMENTS.getBucketName(), "AUDIO_FRAGMENTS"),
-            Set.of( create("audio/basic"),
+            new HashSet<>(Arrays.asList( create("audio/basic"),
                     create("audio/mpeg"),
                     create("audio/mp3"),
-                    create("audio/vnd.wav"))
+                    create("audio/vnd.wav")))
     );
 
     private String path;
