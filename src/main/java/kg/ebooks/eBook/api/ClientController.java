@@ -26,6 +26,7 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class ClientController {
     @Autowired
+
     private final ClientService clientService;
 
     private final SignupRequestClntMapper clientMapper;

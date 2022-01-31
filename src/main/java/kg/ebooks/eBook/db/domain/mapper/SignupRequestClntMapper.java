@@ -1,5 +1,9 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
+import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
+import kg.ebooks.eBook.db.domain.model.enums.Authority;
+import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
+import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.dto.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;

@@ -1,7 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
-import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BasketInfoImpl;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BookInfoBktImpl;
 import kg.ebooks.eBook.db.domain.model.books.Book;
@@ -62,6 +61,12 @@ public class Basket implements BookCase, BasketInfo {
     public List<BookInfoBktImpl> getBooksBkt() {
         ModelMapper modelMapper = new ModelMapper();
 //        List<BookInfoBkt> bookInfoBkts = new ArrayList<>();
+        List<BookInfoBktImpl> list = new ArrayList<>();
+        for (Book book : books) {
+            BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
+            list.add(map);
+        }
+        return list;
 //        return books.stream().map(book -> modelMapper.map(book, BookInfoBktImpl.class)).toList();
         return null;
 //        return bookInfoBkts;
@@ -71,6 +76,12 @@ public class Basket implements BookCase, BasketInfo {
         BasketInfoImpl basketInfo = new BasketInfoImpl();
         ModelMapper modelMapper = new ModelMapper();
         basketInfo.setBasketId(basketId);
+        List<BookInfoBktImpl> bkts = new ArrayList<>();
+        for (Book book : books) {
+            BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
+            bkts.add(map);
+        }
+        basketInfo.setBooksBkt(bkts);
 //        List<BookInfoBktImpl> bkts = books.stream()
 //                .map(book -> modelMapper.map(book, BookInfoBktImpl.class))
 //                .toList();

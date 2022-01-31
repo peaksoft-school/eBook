@@ -20,8 +20,10 @@ import static javax.persistence.FetchType.LAZY;
  */
 @Entity
 @Table(name = "clients")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

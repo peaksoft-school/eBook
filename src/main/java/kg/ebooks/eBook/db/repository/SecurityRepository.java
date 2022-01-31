@@ -12,4 +12,4 @@ public interface SecurityRepository extends JpaRepository<AuthenticationInfo, Lo
 
     @Query("SELECT a FROM AuthenticationInfo a WHERE a.email = :email")
     Optional<AuthenticationInfo> findAuthenticationInfoByEmail(String email);
- }
+}

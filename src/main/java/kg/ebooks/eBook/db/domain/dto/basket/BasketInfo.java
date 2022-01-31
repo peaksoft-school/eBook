@@ -10,8 +10,11 @@ import java.util.List;
  * 23/1/22
  * Sunday 17:49
  */
+
 public interface BasketInfo {
-     Long getBasketId();
-     List<BookInfoBktImpl> getBooksBkt();
-     int getQuantityOfBooks();
+    Long getBasketId();
+
+    List<BookInfoBktImpl> getBooksBkt();
+
+    int getQuantityOfBooks();
 }

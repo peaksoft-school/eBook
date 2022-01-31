@@ -125,7 +125,7 @@ public class DataInitializer {
             educated.setPageSize(420);
             educated.setPrice(new BigDecimal("24.3"));
             educated.setBestSeller(true);
-            educated.setDiscount((byte)50);
+            educated.setDiscount((byte) 50);
             educated.setDescription("This book is the best book i had ever read! Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             educated.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
             educated.setAudioBook(audioBook);
@@ -145,7 +145,7 @@ public class DataInitializer {
             first_teacher.setPageSize(420);
             first_teacher.setPrice(new BigDecimal("24.3"));
             first_teacher.setBestSeller(true);
-            first_teacher.setDiscount((byte)20);
+            first_teacher.setDiscount((byte) 20);
             first_teacher.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             first_teacher.setTypeOfBook(TypeOfBook.PAPER_BOOK);
             first_teacher.setPaperBook(paperBook);
@@ -163,7 +163,7 @@ public class DataInitializer {
             asia_lion.setPageSize(212);
             asia_lion.setPrice(new BigDecimal("24.3"));
             asia_lion.setBestSeller(false);
-            asia_lion.setDiscount((byte)20);
+            asia_lion.setDiscount((byte) 20);
             asia_lion.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             asia_lion.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
             asia_lion.setElectronicBook(electronicBook2);
@@ -182,7 +182,7 @@ public class DataInitializer {
             alykul_osmonov.setPageSize(596);
             alykul_osmonov.setPrice(new BigDecimal("1400"));
             alykul_osmonov.setBestSeller(false);
-            alykul_osmonov.setDiscount((byte)50);
+            alykul_osmonov.setDiscount((byte) 50);
             alykul_osmonov.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             alykul_osmonov.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
             alykul_osmonov.setAudioBook(audioBook);
@@ -201,7 +201,7 @@ public class DataInitializer {
             manas.setPageSize(212);
             manas.setPrice(new BigDecimal("1500"));
             manas.setBestSeller(true);
-            manas.setDiscount((byte)50);
+            manas.setDiscount((byte) 50);
             manas.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             manas.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
             manas.setElectronicBook(electronicBook);
@@ -227,13 +227,13 @@ public class DataInitializer {
             //selectedBooks4
 
             SelectedBooks selectedBooks6 = new SelectedBooks();
-            selectedBooks6.setBooks(List.of(asia_lion));
+            selectedBooks6.setBooks(Arrays.asList(asia_lion));
             selectedBooks6.setQuantityOfBooks(6);
 
             //basket1
 
             Basket basket = new Basket();
-            basket.setBooks(List.of(educated));
+            basket.setBooks(Arrays.asList(educated));
             basket.setQuantityOfBooks(32);
 
             //basket2

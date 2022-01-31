@@ -3,7 +3,6 @@ package kg.ebooks.eBook.db.domain.model.users;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,8 @@ import java.util.Collections;
 @Entity
 @Table(name = "authenticatoin_info")
 @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class AuthenticationInfo implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

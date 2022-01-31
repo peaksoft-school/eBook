@@ -24,8 +24,10 @@ import static javax.persistence.FetchType.*;
  */
 @Entity
 @Table(name = "vendors")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Vendor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,5 +57,5 @@ public class Vendor {
     private AuthenticationInfo authenticationInfo;
 
     @OneToMany(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<Promo> promoCodes = new ArrayList();;
+    private List<Promo> promoCodes = new ArrayList();
 }
