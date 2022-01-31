@@ -8,8 +8,8 @@ package kg.ebooks.eBook.aws.bucket;
  */
 public enum BucketName {
 
-    AWS_BOOKS("ebook-books-bucket"),
-    AWS_FRAGMENTS("ebook-audio-test");
+    AWS_BOOKS("ebook-books-bucket1"),
+    AWS_FRAGMENTS("ebook-audio-test1");
 
     private String bucketName;
 
