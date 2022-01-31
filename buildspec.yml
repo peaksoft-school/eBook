@@ -15,7 +15,3 @@ artifacts:
   files:
     - target/bilingual.jar
   discard-paths: yes
-
-cache:
-  path:
-    - '/root/.m2/**/*'
