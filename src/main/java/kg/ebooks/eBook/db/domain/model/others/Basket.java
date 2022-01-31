@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -60,7 +61,12 @@ public class Basket implements BookCase, BasketInfo {
     public List<BookInfoBktImpl> getBooksBkt() {
         ModelMapper modelMapper = new ModelMapper();
 //        List<BookInfoBkt> bookInfoBkts = new ArrayList<>();
-        return books.stream().map(book -> modelMapper.map(book, BookInfoBktImpl.class)).toList();
+        List<BookInfoBktImpl> list = new ArrayList<>();
+        for (Book book : books) {
+            BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
+            list.add(map);
+        }
+        return list;
 //        return bookInfoBkts;
     }
 
@@ -68,9 +74,11 @@ public class Basket implements BookCase, BasketInfo {
         BasketInfoImpl basketInfo = new BasketInfoImpl();
         ModelMapper modelMapper = new ModelMapper();
         basketInfo.setBasketId(basketId);
-        List<BookInfoBktImpl> bkts = books.stream()
-                .map(book -> modelMapper.map(book, BookInfoBktImpl.class))
-                .toList();
+        List<BookInfoBktImpl> bkts = new ArrayList<>();
+        for (Book book : books) {
+            BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
+            bkts.add(map);
+        }
         basketInfo.setBooksBkt(bkts);
         basketInfo.setQuantityOfBooks(getQuantityOfBooks());
         return basketInfo;

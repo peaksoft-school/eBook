@@ -27,17 +27,19 @@ public class FileAPI {
     public FileInfo uploadFile(@PathVariable String typeOfFile,
                                @RequestParam MultipartFile file) {
         System.out.println("works");
-        return switch (typeOfFile) {
-            case "image" -> fileService.uploadFile(FolderName.IMAGES, file);
-            case "audio" -> fileService.uploadFile(FolderName.AUDIO_FILES, file);
-            case "pdf" -> fileService.uploadFile(FolderName.PDF_FILES, file);
-            default -> {
+        switch (typeOfFile) {
+            case "image":
+                return fileService.uploadFile(FolderName.IMAGES, file);
+            case "audio":
+                return fileService.uploadFile(FolderName.AUDIO_FILES, file);
+            case "pdf":
+                return fileService.uploadFile(FolderName.PDF_FILES, file);
+            default:
                 log.error("invalid type of file [{}]", typeOfFile);
                 throw new IllegalStateException(
                         "Invalid type of file [ " + typeOfFile + " ]"
                 );
-            }
-        };
+        }
     }
 
     @PostMapping("/upload/fragment/audio")

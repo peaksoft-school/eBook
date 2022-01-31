@@ -227,13 +227,13 @@ public class DataInitializer {
             //selectedBooks4
 
             SelectedBooks selectedBooks6 = new SelectedBooks();
-            selectedBooks6.setBooks(List.of(asia_lion));
+            selectedBooks6.setBooks(Arrays.asList(asia_lion));
             selectedBooks6.setQuantityOfBooks(6);
 
             //basket1
 
             Basket basket = new Basket();
-            basket.setBooks(List.of(educated));
+            basket.setBooks(Arrays.asList(educated));
             basket.setQuantityOfBooks(32);
 
             //basket2

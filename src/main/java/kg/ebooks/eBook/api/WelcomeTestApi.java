@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @Controller
-@RequestMapping("/")
+@RequestMapping("/welcome")
 public class WelcomeTestApi {
 
     @GetMapping
     public String welcome() {
-        return "Welcome to eBook application!";
+        return "Welcome to eBook Application!!!";
     }
 }
