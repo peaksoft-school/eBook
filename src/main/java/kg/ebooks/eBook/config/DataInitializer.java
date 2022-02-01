@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -398,9 +399,9 @@ public class DataInitializer {
             elnura.setSelectedBooks(selectedBooks6);
             elnura.setAuthenticationInfo(client2);
 
-            genre1.setBooks(Set.of(
+            genre1.setBooks(new HashSet<Book>(Arrays.asList(
                     manas, alykul_osmonov, asia_lion
-            ));
+            )));
 
             //save-admin
             System.out.println(adminRepository.save(admin1));

@@ -1,7 +1,7 @@
 package kg.ebooks.eBook.db.service.impl;
 
 
-import kg.ebooks.eBook.db.domain.dto.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -13,7 +13,6 @@ import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -69,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
         clientDto.setClientId(String.valueOf(client.getClientId()));
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());
-        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
+//        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
         return clientDto;
     }
 
@@ -77,8 +76,7 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientById(Long id) {
         return clientRepository
                 .findById(id)
-                .orElseThrow(
-                        () -> {
+                .orElseThrow(() -> {
                             ClientNotFoundException notFoundException = new ClientNotFoundException(
                                     "client with id  " + id + "  not found");
                             log.error("error in getting client {}", id, notFoundException);
@@ -91,8 +89,7 @@ public class ClientServiceImpl implements ClientService {
         Optional<ClientDto> empty = clientRepository.findByEmail(clientDto.getEmail());
         Client client = clientMapper.makeClient2(clientDto);
         log.info("create clients service + {} " + clientDto);
-
-        if (empty.isEmpty()) {
+        if (!empty.isPresent()) {
             clientRepository.save(client);
         } else {
             throw new ClientNotFoundException(" not found exception ");
@@ -110,7 +107,6 @@ public class ClientServiceImpl implements ClientService {
         clientFromDatabase.setName(client.getName());
         clientFromDatabase.setEmail(client.getEmail());
         clientFromDatabase.getAuthenticationInfo().setPassword(
-
                 passwordEncoder.encode(client.getPassword())
         );
         return client;
@@ -122,9 +118,7 @@ public class ClientServiceImpl implements ClientService {
             throw new ClientNotFoundException(
                     "Client with id " + id + " does not exists"
             );
-
         }
         clientRepository.deleteById(id);
-
     }
 }

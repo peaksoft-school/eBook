@@ -1,6 +1,6 @@
 package kg.ebooks.eBook.db.service;
 
-import kg.ebooks.eBook.db.domain.dto.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 

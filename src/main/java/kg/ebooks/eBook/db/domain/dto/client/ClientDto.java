@@ -1,5 +1,6 @@
-package kg.ebooks.eBook.db.domain.dto;
+package kg.ebooks.eBook.db.domain.dto.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -23,5 +24,6 @@ public class ClientDto {
 
     @NotNull
     @JsonProperty("password")
+    @JsonIgnore
     private String password;
 }

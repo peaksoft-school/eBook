@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -39,7 +40,7 @@ public class GenreServiceImpl implements GenreService {
         log.info("founded {} genres from database", genreList.size());
         return genreList.stream()
                 .map(genre -> modelMapper.map(genre, GenreDTO.class))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -95,7 +96,7 @@ public class GenreServiceImpl implements GenreService {
         Genre genreById = findById(genreId);
         String genreName = genreById.getGenreName();
         String genreName1 = genre.getGenreName();
-        if (!genreName1.isBlank() &&
+        if (!genreName1.isEmpty() &&
                 !Objects.equals(genreName1, genreName)) {
             genreById.setGenreName(genreName1);
         }
