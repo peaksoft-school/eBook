@@ -14,7 +14,7 @@ phases:
       - echo $CODEBUILD_SRC_DIR
 artifacts:
   files:
-    - target/bilingual.jar
+    - target/eBook.jar
   discard-paths: yes
 
 cache:

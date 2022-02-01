@@ -11,7 +11,7 @@ public enum BucketName {
     AWS_BOOKS("ebook-books-bucket1"),
     AWS_FRAGMENTS("ebook-audio-test1");
 
-    private String bucketName;
+    private final String bucketName;
 
     BucketName(String bucketName) {
         this.bucketName = bucketName;

@@ -1,7 +1,7 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import kg.ebooks.eBook.db.domain.dto.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.Client;
@@ -20,15 +20,14 @@ import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/client")
 @CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
-public class ClientController {
+public class ClientAPI {
+
     @Autowired
-
     private final ClientService clientService;
-
     private final SignupRequestClntMapper clientMapper;
 
     @PostMapping("/signup/client")
