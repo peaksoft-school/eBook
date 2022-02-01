@@ -28,6 +28,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class DataInitializer {
@@ -397,6 +398,10 @@ public class DataInitializer {
             elnura.setSelectedBooks(selectedBooks6);
             elnura.setAuthenticationInfo(client2);
 
+            genre1.setBooks(Set.of(
+                    manas, alykul_osmonov, asia_lion
+            ));
+
             //save-admin
             System.out.println(adminRepository.save(admin1));
             //save-vendors
@@ -406,6 +411,7 @@ public class DataInitializer {
             //save-clients
             System.out.println(clientRepository.save(maria));
             System.out.println(clientRepository.save(elnura));
+
 
         };
     }

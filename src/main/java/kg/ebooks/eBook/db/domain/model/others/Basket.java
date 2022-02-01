@@ -67,6 +67,8 @@ public class Basket implements BookCase, BasketInfo {
             list.add(map);
         }
         return list;
+//        return books.stream().map(book -> modelMapper.map(book, BookInfoBktImpl.class)).toList();
+//        return null;
 //        return bookInfoBkts;
     }
 
@@ -80,6 +82,10 @@ public class Basket implements BookCase, BasketInfo {
             bkts.add(map);
         }
         basketInfo.setBooksBkt(bkts);
+//        List<BookInfoBktImpl> bkts = books.stream()
+//                .map(book -> modelMapper.map(book, BookInfoBktImpl.class))
+//                .toList();
+//        basketInfo.setBooksBkt(bkts);
         basketInfo.setQuantityOfBooks(getQuantityOfBooks());
         return basketInfo;
     }
