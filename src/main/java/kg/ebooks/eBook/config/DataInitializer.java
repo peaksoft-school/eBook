@@ -407,6 +407,7 @@ public class DataInitializer {
             System.out.println(clientRepository.save(maria));
             System.out.println(clientRepository.save(elnura));
 
+
         };
     }
 }
