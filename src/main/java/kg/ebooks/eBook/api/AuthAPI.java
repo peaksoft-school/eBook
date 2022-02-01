@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api")
 @CrossOrigin
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthAPI {
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;

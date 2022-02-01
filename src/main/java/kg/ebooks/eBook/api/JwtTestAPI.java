@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequestMapping("/api")
-public class JwtTestApi {
+public class JwtTestAPI {
 
     @Operation(summary = "Token Test Request", description = "Testing token")
     @GetMapping("/test")
