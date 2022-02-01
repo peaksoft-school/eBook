@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.aws.api;
+package kg.ebooks.eBook.api;
 
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;

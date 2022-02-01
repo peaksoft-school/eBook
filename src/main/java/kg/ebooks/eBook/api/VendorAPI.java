@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @CrossOrigin
 @RequiredArgsConstructor
-public class VendorController {
+public class VendorAPI {
 
     private final VendorService vendorService;
     private final ClientService clientService;

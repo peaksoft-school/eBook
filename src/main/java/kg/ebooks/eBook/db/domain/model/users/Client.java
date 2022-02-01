@@ -12,13 +12,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 /**
- * created by Beksultan Mamatkadyr uulu
- * project : eBook
- * 9/1/22
- * Sunday 10:29
+
  */
 @Entity
 @Table(name = "clients")
@@ -45,6 +43,12 @@ public class Client {
     @OneToOne(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private SelectedBooks selectedBooks;
 
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
+
+    public Client(Long clientId, String name, String email) {
+        this.clientId = clientId;
+        this.name = name;
+        this.email = email;
+    }
 }

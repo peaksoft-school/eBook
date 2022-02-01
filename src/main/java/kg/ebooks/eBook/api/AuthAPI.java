@@ -22,7 +22,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api")
 @CrossOrigin
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthAPI {
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -39,6 +39,7 @@ public class AuthController {
                         loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
+
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
         return ok(new JwtResponse(jwt,   //return ResponseEntity.ok
                 authenticationInfo.getEmail(),
