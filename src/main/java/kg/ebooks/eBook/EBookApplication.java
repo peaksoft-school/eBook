@@ -16,35 +16,35 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class EBookApplication {
 
-    private final AdminRepository adminRepository;
-
-    @PostConstruct
-    public void guest(){
-        AuthenticationInfo auth = new AuthenticationInfo(
-                null,
-                Authority.ADMIN,
-                "elnura",
-                "elnura",
-                true,
-                true,
-                true,
-                true
-        );
-
-        Admin admin = new Admin(
-                null,
-                "Elnura",
-                "Tadzhibaeva",
-                "elnura@gmail.com",
-                auth
-        );
-        adminRepository.save(admin);
-    }
+//    private final AdminRepository adminRepository;
+//
+//    @PostConstruct
+//    public void guest(){
+//        AuthenticationInfo auth = new AuthenticationInfo(
+//                null,
+//                Authority.ADMIN,
+//                "elnura",
+//                "elnura",
+//                true,
+//                true,
+//                true,
+//                true
+//        );
+//
+//        Admin admin = new Admin(
+//                null,
+//                "Elnura",
+//                "Tadzhibaeva",
+//                "elnura@gmail.com",
+//                auth
+//        );
+//        adminRepository.save(admin);
+//    }
 
 
     public static void main(String[] args) {
         SpringApplication.run(EBookApplication.class, args);
-        System.out.println("DON'T WORRY THIS IS JUST A TEST");
+        System.out.println("Welcome to eBook Application!");
     }
 }
 

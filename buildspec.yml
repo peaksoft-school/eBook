@@ -16,7 +16,3 @@ artifacts:
   files:
     - target/eBook.jar
   discard-paths: yes
-
-cache:
-  path:
-    - '/root/.m2/**/*'
