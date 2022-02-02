@@ -39,6 +39,7 @@ public class AuthAPI {
                         loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
+
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
         return ok(new JwtResponse(jwt,   //return ResponseEntity.ok
                 authenticationInfo.getEmail(),

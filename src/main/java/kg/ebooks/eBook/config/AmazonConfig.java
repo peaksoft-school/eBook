@@ -1,4 +1,4 @@
-package kg.ebooks.eBook.aws.config;
+package kg.ebooks.eBook.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
