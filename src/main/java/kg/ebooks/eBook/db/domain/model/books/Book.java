@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.domain.model.books;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
+import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
@@ -10,8 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -55,17 +54,11 @@ public class Book implements BookInfoBkt {
     @NotNull(message = "book should have genre!")
     private Genre genre;
 
-    @NotBlank(message = "Publishing house is required!")
-    private String publishingHouse;
-
     @NotNull(message = "you missed the language")
     private Language language;
 
     @NotNull(message = "you missed date of issue")
     private LocalDate dateOfIssue;
-
-    @NotNull(message = "you have to define the page size")
-    private int pageSize;
 
     @NotNull(message = "you have to define prise of book")
     private BigDecimal price;
@@ -96,6 +89,7 @@ public class Book implements BookInfoBkt {
     @OneToOne(fetch = LAZY, cascade = ALL)
     private PaperBook paperBook;
 
+    private RequestStatus requestStatus;
 
     @Override
     public FileInfo getImage() {

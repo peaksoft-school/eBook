@@ -105,11 +105,15 @@ public class DataInitializer {
             ElectronicBook electronicBook = new ElectronicBook(
                     null,
                     "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
+                    123,
+                    "hello world",
                     new FileInfo()
             );
             ElectronicBook electronicBook2 = new ElectronicBook(
                     null,
                     "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
+                    123,
+                    "hello world",
                     new FileInfo()
             );
             // TODO: 10/1/22 set value to fields when finished electronic book
@@ -121,10 +125,10 @@ public class DataInitializer {
             educated.setBookName("Educated");
             educated.setAuthor("Tara Westover");
             educated.setGenre(genre2);
-            educated.setPublishingHouse("Amazon"); //test
+//            educated.setPublishingHouse("Amazo/n"); //test
             educated.setLanguage(Language.ENGLISH);
             educated.setDateOfIssue(LocalDate.of(2018, Month.FEBRUARY, 18));
-            educated.setPageSize(420);
+//            educated.setPageSize(420);
             educated.setPrice(new BigDecimal("24.3"));
             educated.setBestSeller(true);
             educated.setDiscount((byte) 50);
@@ -141,10 +145,10 @@ public class DataInitializer {
             first_teacher.setBookName("First Teacher");
             first_teacher.setAuthor("CHYNGYZ AITMATOV");
             first_teacher.setGenre(genre4);
-            first_teacher.setPublishingHouse("Amazon"); //test
+//            first_teacher.setPublishingHouse("Amazon"); //test
             first_teacher.setLanguage(Language.ENGLISH);
             first_teacher.setDateOfIssue(LocalDate.of(2018, Month.JULY, 18));
-            first_teacher.setPageSize(420);
+//            first_teacher.setPageSize(420);
             first_teacher.setPrice(new BigDecimal("24.3"));
             first_teacher.setBestSeller(true);
             first_teacher.setDiscount((byte) 20);
@@ -159,10 +163,10 @@ public class DataInitializer {
             asia_lion.setBookName("Азия арстаны");
             asia_lion.setAuthor("Нуржигит Кадырбеков");
             asia_lion.setGenre(genre5);
-            asia_lion.setPublishingHouse("Frunze"); //test
+//            asia_lion.setPublishingHouse("Frunze"); //test
             asia_lion.setLanguage(Language.KYRGYZ);
             asia_lion.setDateOfIssue(LocalDate.of(2019, Month.JULY, 18));
-            asia_lion.setPageSize(212);
+//            asia_lion.setPageSize(212);
             asia_lion.setPrice(new BigDecimal("24.3"));
             asia_lion.setBestSeller(false);
             asia_lion.setDiscount((byte) 20);
@@ -178,10 +182,10 @@ public class DataInitializer {
             alykul_osmonov.setBookName("Алыкул Осмонов");
             alykul_osmonov.setAuthor("Мундузбек Тентимишев");
             alykul_osmonov.setGenre(genre1);
-            alykul_osmonov.setPublishingHouse("Globus"); //test
+//            alykul_osmonov.setPublishingHouse("Globu/s"); //test
             alykul_osmonov.setLanguage(Language.KYRGYZ);
             alykul_osmonov.setDateOfIssue(LocalDate.of(2016, Month.JULY, 18));
-            alykul_osmonov.setPageSize(596);
+//            alykul_osmonov.setPageSize(596);
             alykul_osmonov.setPrice(new BigDecimal("1400"));
             alykul_osmonov.setBestSeller(false);
             alykul_osmonov.setDiscount((byte) 50);
@@ -197,10 +201,10 @@ public class DataInitializer {
             manas.setBookName("Манас");
             manas.setAuthor("Редекция жамааты");
             manas.setGenre(genre3);
-            manas.setPublishingHouse("Frunze"); //test
+//            manas.setPublishingHouse("Frunze"); //test
             manas.setLanguage(Language.RUSSIAN);
             manas.setDateOfIssue(LocalDate.of(2010, Month.JULY, 18));
-            manas.setPageSize(212);
+//            manas.setPageSize(212);
             manas.setPrice(new BigDecimal("1500"));
             manas.setBestSeller(true);
             manas.setDiscount((byte) 50);

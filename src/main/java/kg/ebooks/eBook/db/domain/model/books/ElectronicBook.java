@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -27,6 +29,12 @@ public class ElectronicBook {
 
     @Column(length = 10000)
     private String fragment;
+
+    @NotNull(message = "you have to define the page size")
+    private int pageSize;
+
+    @NotBlank(message = "Publishing house is required!")
+    private String publishingHouse;
 
     @OneToOne(cascade = CascadeType.ALL)
     private FileInfo electronicBook;

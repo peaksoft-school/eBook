@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -27,5 +29,12 @@ public class PaperBook {
     @Column(length = 10000)
     private String fragment;
 
+    private int quantityOfBooks;
+
+//    @NotNull(message = "you have to define the page size")
+    private int pageSize;
+
+//    @NotBlank(message = "Publishing house is required!")
+    private String publishingHouse;
     // #I don't know how to do paper book?
 }
