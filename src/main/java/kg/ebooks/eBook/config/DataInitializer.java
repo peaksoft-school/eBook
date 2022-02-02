@@ -20,6 +20,7 @@ import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -28,8 +29,6 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Component
 public class DataInitializer {
@@ -38,7 +37,8 @@ public class DataInitializer {
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
-            VendorRepository vendorRepository) {
+            VendorRepository vendorRepository,
+            PasswordEncoder passwordEncoder) {
         return args -> {
 
             //images
@@ -283,7 +283,7 @@ public class DataInitializer {
             AuthenticationInfo admin = new AuthenticationInfo();
             admin.setAuthority(Authority.ADMIN);
             admin.setEmail("admin@gmail.com");
-            admin.setPassword("$2a$12$wEjFI2VxIoxzeI8qi34upetbXSmMmG5jpe75bH2LK/a19yfRtVuVe\n");
+            admin.setPassword(passwordEncoder.encode("admin"));
             admin.setAccountNonLocked(true);
             admin.setAccountNonExpired(true);
             admin.setCredentialsNonExpired(true);
@@ -294,7 +294,7 @@ public class DataInitializer {
             AuthenticationInfo client = new AuthenticationInfo();
             client.setAuthority(Authority.CLIENT);
             client.setEmail("client@gmail.com");
-            client.setPassword("$2a$12$FkNwQ4mn/D.cJnDggDKdlOWXvmeMsjZdQrNRy9euazS.kCsz2t8.W\n");
+            client.setPassword(passwordEncoder.encode("client"));
             client.setAccountNonLocked(true);
             client.setAccountNonExpired(true);
             client.setCredentialsNonExpired(true);
@@ -304,7 +304,7 @@ public class DataInitializer {
             AuthenticationInfo client2 = new AuthenticationInfo();
             client2.setAuthority(Authority.CLIENT);
             client2.setEmail("client2@gmail.com");
-            client2.setPassword("$2a$12$kIBBhgDUqUdJ.JryO24ni.G0PSBXZGrLqTdAV.D9lhg/2itLU9QBm\n");
+            client2.setPassword(passwordEncoder.encode("client2"));
             client2.setAccountNonLocked(true);
             client2.setAccountNonExpired(true);
             client2.setCredentialsNonExpired(true);
@@ -315,7 +315,7 @@ public class DataInitializer {
             AuthenticationInfo vendor1 = new AuthenticationInfo();
             vendor1.setAuthority(Authority.VENDOR);
             vendor1.setEmail("vendor@gmail.com");
-            vendor1.setPassword("$2a$12$uS03fdggu.Qcy2mQaegv4ehqlIx5frePwYfP444ysCWm0gtbtlpCe\n");
+            vendor1.setPassword(passwordEncoder.encode("vendor"));
             vendor1.setAccountNonLocked(true);
             vendor1.setAccountNonExpired(true);
             vendor1.setCredentialsNonExpired(true);
@@ -326,7 +326,7 @@ public class DataInitializer {
             AuthenticationInfo vendor_Role = new AuthenticationInfo();
             vendor_Role.setAuthority(Authority.VENDOR);
             vendor_Role.setEmail("vendor2@gmail.com");
-            vendor_Role.setPassword("$2a$12$G9Afbhk5KyK9/4wq/1FEbejyejHgdxd2Lu4/pujPFaTjJk90/FY9.\n");
+            vendor_Role.setPassword(passwordEncoder.encode("vendor2"));
             vendor_Role.setAccountNonLocked(true);
             vendor_Role.setAccountNonExpired(true);
             vendor_Role.setCredentialsNonExpired(true);

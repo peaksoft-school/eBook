@@ -29,9 +29,4 @@ public class VendorAPI {
     public SignupRequestVndr registerVendor(@RequestBody SignupRequestVndr signupRequest) {
         return vendorService.registerVendor(signupRequest);
     }
-
-    public static void main(String[] args) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("admin"));
-    }
 }

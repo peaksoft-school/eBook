@@ -36,6 +36,7 @@ public class EBookApplication {
                 "Elnura",
                 "Tadzhibaeva",
                 "elnura@gmail.com",
+                null,
                 auth
         );
         adminRepository.save(admin);
