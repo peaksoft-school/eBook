@@ -1,12 +1,15 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kg.ebooks.eBook.config.security.password.encoder.PasswordEncode;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.db.service.VendorService;
 import kg.ebooks.eBook.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
