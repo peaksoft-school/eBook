@@ -16,8 +16,8 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class EBookApplication {
 
-    private final AdminRepository adminRepository;
-
+//    private final AdminRepository adminRepository;
+//
 //    @PostConstruct
 //    public void guest(){
 //        AuthenticationInfo auth = new AuthenticationInfo(
