@@ -19,4 +19,5 @@ public interface FileService {
 
     void deleteFile(Long fileId);
 
+    FileInfo findById(Long id);
 }
