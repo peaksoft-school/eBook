@@ -65,7 +65,7 @@ public class ClientServiceImpl implements ClientService {
 
     public ClientDto clientDto(Client client) {
         ClientDto clientDto = new ClientDto();
-        clientDto.setClientId(String.valueOf(client.getClientId()));
+        clientDto.setClientId((client.getClientId()));
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());
 //        clientDto.setPassword(client.getAuthenticationInfo().getPassword());

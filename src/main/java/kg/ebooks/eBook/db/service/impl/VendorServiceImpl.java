@@ -1,27 +1,27 @@
 package kg.ebooks.eBook.db.service.impl;
 
-import kg.ebooks.eBook.db.domain.dto.book.BookDTO;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
-import kg.ebooks.eBook.db.domain.dto.vendor.VendorBook;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
-import kg.ebooks.eBook.db.domain.mapper.VendorMapper;
+import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.VendorService;
+import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import kg.ebooks.eBook.exceptions.DuplicateEntryException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.*;
+import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeSignupRequestsVndr;
+import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeVendor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +32,7 @@ public class VendorServiceImpl implements VendorService {
     private final VendorRepository vendorRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationInfoRepository authenticationInfoRepository;
+    private final SignupRequestVndrMapper save;
 
     @Override
     public SignupRequestVndr registerVendor(SignupRequestVndr signupRequest) {
@@ -50,6 +51,7 @@ public class VendorServiceImpl implements VendorService {
         return makeSignupRequestsVndr(vendorRepository.save(vendor));
     }
 
+
     @Override
     public List<VendorDto> getAllVendors(Vendor vendor) {
         log.info("ClientController  - getClients -: {}", vendor);
@@ -59,66 +61,63 @@ public class VendorServiceImpl implements VendorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public VendorDto clientDto(Vendor vendor) {
+        VendorDto vendorDto = new VendorDto();
+        vendorDto.setFirstName(vendor.getFirstName());
+        vendorDto.setLastName(vendor.getLastName());
+        vendorDto.setEmail(vendor.getEmail());
+        vendorDto.setPhoneNumber(vendor.getPhoneNumber());
+        vendorDto.setNameOfBranch(vendor.getNameOfBranch());
+        vendorDto.setPassword(vendor.getAuthenticationInfo().getPassword());
+        return vendorDto;
+    }
+
     @Override
-    public List<VendorDto> getAllbook(Vendor vendor) {
-
-        log.info("ClientController  - getClients -: {}", vendor);
-        return vendorRepository.findAll()
-                .stream()
-                .map(this::clientDto)
-                .collect(Collectors.toList());
-    }
-
-    public VendorDto clientDto1(Vendor vendor) {
-        VendorDto vendorDto = new VendorDto();
-        vendorDto.setFirstName(vendor.getFirstName());
-        vendorDto.setLastName(vendor.getLastName());
-        vendorDto.setEmail(vendor.getEmail());
-//        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
-        return vendorDto;
-
-    } public VendorDto clientDto(Vendor vendor) {
-
-        BookDTO bookDTO = new BookDTO();
-        bookDTO.setAuthor(bookDTO.getAuthor());
-        bookDTO.setBookName(bookDTO.getBookName());
-        bookDTO.setDiscount(bookDTO.getDiscount());
-        bookDTO.setNetPrice(bookDTO.getNetPrice());
-        bookDTO.setDiscountedPrice(bookDTO.getDiscountedPrice());
-        bookDTO.setImage(bookDTO.getImage());
-//
-        VendorDto vendorDto = new VendorDto();
-        vendorDto.setFirstName(vendor.getFirstName());
-        vendorDto.setLastName(vendor.getLastName());
-        vendorDto.setEmail(vendor.getEmail());
-        vendorDto.setBookDTOList(Arrays.asList(bookDTO));
-//        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
-        return vendorDto;
+    public Vendor getByIdVendor(Long id) {
+        return vendorRepository.findById(id)
+                .orElseThrow(() -> {
+                    ClientNotFoundException notFoundException = new ClientNotFoundException(
+                            "client with id  " + id + "  not found");
+                    log.error("error in getting client {}", id, notFoundException);
+                    return notFoundException;
+                });
 
     }
+
 
     @Transactional
     @Override
-    public VendorDto updateVendor(Long id, VendorDto vendorDto) {
+    public VendorDto saveVendor(VendorDto vendorDto) {
+        Optional<VendorDto> empty = vendorRepository.findUserBy(vendorDto.getEmail());
+        Vendor vendor = save.vendorMapper(vendorDto);
+        log.info("create clients service + {} " + vendorDto);
+        if (!empty.isPresent()) {
+            vendorRepository.save(vendor);
+        } else {
+            throw new ClientNotFoundException(" not found exception ");
+        }
+        return vendorDto;
+    }
 
+
+    @Override
+    @Transactional
+    public VendorDto updateVendor(Long id, VendorDto vendorDto) {
+        System.out.println("ruslan");
         Vendor vendorFromDataBase = vendorRepository.findById(id)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "vendor with id = " + id + " does not exists"
                 ));
+
         vendorFromDataBase.setFirstName(vendorDto.getFirstName());
         vendorFromDataBase.setLastName(vendorDto.getLastName());
         vendorFromDataBase.setPhoneNumber(vendorDto.getPhoneNumber());
         vendorFromDataBase.setEmail(vendorDto.getEmail());
-        vendorFromDataBase.getAuthenticationInfo().setPassword(
-                passwordEncoder.encode(vendorDto.getPassword()));
 
-        if (vendorRepository.findUserByEmail(vendorDto.getEmail()) == null) {
-            try {
-                vendorFromDataBase.setEmail(vendorDto.getEmail());
-            } catch (Exception e) {
-                throw new DuplicateEntryException();
-            }
-        }
+        vendorFromDataBase.getAuthenticationInfo()
+                .setPassword((vendorDto.getPassword()));
+
         return vendorDto;
     }
 
@@ -126,10 +125,5 @@ public class VendorServiceImpl implements VendorService {
     public void deleteVendor(Long id) {
         this.vendorRepository.deleteById(id);
     }
-    @Override
-    public VendorBook saveBook(VendorBook vendorBook) {
-    Vendor vendor = VendorMapper.makeVendor(vendorBook);
-    vendorRepository.save(vendor);
-    return vendorBook;
-    }
+
 }

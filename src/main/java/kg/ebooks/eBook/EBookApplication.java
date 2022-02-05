@@ -15,8 +15,6 @@ public class EBookApplication {
     public static void main(String[] args) {
         SpringApplication.run(EBookApplication.class, args);
         System.out.println("Welcome to eBook Application!");
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("vendor2"));
     }
 }
 

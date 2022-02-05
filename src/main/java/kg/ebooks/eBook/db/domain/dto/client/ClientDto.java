@@ -13,7 +13,7 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 public class ClientDto {
 
-    private String clientId;
+    private Long clientId;
     @JsonProperty("name")
     private String name;
 
