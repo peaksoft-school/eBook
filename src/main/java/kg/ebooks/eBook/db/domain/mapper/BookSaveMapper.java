@@ -1,8 +1,10 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
+import kg.ebooks.eBook.aws.service.FileService;
+import kg.ebooks.eBook.db.domain.dto.book.AudioDTO;
 import kg.ebooks.eBook.db.domain.dto.book.BookSave;
-import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
+import kg.ebooks.eBook.db.domain.dto.book.PaperBookSaveDTO;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
@@ -10,15 +12,22 @@ import kg.ebooks.eBook.db.domain.model.books.PaperBook;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
-import kg.ebooks.eBook.db.service.GenreService;
+import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -28,13 +37,19 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BookSaveMapper {
 
     private final GenreRepository genreRepository;
+    private final FileService fileService;
+    private final BookRepository bookRepository;
 
-    public Book makeBookFromAudioBook(BookSave<AudioBook> audioBook) {
-        Book book = makeABook(audioBook.getImages(),
-                audioBook.getTypeOfBook(),
+    public Book makeBookFromAudioBook(BookSave<AudioDTO> audioBook) {
+        Set<FileInfo> fileInfos = audioBook.getImages().stream()
+                .map(fileService::findById)
+                .collect(Collectors.toSet());
+
+        Book book = makeABook(fileInfos,
                 audioBook.getBookName(),
                 audioBook.getAuthor(),
                 audioBook.getDescription(),
@@ -45,16 +60,16 @@ public class BookSaveMapper {
                 audioBook.getDiscount());
 
         AudioBook audioBook1 = new AudioBook();
-        audioBook1.setFragment(audioBook.getBook().getFragment());
-        audioBook1.setDuration(audioBook.getBook().getDuration());
-        audioBook1.setAudioBook(audioBook.getBook().getAudioBook());
+        audioBook1.setFragment(fileService.findById(audioBook.getBook().getFragmentId()));
+        audioBook1.setDuration(audioBook.getBook().getDuration().makeLocalTime(audioBook.getBook().getDuration()));
+        audioBook1.setAudioBook(fileService.findById(audioBook.getBook().getAudioBookId()));
 
         book.setAudioBook(audioBook1);
-        return book;
+        book.setTypeOfBook(AUDIO_BOOK);
+        return setGenreToBook(book, audioBook.getGenreId());
     }
 
-    private static Book makeABook(List<FileInfo> images,
-                                  TypeOfBook typeOfBook,
+    private static Book makeABook(Set<FileInfo> images,
                                   String bookName,
                                   String author,
                                   String description,
@@ -65,7 +80,6 @@ public class BookSaveMapper {
                                   byte discount) {
         Book book = new Book();
         book.setImages(images);
-        book.setTypeOfBook(typeOfBook);
         book.setBookName(bookName);
         book.setAuthor(author);
         book.setDescription(description);
@@ -78,8 +92,13 @@ public class BookSaveMapper {
     }
 
     public Book makeBookFromElectronicBook(BookSave<ElectronicBook> electronicBookToSave) {
-        Book book = makeABook(electronicBookToSave.getImages(),
-                electronicBookToSave.getTypeOfBook(),
+
+        Set<FileInfo> fileInfos = electronicBookToSave.getImages().stream()
+                .map(fileService::findById)
+                .collect(Collectors.toSet());
+
+
+        Book book = makeABook(fileInfos,
                 electronicBookToSave.getBookName(),
                 electronicBookToSave.getAuthor(),
                 electronicBookToSave.getDescription(),
@@ -100,9 +119,12 @@ public class BookSaveMapper {
         return book;
     }
 
-    public Book makeBookFromPaperBook(BookSave<PaperBook> paperBookToSave) {
-        Book book = makeABook(paperBookToSave.getImages(),
-                paperBookToSave.getTypeOfBook(),
+    public Book makeBookFromPaperBook(BookSave<PaperBookSaveDTO> paperBookToSave) {
+        Set<FileInfo> fileInfos = paperBookToSave.getImages().stream()
+                .map(fileService::findById)
+                .collect(Collectors.toSet());
+
+        Book book = makeABook(fileInfos,
                 paperBookToSave.getBookName(),
                 paperBookToSave.getAuthor(),
                 paperBookToSave.getDescription(),
@@ -119,17 +141,19 @@ public class BookSaveMapper {
         paperBook.setQuantityOfBooks(paperBookToSave.getBook().getQuantityOfBooks());
 
         book.setPaperBook(paperBook);
-
-        return book;
+        book.setTypeOfBook(PAPER_BOOK);
+        return setGenreToBook(book, paperBookToSave.getGenreId());
     }
 
-    public Book setGenreToBook(Book book, Long genreId) {
+    @Transactional
+    Book setGenreToBook(Book book, Long genreId) {
         Genre genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "genre with id = " + genreId + " does not exists"
                 ));
 
         book.setGenre(genre);
+        genre.setBook(book);
         return book;
     }
 }

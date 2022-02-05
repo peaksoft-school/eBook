@@ -6,6 +6,7 @@ import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
 import kg.ebooks.eBook.aws.working_with_files.FileStore;
+import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -99,5 +100,18 @@ public class FileServiceImpl implements FileService {
                     "failed to delete file from amazon s3 bucket"
             );
         }
+    }
+
+    @Override
+    public FileInfo findById(Long id) {
+        FileInfo fileInfo = fileRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("file info with id = {} does not exists", id);
+                    throw new DoesNotExistsException(
+                            "file info with id = " + id + " does not exists"
+                    );
+                });
+        log.info("founded file info [{}]", fileInfo);
+        return fileInfo;
     }
 }

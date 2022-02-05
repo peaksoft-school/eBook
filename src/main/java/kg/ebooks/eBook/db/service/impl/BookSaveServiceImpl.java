@@ -1,13 +1,11 @@
 package kg.ebooks.eBook.db.service.impl;
 
-import kg.ebooks.eBook.db.domain.dto.book.BookDTO;
-import kg.ebooks.eBook.db.domain.dto.book.BookSave;
+import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.mapper.BookSaveMapper;
-import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.repository.BookRepository;
-import kg.ebooks.eBook.db.service.BookService;
+import kg.ebooks.eBook.db.service.BookSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BookServiceImpl implements BookService {
+public class BookSaveServiceImpl implements BookSaveService {
 
     private final BookRepository bookRepository;
     private final BookSaveMapper bookSaveMapper;
@@ -42,23 +40,28 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDTO saveAudioBook(BookSave<AudioBook> audioBook) {
+    public BookDTO saveAudioBook(BookSave<AudioDTO> audioBook) {
         Book book = bookSaveMapper.makeBookFromAudioBook(audioBook);
-        log.info("book with name [{}] , type [{}] is storing to database",
-                audioBook.getBookName(), audioBook.getTypeOfBook());
-        bookSaveMapper.setGenreToBook(book, audioBook.getGenreId());
+        log.info("book with name [{}] is storing to database",
+                audioBook.getBookName());
         Book save = bookRepository.save(book);
         log.info("book with name [{}] successfully saved to database", book.getBookName());
         return modelMapper.map(save, BookDTO.class);
     }
 
     @Override
-    public BookDTO saveElectronicBook(BookSave<AudioBook> electronicBook) {
+    public BookDTO saveElectronicBook(BookSave<ElectronicDTO> electronicBook) {
         return null;
     }
 
     @Override
-    public BookDTO savePaperBook(BookSave<AudioBook> paperBook) {
-        return null;
+    public BookDTO savePaperBook(BookSave<PaperBookSaveDTO> paperBook) {
+        Book book = bookSaveMapper.makeBookFromPaperBook(paperBook);
+        log.info("book with name [{}] is storing to database",
+                paperBook.getBookName());
+        Book save = bookRepository.save(book);
+        log.info("book with name [{}] successfully saved to database", book.getBookName());
+        return modelMapper.map(save, BookDTO.class);
     }
+
 }

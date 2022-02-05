@@ -58,4 +58,8 @@ public class Genre implements GenreGetDTO {
                 .map(book -> modelMapper.map(book, BookDTO.class))
                 .collect(Collectors.toSet());
     }
+
+    public void setBook(Book book) {
+        books.add(book);
+    }
 }

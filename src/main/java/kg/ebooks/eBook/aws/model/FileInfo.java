@@ -1,10 +1,8 @@
 package kg.ebooks.eBook.aws.model;
 
 import kg.ebooks.eBook.aws.bucket.FolderName;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 
 /**
@@ -18,6 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
+@ToString
 public class FileInfo {
 
     @Id

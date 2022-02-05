@@ -24,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -33,7 +34,7 @@ import java.util.HashSet;
 @Component
 public class DataInitializer {
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -121,7 +122,7 @@ public class DataInitializer {
             // book-educated
 
             Book educated = new Book();
-            educated.setImages(Arrays.asList(fileInfo1));
+            educated.setImages(new HashSet<>(Arrays.asList(fileInfo1)));
             educated.setBookName("Educated");
             educated.setAuthor("Tara Westover");
             educated.setGenre(genre2);
@@ -141,7 +142,7 @@ public class DataInitializer {
             //book-first_teacher
 
             Book first_teacher = new Book();
-            first_teacher.setImages(Arrays.asList(fileInfo2));
+            first_teacher.setImages(new HashSet<>(Arrays.asList(fileInfo2)));
             first_teacher.setBookName("First Teacher");
             first_teacher.setAuthor("CHYNGYZ AITMATOV");
             first_teacher.setGenre(genre4);
@@ -159,7 +160,7 @@ public class DataInitializer {
             //book-asia_lion
 
             Book asia_lion = new Book();
-            asia_lion.setImages(Arrays.asList(fileInfo3));
+            asia_lion.setImages(new HashSet<>(Arrays.asList(fileInfo3)));
             asia_lion.setBookName("Азия арстаны");
             asia_lion.setAuthor("Нуржигит Кадырбеков");
             asia_lion.setGenre(genre5);
@@ -178,7 +179,7 @@ public class DataInitializer {
             //book-alykul_osmonov
 
             Book alykul_osmonov = new Book();
-            alykul_osmonov.setImages(Arrays.asList(fileInfo4));
+            alykul_osmonov.setImages(new HashSet<>(Arrays.asList(fileInfo4)));
             alykul_osmonov.setBookName("Алыкул Осмонов");
             alykul_osmonov.setAuthor("Мундузбек Тентимишев");
             alykul_osmonov.setGenre(genre1);
@@ -197,7 +198,7 @@ public class DataInitializer {
             //book-manas
 
             Book manas = new Book();
-            manas.setImages(Arrays.asList(fileInfo5));
+            manas.setImages(new HashSet<>(Arrays.asList(fileInfo5)));
             manas.setBookName("Манас");
             manas.setAuthor("Редекция жамааты");
             manas.setGenre(genre3);

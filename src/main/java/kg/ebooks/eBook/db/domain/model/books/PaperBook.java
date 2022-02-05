@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "paper_books")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class PaperBook {
