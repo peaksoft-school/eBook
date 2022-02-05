@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.domain.dto.book;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import kg.ebooks.eBook.aws.model.FileInfo;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,7 +19,7 @@ import java.time.LocalTime;
  * hello world
  */
 @Getter @Setter
-public class AudioDTO {
+public class AudioBookRequest implements BookRequest {
     private Long id;
     private Long fragmentId;
 //    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")

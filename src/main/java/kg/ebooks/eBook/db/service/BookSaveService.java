@@ -1,6 +1,8 @@
 package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.book.*;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 
 import java.util.Set;
 
@@ -12,12 +14,8 @@ import java.util.Set;
  */
 public interface BookSaveService {
 
-    Set<BookDTO> findALLBooks();
+    Set<BookResponse> findALLBooks();
 
-    BookDTO saveAudioBook(BookSave<AudioDTO> audioBook);
-
-    BookDTO saveElectronicBook(BookSave<ElectronicDTO> electronicBook);
-
-    BookDTO savePaperBook(BookSave<PaperBookSaveDTO> paperBook);
+    BookResponse saveBook(AuthenticationInfo authority, TypeOfBook typeOfBook, BookSave<?> book);
 
 }

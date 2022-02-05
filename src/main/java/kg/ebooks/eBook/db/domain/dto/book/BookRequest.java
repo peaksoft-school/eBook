@@ -2,9 +2,10 @@ package kg.ebooks.eBook.db.domain.dto.book;
 
 /**
  * created by Beksultan Mamatkadyr uulu
- * 4/2/22
- * Friday 15:11
+ * 5/2/22
+ * Saturday 19:31
  * hello world
  */
-public class ElectronicDTO {
+public interface BookRequest {
+
 }

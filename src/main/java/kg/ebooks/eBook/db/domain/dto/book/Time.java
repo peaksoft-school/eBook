@@ -18,7 +18,7 @@ public class Time {
     private byte minute;
     private byte second;
 
-    public LocalTime makeLocalTime(Time time) {
+    public LocalTime makeLocalTime() {
         return LocalTime.of(hour, minute, second);
     }
 }

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @Setter
-public class PaperBookSaveDTO {
+public class PaperBookRequest implements BookRequest {
     @NotBlank(message = "you have to write fragment for this book")
     private String fragment;
     @Min(value = 1, message = "quantity of books must be minimum 1")

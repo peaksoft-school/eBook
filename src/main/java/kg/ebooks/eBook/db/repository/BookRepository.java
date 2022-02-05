@@ -13,4 +13,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.images IN ?1")
     Book findByImage(FileInfo img);
+
+    Book findByBookName(String bookName);
 }

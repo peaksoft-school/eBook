@@ -24,7 +24,7 @@ import java.util.Set;
  */
 @NoArgsConstructor
 @Getter @Setter
-public class BookSave<BOOKTYPE>{
+public class BookSave<BOOKTYPE extends BookRequest> {
 
     private Set<Long> images;
 
