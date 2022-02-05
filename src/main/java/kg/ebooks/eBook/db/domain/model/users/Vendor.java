@@ -28,6 +28,7 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Vendor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

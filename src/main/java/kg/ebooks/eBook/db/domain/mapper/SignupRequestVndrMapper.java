@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import javax.transaction.Transactional;
 @Component
 @AllArgsConstructor
 public class SignupRequestVndrMapper {
-
+    @Autowired
     private final PasswordEncoder passwordEncoder;
 
     public static Vendor makeVendor(SignupRequestVndr signupRequestVndr) {
@@ -47,11 +48,11 @@ public class SignupRequestVndrMapper {
         return signupRequestVndr;
     }
 
-    @Transactional
-    public  Vendor vendorMapper(VendorDto vendorDto) {
+
+    public Vendor vendorMapper(VendorDto vendorDto) {
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
         authenticationInfo.setEmail(vendorDto.getEmail());
-        authenticationInfo.setPassword(vendorDto.getPassword());
+        authenticationInfo.setPassword(passwordEncoder.encode(vendorDto.getPassword()));
         authenticationInfo.setAuthority(Authority.VENDOR);
 
         Vendor vendor = new Vendor();
@@ -59,7 +60,7 @@ public class SignupRequestVndrMapper {
         vendor.setFirstName(vendorDto.getFirstName());
         vendor.setPhoneNumber(vendorDto.getPhoneNumber());
         vendor.setEmail(vendorDto.getEmail());
-        vendor.setNameOfBranch(vendorDto.getNameOfBranch());
+//        vendor.setNameOfBranch(vendorDto.getNameOfBranch());
         vendor.setAuthenticationInfo(authenticationInfo);
         return vendor;
     }
@@ -78,14 +79,6 @@ public class SignupRequestVndrMapper {
 
         return vendorDto;
     }
-
-
-//    @Bean
-//    public ModelMapper modelMapper() {
-//        ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//        return new ModelMapper();
-//    }
 
 }
 

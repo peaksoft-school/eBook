@@ -8,6 +8,7 @@ import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.VendorService;
+import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class VendorServiceImpl implements VendorService {
     private final VendorRepository vendorRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationInfoRepository authenticationInfoRepository;
-    private final SignupRequestVndrMapper save;
+    private final SignupRequestVndrMapper vendorMapper;
 
     @Override
     public SignupRequestVndr registerVendor(SignupRequestVndr signupRequest) {
@@ -68,8 +69,8 @@ public class VendorServiceImpl implements VendorService {
         vendorDto.setLastName(vendor.getLastName());
         vendorDto.setEmail(vendor.getEmail());
         vendorDto.setPhoneNumber(vendor.getPhoneNumber());
-        vendorDto.setNameOfBranch(vendor.getNameOfBranch());
-        vendorDto.setPassword(vendor.getAuthenticationInfo().getPassword());
+//        vendorDto.setNameOfBranch(vendor.getNameOfBranch());
+//        vendorDto.setPassword(vendor.getAuthenticationInfo().getPassword());
         return vendorDto;
     }
 
@@ -88,16 +89,19 @@ public class VendorServiceImpl implements VendorService {
 
     @Transactional
     @Override
-    public VendorDto saveVendor(VendorDto vendorDto) {
-        Optional<VendorDto> empty = vendorRepository.findUserBy(vendorDto.getEmail());
-        Vendor vendor = save.vendorMapper(vendorDto);
-        log.info("create clients service + {} " + vendorDto);
-        if (!empty.isPresent()) {
-            vendorRepository.save(vendor);
-        } else {
-            throw new ClientNotFoundException(" not found exception ");
+    public Vendor saveVendor(VendorDto vendorDto) {
+        Optional<Vendor> optionalVendor = vendorRepository.findUserByEmail(vendorDto.getEmail());
+        if (optionalVendor.isPresent()) {
+            log.error("vendor with email {} has already exists", vendorDto.getEmail());
+            throw new AlreadyExistsException(
+                    "vendor with email = " + vendorDto.getEmail() + " has already exists"
+            );
         }
-        return vendorDto;
+        Vendor vendor = vendorMapper.vendorMapper(vendorDto);
+        System.out.println(vendor);
+        log.info("create clients service + {} " + vendorDto);
+        Vendor vendorSave = vendorRepository.save(vendor);
+        return vendorSave;
     }
 
 
@@ -109,6 +113,13 @@ public class VendorServiceImpl implements VendorService {
                 .orElseThrow(() -> new DoesNotExistsException(
                         "vendor with id = " + id + " does not exists"
                 ));
+        Optional<Vendor> optionalVendor = vendorRepository.findUserByEmail(vendorDto.getEmail());
+        if (optionalVendor.isPresent()) {
+            log.error("vendor with email {} has already exists", vendorDto.getEmail());
+            throw new AlreadyExistsException(
+                    "vendor with email = " + vendorDto.getEmail() + " has already exists"
+            );
+        }
 
         vendorFromDataBase.setFirstName(vendorDto.getFirstName());
         vendorFromDataBase.setLastName(vendorDto.getLastName());

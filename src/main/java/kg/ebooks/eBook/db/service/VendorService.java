@@ -15,7 +15,7 @@ public interface VendorService {
 
     Vendor getByIdVendor(Long id);
 
-    VendorDto saveVendor(VendorDto vendorDto);
+    Vendor saveVendor(VendorDto vendorDto);
 
     VendorDto updateVendor(Long id, VendorDto vendorDto);
 

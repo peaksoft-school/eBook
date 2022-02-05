@@ -14,7 +14,7 @@ public interface ClientService {
 
     Client getClientById(Long id);
 
-    ClientDto saveClient(ClientDto clientDto);
+    Client saveClient(ClientDto clientDto);
 
     ClientDto updateClient(Long id, ClientDto client);
 

@@ -9,6 +9,7 @@ import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.service.ClientService;
+import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
@@ -77,39 +78,53 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository
                 .findById(id)
                 .orElseThrow(() -> {
-                            ClientNotFoundException notFoundException = new ClientNotFoundException(
-                                    "client with id  " + id + "  not found");
-                            log.error("error in getting client {}", id, notFoundException);
-                            return notFoundException;
-                        });
+                    ClientNotFoundException notFoundException = new ClientNotFoundException(
+                            "client with id  " + id + "  not found");
+                    log.error("error in getting client {}", id, notFoundException);
+                    return notFoundException;
+                });
     }
 
+
     @Override
-    public ClientDto saveClient(ClientDto clientDto) {
-        Optional<ClientDto> empty = clientRepository.findByEmail(clientDto.getEmail());
-        Client client = clientMapper.makeClient2(clientDto);
-        log.info("create clients service + {} " + clientDto);
-        if (!empty.isPresent()) {
-            clientRepository.save(client);
-        } else {
-            throw new ClientNotFoundException(" not found exception ");
+    public Client saveClient(ClientDto clientDto) {
+        Optional<Client> optionalClient = clientRepository.findUserByEmail(clientDto.getEmail());
+        if (optionalClient.isPresent()) {
+            log.error("client with email {} has already exists", clientDto.getEmail());
+            throw new AlreadyExistsException(
+                    "client with email = " + clientDto.getEmail() + " has already exists"
+            );
         }
-        return clientDto;
+
+        Client client = clientMapper.makeClient2(clientDto);
+        System.out.println(client);
+        log.info("create clients service + {} " + clientDto);
+        Client client1Save = clientRepository.save(client);
+        return client1Save;
     }
+
 
     @Override
     @Transactional
-    public ClientDto updateClient(Long id, ClientDto client) {
+    public ClientDto updateClient(Long id, ClientDto clientDto) {
         Client clientFromDatabase = clientRepository.findById(id)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "client with id = " + id + " does not exists"
                 ));
-        clientFromDatabase.setName(client.getName());
-        clientFromDatabase.setEmail(client.getEmail());
+        Optional<Client> clientOptional = clientRepository.findUserByEmail(clientDto.getEmail());
+        if (clientOptional.isPresent()) {
+            log.error("client with email {} has already exists", clientDto.getEmail());
+            throw new AlreadyExistsException(
+                    "client with email = " + clientDto.getEmail() + " has already exists"
+            );
+        }
+        clientFromDatabase.setName(clientDto.getName());
+        clientFromDatabase.setEmail(clientDto.getEmail());
         clientFromDatabase.getAuthenticationInfo().setPassword(
-                passwordEncoder.encode(client.getPassword())
-        );
-        return client;
+                passwordEncoder.encode(clientDto.getPassword()));
+
+        clientRepository.save(clientFromDatabase);
+        return clientDto;
     }
 
     @Override
@@ -122,3 +137,4 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.deleteById(id);
     }
 }
+

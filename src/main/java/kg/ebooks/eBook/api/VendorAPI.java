@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_GATEWAY;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/vendor")
@@ -47,18 +46,20 @@ public class VendorAPI {
     @GetMapping("/getAll")
     public ResponseEntity<List<VendorDto>> getAll(Vendor vendor) {
         try {
+            log.info("getAll vendors {}" + vendor );
             return new ResponseEntity<>(vendorService.getAllVendors(vendor), OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
     @GetMapping({"/getById/{id}"})
     public ResponseEntity<VendorDto> getVendor(@PathVariable("id") Long id) {
         try {
+            log.info("getById {}" + id);
             return new ResponseEntity<>(signupRequestVndr.clientGetById(vendorService.getByIdVendor(id)), OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
@@ -66,7 +67,7 @@ public class VendorAPI {
     public ResponseEntity<VendorDto> updateVendorProfil(@PathVariable("vendorId") Long id,
                                                         @RequestBody VendorDto vendorDto) {
         try {
-            System.out.println("ha ha ha ");
+            log.info("updateVendor profil {}" + vendorDto);
             return new ResponseEntity<>(vendorService.updateVendor(id, vendorDto), OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -76,16 +77,18 @@ public class VendorAPI {
     @DeleteMapping({"/deleteById/{vendorId}"})
     public ResponseEntity<Void> deleteVendorById(@PathVariable("vendorId") Long vendorId) {
         vendorService.deleteVendor(vendorId);
+        log.info("deleteVendorById " + vendorId);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/save")
-    public ResponseEntity<VendorDto> saveBook(@Valid @RequestBody VendorDto vendorDto) {
+    public ResponseEntity<Vendor> saveBook(@Valid @RequestBody VendorDto vendorDto) {
         try {
+            System.out.println(vendorDto);
             return new ResponseEntity<>(vendorService.saveVendor(vendorDto), OK);
         } catch (Exception e) {
             log.info("save a in bood orders" + vendorDto);
-            return new ResponseEntity<>(BAD_GATEWAY);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 }

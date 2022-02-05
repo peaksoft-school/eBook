@@ -43,7 +43,7 @@ public class ClientAPI {
             log.info("ClientController  - getClients -: {}", client);
             return new ResponseEntity<>(clientService.getClients(client), OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(BAD_GATEWAY);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
@@ -53,17 +53,17 @@ public class ClientAPI {
             log.info("ClientController  - getClient - id: {}", id);
             return new ResponseEntity<>(clientMapper.clientGetById(clientService.getClientById(id)), OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(BAD_GATEWAY);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ClientDto> saveClient(@Valid @RequestBody ClientDto clientDto) {
+    public ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDto clientDto) {
         try {
             log.info("create clients + {} " + clientDto);
             return new ResponseEntity<>(clientService.saveClient(clientDto), OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
