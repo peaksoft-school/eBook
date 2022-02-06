@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class Genre implements GenreGetDTO {
 
     @OneToMany(fetch = EAGER, cascade = {REFRESH, PERSIST, DETACH, MERGE})
     @JsonIgnore
-    private Set<Book> books;
+    private Set<Book> books = new HashSet<>();
 
     private Integer quantityOfBooks;
 

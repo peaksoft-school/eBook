@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.domain.model.books;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
+import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
@@ -12,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -50,7 +52,7 @@ public class Book implements BookInfoBkt {
 
     private String author;
 
-    @ManyToOne(fetch = LAZY, cascade = {DETACH, REFRESH, PERSIST})
+    @ManyToOne(fetch = EAGER, cascade = {DETACH, REFRESH, PERSIST})
     private Genre genre;
 
     private Language language;
@@ -104,7 +106,7 @@ public class Book implements BookInfoBkt {
     }
     @Override
     public FileInfo getImage() {
-        return images.stream().findFirst()
+        return images.stream().findAny()
                 .orElseThrow(() -> new DoesNotExistsException(
                         "image in book does not exists"
                 ));
@@ -120,5 +122,41 @@ public class Book implements BookInfoBkt {
     @Override
     public BigDecimal getNetPrice() {
         return price;
+    }
+
+    public GenreDTO getGenre() {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(genre, GenreDTO.class);
+    }
+
+    public boolean isNew() {
+        LocalDate now = LocalDate.now().minusDays(30);
+        return now.isBefore(storageDate);
+    }
+
+    public int getYearOfIssue() {
+        return dateOfIssue.getYear();
+    }
+
+    public String getPublishingHouse() {
+        if (paperBook != null) {
+            return paperBook.getPublishingHouse();
+        }
+
+        if (electronicBook != null) {
+            return electronicBook.getPublishingHouse();
+        }
+        return "hello";
+    }
+
+    public String getFragment() {
+        if (paperBook != null) {
+            return paperBook.getFragment();
+        }
+
+        if (electronicBook != null) {
+            return electronicBook.getFragment();
+        }
+        return "no fragment";
     }
 }
