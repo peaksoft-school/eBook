@@ -7,8 +7,10 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
 import kg.ebooks.eBook.aws.working_with_files.FileStore;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,11 +66,11 @@ public class FileServiceImpl implements FileService {
             fileStore.save(folderName.getPath(), fileName, Optional.of(metadata), multipartFile.getInputStream());
             log.info("successfully upload file to amazon s3 server :: file name = {}", fileName);
         } catch (AmazonServiceException | IOException e) {
-            throw new AmazonServiceException (
+            throw new AmazonServiceException(
                     "failed to save file to Amazon s3 server"
             );
         }
-        return fileRepository.save(new FileInfo(null, folderName, fileName));
+        return fileRepository.save(new FileInfo(null, folderName, fileName, true));
     }
 
     private Set<String> getMimeTypes(FolderName folderName) {
@@ -78,7 +80,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public byte[] downloadFile(Long fileId) {
         FileInfo fileInfo = fileRepository.findById(fileId)
-                .orElseThrow(() -> new InvalidFileException (
+                .orElseThrow(() -> new InvalidFileException(
                         "CANNOT DOWNLOAD FILE \n reason: file does not exists"
                 ));
         log.info("downloading file [{}]", fileInfo.getFileName());
@@ -96,7 +98,7 @@ public class FileServiceImpl implements FileService {
             log.info("successfully deleted from to database :: file name = {}", fileInfo.getFileName());
         } catch (AmazonServiceException e) {
             log.info("failed to delete file from amazon s3 bucket");
-            throw new AmazonServiceException (
+            throw new AmazonServiceException(
                     "failed to delete file from amazon s3 bucket"
             );
         }

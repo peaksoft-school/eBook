@@ -13,8 +13,10 @@ import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -65,8 +67,16 @@ public class BookSaveMapper {
     public Book makeBookFromBookRequest(TypeOfBook typeOfBook, BookSave<? extends BookRequest> bookSave) {
 
         Set<FileInfo> fileInfos = bookSave.getImages().stream()
-                .map(fileService::findById)
-                .collect(Collectors.toSet());
+                .map(fileId -> {
+                    FileInfo fileInfoById = fileService.findById(fileId);
+                    if (!fileInfoById.isFree()) {
+                        log.error("file with id = [{}] has already in a book", fileId);
+                        throw new InvalidRequestException(
+                                String.format("file with id = [%d] has already in a book", fileId)
+                        );
+                    }
+                    return fileInfoById;
+                }).collect(Collectors.toSet());
 
 
         Book book = makeABook(fileInfos,

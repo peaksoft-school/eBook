@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.aws.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import lombok.*;
 
@@ -26,4 +27,11 @@ public class FileInfo {
     private FolderName folderName;
 
     private String fileName;
+
+    @JsonIgnore
+    private boolean free;
+
+    public void makeIsNotFree() {
+        this.free = false;
+    }
 }

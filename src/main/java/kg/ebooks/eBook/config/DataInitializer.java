@@ -34,7 +34,7 @@ import java.util.HashSet;
 @Component
 public class DataInitializer {
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -92,7 +92,7 @@ public class DataInitializer {
 
             // audioBooks
             AudioBook audioBook = new AudioBook();
-            audioBook.setFragment(new FileInfo(null, FolderName.AUDIO_FILES, "test"));
+            audioBook.setFragment(new FileInfo(null, FolderName.AUDIO_FILES, "test", false));
             audioBook.setDuration(LocalTime.of(19, 23, 12));
             // TODO: 10/1/22 set value to fields when finished audiobook
 

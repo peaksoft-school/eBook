@@ -83,6 +83,25 @@ public class Book implements BookInfoBkt {
 
     private RequestStatus requestStatus;
 
+    private int likes;
+
+    private int inBasket;
+
+    public void like() {
+        this.likes++;
+    }
+
+    public void disLike() {
+        this.likes--;
+    }
+
+    public void incrementInBasket() {
+        this.inBasket++;
+    }
+
+    public void decrementInBasket() {
+        this.inBasket--;
+    }
     @Override
     public FileInfo getImage() {
         return images.stream().findFirst()

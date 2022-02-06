@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.mapper.BookSaveMapper;
 import kg.ebooks.eBook.db.domain.model.books.Book;
@@ -22,7 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -73,6 +73,7 @@ public class BookSaveServiceImpl implements BookSaveService {
                     ));
             save.setStorageDate(LocalDate.now());
             admin.setBook(save);
+            save.getImages().forEach(FileInfo::makeIsNotFree);
         } else if (Objects.equals(authority.getAuthority(), VENDOR)) {
             response.setRequestStatus(INPROGRESS);
             save = bookRepository.save(response);
@@ -82,6 +83,7 @@ public class BookSaveServiceImpl implements BookSaveService {
                     ));
             save.setStorageDate(LocalDate.now());
             vendor.setBook(save);
+            save.getImages().forEach(FileInfo::makeIsNotFree);
         } else {
             log.error("access forbidden for this user with authority {}", authority);
             throw new AccessForbiddenException(
@@ -93,17 +95,16 @@ public class BookSaveServiceImpl implements BookSaveService {
         return modelMapper.map(save, BookResponse.class);
     }
 
-    private boolean isBookValid(TypeOfBook typeOfBook, BookSave<?> book) {
+    private void isBookValid(TypeOfBook typeOfBook, BookSave<?> book) {
         Book byBookName = bookRepository.findByBookName(book.getBookName());
         if (byBookName != null) {
             if (byBookName.getTypeOfBook() == typeOfBook &&
                     byBookName.getLanguage() == book.getLanguage()) {
                 log.error("book already [{}] exists in database", book.getBookName());
                 throw new AlreadyExistsException(
-                        "book already [ " + book.getBookName()+ " ] exists"
+                        "book already [ " + book.getBookName()+ " ] exists in database"
                 );
             }
         }
-        return true;
     }
 }
