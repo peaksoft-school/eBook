@@ -15,7 +15,7 @@ import java.math.BigDecimal;
  */
 @NoArgsConstructor
 @Getter @Setter
-public class BookDTO {
+public class BookResponse {
     private Long bookId;
     private FileInfo image;
     private String bookName;

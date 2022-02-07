@@ -6,6 +6,7 @@ import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
@@ -42,39 +44,29 @@ public class Book implements BookInfoBkt {
     private Long bookId;
 
     @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<FileInfo> images;
+    private Set<FileInfo> images;
 
-    @NotBlank(message = "Book name is required!")
     private String bookName;
 
-    @NotBlank(message = "Author full name is required!")
     private String author;
 
     @ManyToOne(fetch = LAZY, cascade = {DETACH, REFRESH, PERSIST})
-    @NotNull(message = "book should have genre!")
     private Genre genre;
 
-    @NotNull(message = "you missed the language")
     private Language language;
 
-    @NotNull(message = "you missed date of issue")
     private LocalDate dateOfIssue;
 
-    @NotNull(message = "you have to define prise of book")
     private BigDecimal price;
 
-    @NotNull(message = "you have to define is Book bestSeller or not")
     private Boolean bestSeller;
 
-    @Min(value = 1, message = "you can give min 1 percent to make a discount")
-    @Max(value = 100, message = "you can give max 100 percent to make a discount")
     private byte discount;
 
     @NotNull(message = "you have to define type of book")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private TypeOfBook typeOfBook;
 
-    @NotBlank(message = "you have to define description to this book")
     @Column(length = 10000)
     private String description;
 
@@ -91,9 +83,31 @@ public class Book implements BookInfoBkt {
 
     private RequestStatus requestStatus;
 
+    private int likes;
+
+    private int inBasket;
+
+    public void like() {
+        this.likes++;
+    }
+
+    public void disLike() {
+        this.likes--;
+    }
+
+    public void incrementInBasket() {
+        this.inBasket++;
+    }
+
+    public void decrementInBasket() {
+        this.inBasket--;
+    }
     @Override
     public FileInfo getImage() {
-        return images.get(0);
+        return images.stream().findFirst()
+                .orElseThrow(() -> new DoesNotExistsException(
+                        "image in book does not exists"
+                ));
     }
 
     @Override

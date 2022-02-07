@@ -1,20 +1,20 @@
 package kg.ebooks.eBook.db.domain.dto.book;
 
-import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
-import kg.ebooks.eBook.db.domain.model.others.Genre;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -24,38 +24,39 @@ import java.util.List;
  */
 @NoArgsConstructor
 @Getter @Setter
-public class BookSave<BOOK>{
+public class BookSave<BOOKTYPE extends BookRequest> {
 
-    private List<FileInfo> images;
+    private Set<Long> images;
 
-    @NotNull(message = "type of book must not be null")
-    private TypeOfBook typeOfBook;
-
-    @NotBlank(message = "book name must not be null")
+    @NotBlank(message = "Book name is required!")
     private String bookName;
 
-    @NotBlank(message = "author must not be null")
+    @NotBlank(message = "Author full name is required!")
     private String author;
 
-    @NotNull(message = "genreId must not be null")
+    @NotNull(message = "book should have genre!")
     private Long genreId;
 
     @Column(length = 1234)
+    @NotBlank(message = "you have to define description to this book")
     private String description;
 
-    @NotNull(message = "Language must not be null")
+    @NotNull(message = "you missed the language")
     private Language language;
 
-    @NotNull(message = "data of issue must not be null")
+    @NotNull(message = "you missed date of issue")
     private LocalDate dataOfIssue;
 
+    @NotNull(message = "you have to define is Book bestSeller or not")
     private Boolean bestSeller;
 
-    @NotNull(message = "price must not be null")
+    @NotNull(message = "you have to define prise of book")
     private BigDecimal price;
 
+    @Min(value = 1, message = "you can give min 1 percent to make a discount")
+    @Max(value = 100, message = "you can give max 100 percent to make a discount")
     private byte discount;
 
-    private BOOK book;
+    private BOOKTYPE book;
 
 }

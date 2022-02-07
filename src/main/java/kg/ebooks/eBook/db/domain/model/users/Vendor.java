@@ -58,4 +58,8 @@ public class Vendor {
 
     @OneToMany(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private List<Promo> promoCodes = new ArrayList();
+
+    public void setBook(Book save) {
+        this.booksToSale.add(save);
+    }
 }

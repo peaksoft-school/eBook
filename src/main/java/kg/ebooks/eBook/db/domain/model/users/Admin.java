@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -40,8 +41,12 @@ public class Admin {
     private String email;
 
     @OneToMany
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
+
+    public void setBook(Book book) {
+        this.books.add(book);
+    }
 }

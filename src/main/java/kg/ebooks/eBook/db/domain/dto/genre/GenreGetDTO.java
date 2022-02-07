@@ -1,8 +1,7 @@
 package kg.ebooks.eBook.db.domain.dto.genre;
 
-import kg.ebooks.eBook.db.domain.dto.book.BookDTO;
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -19,5 +18,5 @@ public interface GenreGetDTO {
 
     Integer getQuantityOfBooks();
 
-    Set<BookDTO> getAllBooks();
+    Set<BookResponse> getAllBooks();
 }
