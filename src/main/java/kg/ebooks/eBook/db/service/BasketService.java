@@ -10,11 +10,11 @@ import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
  */
 public interface BasketService {
 
-    void addBookToBasket(Long clientId, Long bookId);
+    void addBookToBasket(String clientEmail, Long bookId);
 
-    void deleteBookFromBasket(Long clientId, Long bookId);
+    void deleteBookFromBasket(String clientEmail, Long bookId);
 
-    BasketInfo getBasketByClientId(Long clientId);
+    BasketInfo getBasketByClientId(String clientEmail);
 
-    void cleanBasketByClientId(Long clientId);
+    void cleanBasketByClientId(String clientEmail);
 }

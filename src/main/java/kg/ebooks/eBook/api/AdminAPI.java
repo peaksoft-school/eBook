@@ -32,8 +32,8 @@ public class AdminAPI {
         return bookGetService.getAllBooksStorageRequests();
     }
 
-    @PostMapping("/accept/book/request")
-    public String acceptBookRequest(@RequestBody Long bookId) {
+    @PostMapping("/accept/book/request/{bookId}")
+    public String acceptBookRequest(@PathVariable Long bookId) {
         return adminService.acceptBookRequest(bookId);
     }
 

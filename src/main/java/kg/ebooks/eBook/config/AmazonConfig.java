@@ -21,14 +21,17 @@ import org.springframework.context.annotation.Configuration;
 public class AmazonConfig {
 
     public static final AWSCredentials awsCredentials = new BasicAWSCredentials(
-            "AKIA2ODYHKQAFCC4W7ZK",
-            "7LKvgCVVndL1lJAusftw+TMbCxN4qmSDSjhFFupx"
+//            "AKIA2ODYHKQAFCC4W7ZK",
+//            "7LKvgCVVndL1lJAusftw+TMbCxN4qmSDSjhFFupx"
+            "AKIAZZPYDOROTII6AZMX",
+            "doXbU3YapsOPhiPikUV18FyHjH0j2KI3pxHWAgnc"
     );
 
     @Bean
     public AmazonS3 amazonS3() {
         return AmazonS3ClientBuilder.standard()
-                .withRegion(Regions.EU_CENTRAL_1)
+//                .withRegion(Regions.EU_CENTRAL_1)
+                .withRegion(Regions.AP_NORTHEAST_1)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }

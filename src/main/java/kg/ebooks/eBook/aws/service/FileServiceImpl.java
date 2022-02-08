@@ -94,6 +94,7 @@ public class FileServiceImpl implements FileService {
                         "file with id = " + fileId + " does not exists"
                 ));
         try {
+            log.warn("{}/{}", fileInfo.getFolderName().getPath(), fileInfo.getFileName());
             fileStore.delete(fileInfo.getFolderName().getPath(), fileInfo.getFileName());
             log.info("successfully deleted from to database :: file name = {}", fileInfo.getFileName());
         } catch (AmazonServiceException e) {

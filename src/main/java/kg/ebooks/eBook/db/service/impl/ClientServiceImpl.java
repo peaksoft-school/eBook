@@ -9,6 +9,7 @@ import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.service.ClientService;
+import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
                 authenticationInfoRepository.findByEmail(email);
 
         if (byEmail.isPresent()) {
-            throw new IllegalStateException(
+            throw new AlreadyExistsException(
                     "user with email = " + email + "has already exists"
             );
         }
