@@ -9,6 +9,7 @@ import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class AuthAPI {
 
     @PostMapping("/authentication")
     @Operation(summary = "Прохождение аутентификации", description = "Позволяет пройти аутентификацию")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> authApi(@RequestBody SigninRequest loginRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(

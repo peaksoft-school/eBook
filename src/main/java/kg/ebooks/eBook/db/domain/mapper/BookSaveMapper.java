@@ -1,8 +1,8 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
-import kg.ebooks.eBook.db.domain.dto.book.BookSave;
-import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
+import kg.ebooks.eBook.aws.service.FileService;
+import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
@@ -10,15 +10,22 @@ import kg.ebooks.eBook.db.domain.model.books.PaperBook;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
-import kg.ebooks.eBook.db.service.GenreService;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -28,33 +35,14 @@ import java.util.List;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class BookSaveMapper {
 
     private final GenreRepository genreRepository;
+    private final FileService fileService;
+    private final BookRepository bookRepository;
 
-    public Book makeBookFromAudioBook(BookSave<AudioBook> audioBook) {
-        Book book = makeABook(audioBook.getImages(),
-                audioBook.getTypeOfBook(),
-                audioBook.getBookName(),
-                audioBook.getAuthor(),
-                audioBook.getDescription(),
-                audioBook.getLanguage(),
-                audioBook.getDataOfIssue(),
-                audioBook.getBestSeller(),
-                audioBook.getPrice(),
-                audioBook.getDiscount());
-
-        AudioBook audioBook1 = new AudioBook();
-        audioBook1.setFragment(audioBook.getBook().getFragment());
-        audioBook1.setDuration(audioBook.getBook().getDuration());
-        audioBook1.setAudioBook(audioBook.getBook().getAudioBook());
-
-        book.setAudioBook(audioBook1);
-        return book;
-    }
-
-    private static Book makeABook(List<FileInfo> images,
-                                  TypeOfBook typeOfBook,
+    private static Book makeABook(Set<FileInfo> images,
                                   String bookName,
                                   String author,
                                   String description,
@@ -65,7 +53,6 @@ public class BookSaveMapper {
                                   byte discount) {
         Book book = new Book();
         book.setImages(images);
-        book.setTypeOfBook(typeOfBook);
         book.setBookName(bookName);
         book.setAuthor(author);
         book.setDescription(description);
@@ -77,59 +64,76 @@ public class BookSaveMapper {
         return book;
     }
 
-    public Book makeBookFromElectronicBook(BookSave<ElectronicBook> electronicBookToSave) {
-        Book book = makeABook(electronicBookToSave.getImages(),
-                electronicBookToSave.getTypeOfBook(),
-                electronicBookToSave.getBookName(),
-                electronicBookToSave.getAuthor(),
-                electronicBookToSave.getDescription(),
-                electronicBookToSave.getLanguage(),
-                electronicBookToSave.getDataOfIssue(),
-                electronicBookToSave.getBestSeller(),
-                electronicBookToSave.getPrice(),
-                electronicBookToSave.getDiscount());
+    public Book makeBookFromBookRequest(TypeOfBook typeOfBook, BookSave<? extends BookRequest> bookSave) {
 
-        ElectronicBook electronicBook = new ElectronicBook();
-        electronicBook.setPageSize(electronicBookToSave.getBook().getPageSize());
-        electronicBook.setPublishingHouse(electronicBookToSave.getBook().getPublishingHouse());
-        electronicBook.setFragment(electronicBookToSave.getBook().getFragment());
-        electronicBook.setElectronicBook(electronicBookToSave.getBook().getElectronicBook());
+        Set<FileInfo> fileInfos = bookSave.getImages().stream()
+                .map(fileId -> {
+                    FileInfo fileInfoById = fileService.findById(fileId);
+                    if (!fileInfoById.isFree()) {
+                        log.error("file with id = [{}] has already in a book", fileId);
+                        throw new InvalidRequestException(
+                                String.format("file with id = [%d] has already in a book", fileId)
+                        );
+                    }
+                    return fileInfoById;
+                }).collect(Collectors.toSet());
 
-        book.setElectronicBook(electronicBook);
 
-        return book;
+        Book book = makeABook(fileInfos,
+                bookSave.getBookName(),
+                bookSave.getAuthor(),
+                bookSave.getDescription(),
+                bookSave.getLanguage(),
+                bookSave.getDataOfIssue(),
+                bookSave.getBestSeller(),
+                bookSave.getPrice(),
+                bookSave.getDiscount());
+
+        switch (typeOfBook) {
+            case PAPER_BOOK:
+                PaperBookRequest paperBookRequest = (PaperBookRequest) bookSave.getBook();
+                PaperBook paperBook = new PaperBook();
+                paperBook.setFragment(paperBookRequest.getFragment());
+                paperBook.setPublishingHouse(paperBookRequest.getPublishingHouse());
+                paperBook.setPageSize(paperBook.getPageSize());
+                paperBook.setQuantityOfBooks(paperBook.getQuantityOfBooks());
+                book.setPaperBook(paperBook);
+                book.setTypeOfBook(PAPER_BOOK);
+                break;
+            case AUDIO_BOOK:
+                AudioBookRequest audioBookRequest = (AudioBookRequest) bookSave.getBook();
+                AudioBook audioBook = new AudioBook();
+                audioBook.setFragment(fileService.findById(audioBookRequest.getFragmentId()));
+                audioBook.setDuration(audioBookRequest.getDuration().makeLocalTime());
+                audioBook.setAudioBook(fileService.findById(audioBookRequest.getAudioBookId()));
+                book.setAudioBook(audioBook);
+                book.setTypeOfBook(AUDIO_BOOK);
+                break;
+            case ELECTRONIC_BOOK:
+                ElectronicBookRequest electronicBookRequest = (ElectronicBookRequest) bookSave.getBook();
+                ElectronicBook electronicBook = new ElectronicBook();
+                electronicBook.setFragment(electronicBookRequest.getFragment());
+                electronicBook.setPublishingHouse(electronicBookRequest.getPublishingHouse());
+                electronicBook.setPageSize(electronicBookRequest.getPageSize());
+                electronicBook.setElectronicBook(fileService.findById(electronicBookRequest.getElectronicBookId()));
+                book.setElectronicBook(electronicBook);
+                book.setTypeOfBook(ELECTRONIC_BOOK);
+                break;
+        }
+        return setGenreToBook(book, bookSave.getGenreId());
     }
 
-    public Book makeBookFromPaperBook(BookSave<PaperBook> paperBookToSave) {
-        Book book = makeABook(paperBookToSave.getImages(),
-                paperBookToSave.getTypeOfBook(),
-                paperBookToSave.getBookName(),
-                paperBookToSave.getAuthor(),
-                paperBookToSave.getDescription(),
-                paperBookToSave.getLanguage(),
-                paperBookToSave.getDataOfIssue(),
-                paperBookToSave.getBestSeller(),
-                paperBookToSave.getPrice(),
-                paperBookToSave.getDiscount());
 
-        PaperBook paperBook = new PaperBook();
-        paperBook.setPageSize(paperBookToSave.getBook().getPageSize());
-        paperBook.setPublishingHouse(paperBookToSave.getBook().getPublishingHouse());
-        paperBook.setFragment(paperBookToSave.getBook().getFragment());
-        paperBook.setQuantityOfBooks(paperBookToSave.getBook().getQuantityOfBooks());
-
-        book.setPaperBook(paperBook);
-
-        return book;
-    }
-
-    public Book setGenreToBook(Book book, Long genreId) {
+    @Transactional
+    Book setGenreToBook(Book book, Long genreId) {
         Genre genre = genreRepository.findById(genreId)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "genre with id = " + genreId + " does not exists"
                 ));
 
         book.setGenre(genre);
+        genre.setBook(book);
+        genre.count();
         return book;
     }
 }

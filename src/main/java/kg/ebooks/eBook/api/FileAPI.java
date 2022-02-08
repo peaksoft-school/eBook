@@ -1,10 +1,12 @@
 package kg.ebooks.eBook.api;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,30 +21,28 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/static")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "This API for saving files {images, audios, electronic_books} to amazon S3 bucket")
+@PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
 public class FileAPI {
 
     private final FileService fileService;
 
-    @PostMapping("/upload/{typeOfFile}")
-    public FileInfo uploadFile(@PathVariable String typeOfFile,
-                               @RequestParam MultipartFile file) {
-        System.out.println("works");
-        switch (typeOfFile) {
-            case "image":
-                return fileService.uploadFile(FolderName.IMAGES, file);
-            case "audio":
-                return fileService.uploadFile(FolderName.AUDIO_FILES, file);
-            case "pdf":
-                return fileService.uploadFile(FolderName.PDF_FILES, file);
-            default:
-                log.error("invalid type of file [{}]", typeOfFile);
-                throw new IllegalStateException(
-                        "Invalid type of file [ " + typeOfFile + " ]"
-                );
-        }
+    @PostMapping("/upload/image")
+    public FileInfo uploadFile(@RequestParam MultipartFile file) {
+        return fileService.uploadFile(FolderName.IMAGES, file);
     }
 
-    @PostMapping("/upload/fragment/audio")
+    @PostMapping("/upload/audio")
+    public FileInfo uploadAudioFile(@RequestParam MultipartFile file) {
+        return fileService.uploadFile(FolderName.AUDIO_FILES, file);
+    }
+
+    @PostMapping("/upload/pdf")
+    public FileInfo uploadPDFFile(@RequestParam MultipartFile file) {
+        return fileService.uploadFile(FolderName.PDF_FILES, file);
+    }
+
+    @PostMapping("/upload/audio/fragment")
     public FileInfo uploadFragmentFile(@RequestParam MultipartFile file) {
         return fileService.uploadFile(FolderName.AUDIO_FRAGMENTS_FILES, file);
     }

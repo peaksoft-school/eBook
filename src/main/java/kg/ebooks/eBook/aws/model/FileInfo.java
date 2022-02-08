@@ -1,10 +1,9 @@
 package kg.ebooks.eBook.aws.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.ebooks.eBook.aws.bucket.FolderName;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import javax.persistence.*;
 
 /**
@@ -18,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
+@ToString
 public class FileInfo {
 
     @Id
@@ -27,4 +27,11 @@ public class FileInfo {
     private FolderName folderName;
 
     private String fileName;
+
+    @JsonIgnore
+    private boolean free;
+
+    public void makeIsNotFree() {
+        this.free = false;
+    }
 }
