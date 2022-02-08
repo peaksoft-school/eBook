@@ -28,10 +28,10 @@ public class BasketServiceImpl implements BasketService {
 
     @Override
     @Transactional
-    public void addBookToBasket(Long clientId, Long bookId) {
+    public void addBookToBasket(String clientEmail, Long bookId) {
         Book book = getOrElseThrow(bookId);
 
-        Client client = getClient(clientId);
+        Client client = getClientByEmail(clientEmail);
 
         if (client.getBasket().getBooks().contains(book)) {
             throw new AlreadyExistsException(
@@ -43,11 +43,11 @@ public class BasketServiceImpl implements BasketService {
 
     @Override
     @Transactional
-    public void deleteBookFromBasket(Long clientId, Long bookId) {
+    public void deleteBookFromBasket(String clientEmail, Long bookId) {
 
         Book book = getOrElseThrow(bookId);
 
-        Client client = getClient(clientId);
+        Client client = getClientByEmail(clientEmail);
 
         if (!client.getBasket().getBooks().contains(book)) {
             throw new DoesNotExistsException(
@@ -59,8 +59,8 @@ public class BasketServiceImpl implements BasketService {
     }
 
     @Override
-    public BasketInfo getBasketByClientId(Long clientId) {
-        Client client = getClient(clientId);
+    public BasketInfo getBasketByClientId(String clientEmail) {
+        Client client = getClientByEmail(clientEmail);
         Basket basket = client.getBasket();
         return basket.makeBasketInfo();
     }
@@ -79,10 +79,17 @@ public class BasketServiceImpl implements BasketService {
                 ));
     }
 
+    private Client getClientByEmail(String clientEmail) {
+        return clientRepository.findByEmailO(clientEmail)
+                .orElseThrow(() -> new DoesNotExistsException(
+                        "Client with email = " + clientEmail + " does not exists"
+                ));
+    }
+
     @Override
     @Transactional
-    public void cleanBasketByClientId(Long clientId) {
-        Client client = getClient(clientId);
+    public void cleanBasketByClientId(String clientEmail) {
+        Client client = getClientByEmail(clientEmail);
         client.getBasket().clear();
     }
 }

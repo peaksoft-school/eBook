@@ -25,5 +25,6 @@ public class ClientDto {
     @NotNull
     @JsonProperty("password")
     @JsonIgnore
+    // TODO: 7/2/22 fix password
     private String password;
 }
