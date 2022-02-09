@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +22,6 @@ public class VendorDto {
     private String email;
     private String nameOfBranch;
     private String password;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate minDate;
 }

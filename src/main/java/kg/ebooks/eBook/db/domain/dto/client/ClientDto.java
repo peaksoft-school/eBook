@@ -1,6 +1,9 @@
 package kg.ebooks.eBook.db.domain.dto.client;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -13,4 +16,6 @@ public class ClientDto {
     private String name;
     private String email;
     private String password;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate minDate;
 }

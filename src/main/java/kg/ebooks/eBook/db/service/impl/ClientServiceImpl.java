@@ -12,8 +12,10 @@ import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class ClientServiceImpl implements ClientService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationInfoRepository authenticationInfoRepository;
     private final SignupRequestClntMapper clientMapper;
+
 
     @Override
     public SignupRequestClnt registerClient(SignupRequestClnt signupRequest) {
@@ -56,8 +59,8 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public List<ClientDto> getClients(Client client) {
-        log.info("ClientController  - getClients -: {}", client);
+    public List<ClientDto> getClients() {
+        log.info("ClientController  - getClients -: {}");
         return clientRepository.findAll()
                 .stream()
                 .map(this::clientDto)

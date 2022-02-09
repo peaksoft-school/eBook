@@ -54,8 +54,8 @@ public class VendorServiceImpl implements VendorService {
 
 
     @Override
-    public List<VendorDto> getAllVendors(Vendor vendor) {
-        log.info("ClientController  - getClients -: {}", vendor);
+    public List<VendorDto> getAllVendors() {
+        log.info("ClientController  - getClients -: {}");
         return vendorRepository.findAll()
                 .stream()
                 .map(this::clientDto)

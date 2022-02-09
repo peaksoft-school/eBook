@@ -53,6 +53,7 @@ public class SignupRequestClntMapper {
         Client client = new Client();
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
+        clientDto.setMinDate(clientDto.getMinDate());
         client.setAuthenticationInfo(authenticationInfo);
         return client;
     }

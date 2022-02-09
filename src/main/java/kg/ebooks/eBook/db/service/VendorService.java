@@ -11,7 +11,7 @@ public interface VendorService {
 
     SignupRequestVndr registerVendor(SignupRequestVndr signupRequest);
 
-    List<VendorDto> getAllVendors(Vendor vendor);
+    List<VendorDto> getAllVendors();
 
     Vendor getByIdVendor(Long id);
 

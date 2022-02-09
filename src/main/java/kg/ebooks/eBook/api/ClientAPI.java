@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.api;
 
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
@@ -21,6 +22,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/client")
+@Api(description = "Контроллер для управления пользователем")
 @CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
@@ -38,16 +40,18 @@ public class ClientAPI {
 
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<ClientDto>> getAllClients(Client client) {
+    @Operation(summary = "Все пользователи", description = "Позволяет получить всех пользователей из базы данных")
+    public ResponseEntity<List<ClientDto>> getAllClients() {
         try {
-            log.info("ClientController  - getClients -: {}", client);
-            return new ResponseEntity<>(clientService.getClients(client), OK);
+            log.info("ClientController  - getClients -: {}");
+            return new ResponseEntity<>(clientService.getClients(), OK);
         } catch (Exception e) {
             return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
     @GetMapping({"/getById/{id}"})
+    @Operation(summary = "Пользователь(id)", description = "Позволяет получить пользователя по 'id'")
     public ResponseEntity<ClientDto> getClient(@PathVariable("id") Long id) {
         try {
             log.info("ClientController  - getClient - id: {}", id);
@@ -58,6 +62,7 @@ public class ClientAPI {
     }
 
     @PostMapping("/save")
+    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
     public ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDto clientDto) {
         try {
             log.info("create clients + {} " + clientDto);
@@ -68,6 +73,7 @@ public class ClientAPI {
     }
 
     @PutMapping({"/update/{clientId}"})
+    @Operation(summary = "Обновление пользователя", description = "Позволяет обновить пользователя")
     public ResponseEntity<ClientDto> updateClient(@PathVariable("clientId") Long id,
                                                   @RequestBody ClientDto client) {
         log.info("Updating client: {}", client);
@@ -79,6 +85,7 @@ public class ClientAPI {
     }
 
     @DeleteMapping({"/delete/{clientId}"})
+    @Operation(summary = "Удаление пользователя", description = "Позволяет удалить пользователя")
     public ResponseEntity<Void> deleteClient(@PathVariable("clientId") Long id) {
         log.info("Deleting client with id: {}, id" + id);
         clientService.deleteClientById(id);
