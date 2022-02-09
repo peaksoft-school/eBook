@@ -1,8 +1,12 @@
 package kg.ebooks.eBook.api;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
+import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.service.BasketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,26 +24,30 @@ public class BasketAPI {
 
     private final BasketService basketService;
 
-    @PostMapping("{clientId}/add/book/{bookId}")
-    public void addBookToBasket(@PathVariable Long clientId,
-                                @PathVariable Long bookId) {
-        basketService.addBookToBasket(clientId, bookId);
+    @PostMapping("/add/book/{bookId}")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public void addBookToBasket(Authentication authentication, @PathVariable Long bookId) {
+        AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
+        basketService.addBookToBasket(authenticationInfo.getEmail(), bookId);
     }
 
-    @DeleteMapping("{clientId}/delete/{bookId}/book")
-    public void deleteBookFromBasket(@PathVariable Long clientId,
+    @DeleteMapping("/delete/book/{bookId}")
+    public void deleteBookFromBasket(Authentication authentication,
                                      @PathVariable Long bookId) {
-        basketService.deleteBookFromBasket(clientId, bookId);
+        AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
+        basketService.deleteBookFromBasket(authenticationInfo.getEmail(), bookId);
     }
 
-    @GetMapping("/{clientId}/get")
-    public BasketInfo getBasketById(@PathVariable Long clientId) {
-        return basketService.getBasketByClientId(clientId);
+    @GetMapping("/get")
+    public BasketInfo getBasketById(Authentication authentication) {
+        AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
+        return basketService.getBasketByClientId(authenticationInfo.getEmail());
     }
 
-    @DeleteMapping("/{clientId}/clean")
-    public void cleanBacket(@PathVariable Long clientId) {
-        basketService.cleanBasketByClientId(clientId);
+    @DeleteMapping("/clean")
+    public void cleanBasket(Authentication authentication) {
+        AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
+        basketService.cleanBasketByClientId(authenticationInfo.getEmail());
     }
 
     // TODO: 25/1/22 total amounts

@@ -9,5 +9,15 @@ package kg.ebooks.eBook.db.domain.model.enums;
 public enum RequestStatus {
     ACCEPTED,
     DENIED,
-    INPROGRESS
+    INPROGRESS;
+
+    private String reason;
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 }

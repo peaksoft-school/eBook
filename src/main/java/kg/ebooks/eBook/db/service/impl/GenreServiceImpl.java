@@ -49,7 +49,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     private Genre findById(Long genreId) {
-       return genreRepository.findById(genreId)
+        return genreRepository.findById(genreId)
                 .orElseThrow(() -> {
                     log.error("genre with id = {} not found ", genreId);
                     return new DoesNotExistsException(
@@ -81,7 +81,7 @@ public class GenreServiceImpl implements GenreService {
         try {
             genreRepository.delete(byId);
         } catch (Exception ex) {
-        log.info("can't delete this genre with id = {} because this genre related to another table", genreId);
+            log.info("can't delete this genre with id = {} because this genre related to another table", genreId);
             throw new ImpossibleException(
                     "you can't delete this genre [" + byId.getGenreName() +
                             "] because this genre related to another table"

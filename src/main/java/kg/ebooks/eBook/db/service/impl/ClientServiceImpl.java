@@ -45,7 +45,7 @@ public class ClientServiceImpl implements ClientService {
                 authenticationInfoRepository.findByEmail(email);
 
         if (byEmail.isPresent()) {
-            throw new IllegalStateException(
+            throw new AlreadyExistsException(
                     "user with email = " + email + "has already exists"
             );
         }
