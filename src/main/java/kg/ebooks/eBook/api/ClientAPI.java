@@ -1,34 +1,33 @@
 package kg.ebooks.eBook.api;
 
-import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
 
 
 @RestController
 @RequestMapping("/api/client")
-@Api(description = "Контроллер для управления пользователем")
+@Tag(name = "Контроллер для управления пользователем")
 @CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
 public class ClientAPI {
 
-    @Autowired
     private final ClientService clientService;
     private final SignupRequestClntMapper clientMapper;
 
@@ -52,7 +51,7 @@ public class ClientAPI {
 
     @GetMapping({"/getById/{id}"})
     @Operation(summary = "Пользователь(id)", description = "Позволяет получить пользователя по 'id'")
-    public ResponseEntity<ClientDto> getClient(@PathVariable("id") Long id) {
+    public ResponseEntity<ClientDtoResquestResponse> getClient(@PathVariable("id") Long id) {
         try {
             log.info("ClientController  - getClient - id: {}", id);
             return new ResponseEntity<>(clientMapper.clientGetById(clientService.getClientById(id)), OK);

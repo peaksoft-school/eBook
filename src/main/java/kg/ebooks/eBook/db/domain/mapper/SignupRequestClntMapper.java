@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -53,22 +54,22 @@ public class SignupRequestClntMapper {
         Client client = new Client();
         client.setName(clientDto.getName());
         client.setEmail(clientDto.getEmail());
-        clientDto.setMinDate(clientDto.getMinDate());
         client.setAuthenticationInfo(authenticationInfo);
         return client;
     }
 
 
-    public ClientDto clientGetById(Client client) {
+    public ClientDtoResquestResponse clientGetById(Client client) {
         if (client == null) {
             return null;
         }
-        ClientDto clientDto = new ClientDto();
-        clientDto.setClientId(client.getClientId());
-        clientDto.setName(client.getName());
-        clientDto.setEmail(client.getEmail());
-        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
-        return clientDto;
+        ClientDtoResquestResponse clientDtoResquestResponse = new ClientDtoResquestResponse();
+        clientDtoResquestResponse.setClientId(client.getClientId());
+        clientDtoResquestResponse.setName(client.getName());
+        clientDtoResquestResponse.setEmail(client.getEmail());
+        clientDtoResquestResponse.setDateOfRegistration(client.getDateOfRegistration());
+        clientDtoResquestResponse.setPassword(client.getAuthenticationInfo().getPassword());
+        return clientDtoResquestResponse;
     }
 
 

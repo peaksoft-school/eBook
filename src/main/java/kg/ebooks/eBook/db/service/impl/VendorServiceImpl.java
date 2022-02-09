@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,6 +50,7 @@ public class VendorServiceImpl implements VendorService {
         }
         Vendor vendor = makeVendor(signupRequest);
         vendor.getAuthenticationInfo().setPassword(passwordEncoder.encode(vendor.getAuthenticationInfo().getPassword()));
+        vendor.setDateOfRegistration(LocalDate.now());
         return makeSignupRequestsVndr(vendorRepository.save(vendor));
     }
 
@@ -69,8 +71,6 @@ public class VendorServiceImpl implements VendorService {
         vendorDto.setLastName(vendor.getLastName());
         vendorDto.setEmail(vendor.getEmail());
         vendorDto.setPhoneNumber(vendor.getPhoneNumber());
-//        vendorDto.setNameOfBranch(vendor.getNameOfBranch());
-//        vendorDto.setPassword(vendor.getAuthenticationInfo().getPassword());
         return vendorDto;
     }
 
@@ -100,6 +100,7 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = vendorMapper.vendorMapper(vendorDto);
         System.out.println(vendor);
         log.info("create clients service + {} " + vendorDto);
+
         Vendor vendorSave = vendorRepository.save(vendor);
         return vendorSave;
     }

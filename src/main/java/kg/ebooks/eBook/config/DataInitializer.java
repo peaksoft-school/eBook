@@ -387,8 +387,8 @@ public class DataInitializer {
             // Client-maria
 
             Client maria = new Client();
-            maria.setName("Maria");
-            maria.setEmail("maria@gmail.com");
+            maria.setName("client");
+            maria.setEmail("client@gmail.com");
             maria.setSubscriptionToNewsLetter(true);
             maria.setBasket(basket);
             maria.setSelectedBooks(selectedBooks2);
@@ -397,8 +397,8 @@ public class DataInitializer {
             // Client-elnura
 
             Client elnura = new Client();
-            elnura.setName("Elnura");
-            elnura.setEmail("elnura@gmail.com");
+            elnura.setName("client2");
+            elnura.setEmail("client2@gmail.com");
             elnura.setSubscriptionToNewsLetter(false);
             elnura.setBasket(basket3);
             elnura.setSelectedBooks(selectedBooks6);

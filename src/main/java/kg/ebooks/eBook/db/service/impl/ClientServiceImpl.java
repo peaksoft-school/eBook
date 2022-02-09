@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +52,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         Client client = SignupRequestClntMapper.makeClient(signupRequest);
+        client.setDateOfRegistration(LocalDate.now());
         client.getAuthenticationInfo().setPassword(
                 passwordEncoder.encode(client.getAuthenticationInfo().getPassword())
         );
@@ -69,7 +71,7 @@ public class ClientServiceImpl implements ClientService {
 
     public ClientDto clientDto(Client client) {
         ClientDto clientDto = new ClientDto();
-        clientDto.setClientId((client.getClientId()));
+        clientDto.setClientId(client.getClientId());
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());
 //        clientDto.setPassword(client.getAuthenticationInfo().getPassword());
@@ -102,6 +104,7 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientMapper.makeClient2(clientDto);
         System.out.println(client);
         log.info("create clients service + {} " + clientDto);
+        client.setDateOfRegistration(LocalDate.now());
         Client client1Save = clientRepository.save(client);
         return client1Save;
     }

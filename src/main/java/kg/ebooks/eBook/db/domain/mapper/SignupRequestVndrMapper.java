@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.domain.mapper;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+
 @Component
 @AllArgsConstructor
 public class SignupRequestVndrMapper {
@@ -60,21 +63,22 @@ public class SignupRequestVndrMapper {
         vendor.setFirstName(vendorDto.getFirstName());
         vendor.setPhoneNumber(vendorDto.getPhoneNumber());
         vendor.setEmail(vendorDto.getEmail());
-//        vendor.setNameOfBranch(vendorDto.getNameOfBranch());
+        vendor.setDateOfRegistration(LocalDate.now());
         vendor.setAuthenticationInfo(authenticationInfo);
         return vendor;
     }
 
 
-    public VendorDto clientGetById(Vendor vendor) {
+    public VendorDtoResquestResponse vendorGetById(Vendor vendor) {
         if (vendor == null) {
             return null;
         }
-        VendorDto vendorDto = new VendorDto();
+        VendorDtoResquestResponse vendorDto = new VendorDtoResquestResponse();
         vendorDto.setVendorId(vendor.getVendorId());
         vendorDto.setLastName(vendor.getLastName());
         vendorDto.setFirstName(vendor.getFirstName());
         vendorDto.setEmail(vendor.getEmail());
+        vendorDto.setDateOfRegistration(vendor.getDateOfRegistration());
         vendorDto.setPhoneNumber(vendor.getPhoneNumber());
 
         return vendorDto;

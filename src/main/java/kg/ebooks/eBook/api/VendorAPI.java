@@ -1,13 +1,15 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.ebooks.eBook.config.jwt.JwtUtils;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.db.service.VendorService;
-import kg.ebooks.eBook.config.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +21,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/vendor")
+@Tag(name = "Контроллер для управления продавецу")
 @CrossOrigin
 @RequiredArgsConstructor
 @Slf4j
 public class VendorAPI {
-    @Autowired
     private final VendorService vendorService;
-    private final ClientService clientService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtils jwtUtils;
-    private final SignupRequestVndrMapper signupRequestVndr;
+       private final SignupRequestVndrMapper signupRequestVndr;
 
     @PostMapping("/signup/vendor")
     @Operation(summary = "Прохождение регистрации", description = "Позволяет пройти регистрацию продавцу")
@@ -52,18 +52,18 @@ public class VendorAPI {
     }
 
     @GetMapping({"/getById/{id}"})
-    @Operation(summary = "продавец(id)", description = "Позволяет получить пользователя по 'id'")
-    public ResponseEntity<VendorDto> getVendor(@PathVariable("id") Long id) {
+    @Operation(summary = "продавец(id)", description = "Позволяет получить продавецу по 'id'")
+    public ResponseEntity<VendorDtoResquestResponse> getVendor(@PathVariable("id") Long id) {
         try {
             log.info("getById {}" + id);
-            return new ResponseEntity<>(signupRequestVndr.clientGetById(vendorService.getByIdVendor(id)), OK);
+            return new ResponseEntity<>(signupRequestVndr.vendorGetById(vendorService.getByIdVendor(id)), OK);
         } catch (Exception e) {
             return new ResponseEntity<>(BAD_REQUEST);
         }
     }
 
     @PutMapping({"/update/{vendorId}"})
-    @Operation(summary = "Обновление пользователя", description = "Позволяет обновить пользователя")
+    @Operation(summary = "Обновление продавецу", description = "Позволяет обновить продавецу")
     public ResponseEntity<VendorDto> updateVendorProfil(@PathVariable("vendorId") Long id,
                                                         @RequestBody VendorDto vendorDto) {
         try {
@@ -75,7 +75,7 @@ public class VendorAPI {
     }
 
     @DeleteMapping({"/deleteById/{vendorId}"})
-    @Operation(summary = "Удаление продавец", description = "Позволяет удалить пользователя")
+    @Operation(summary = "Удаление продавецу", description = "Позволяет удалить продавецу")
     public ResponseEntity<Void> deleteVendorById(@PathVariable("vendorId") Long vendorId) {
         vendorService.deleteVendor(vendorId);
         log.info("deleteVendorById " + vendorId);
@@ -83,7 +83,7 @@ public class VendorAPI {
     }
 
     @PostMapping("/save")
-    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
+    @Operation(summary = "Добавление продавец", description = "Позволяет добавить нового продавецу")
     public ResponseEntity<Vendor> saveVendor(@Valid @RequestBody VendorDto vendorDto) {
         try {
             log.info("save a in bood orders" + vendorDto);

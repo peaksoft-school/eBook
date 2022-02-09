@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,8 @@ public class Vendor {
     private String phoneNumber;
 
     private String nameOfBranch;
+
+    private LocalDate dateOfRegistration;
 
     @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private List<Book> booksToSale = new ArrayList();
