@@ -1,20 +1,24 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.service.ClientService;
+import kg.ebooks.eBook.exceptions.InvalidFieldException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -83,6 +87,12 @@ public class ClientAPI {
         log.info("Deleting client with id: {}, id" + id);
         clientService.deleteClientById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleValidationExceptions (
+            MethodArgumentNotValidException ex) {
+        return ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
     }
 }
 
