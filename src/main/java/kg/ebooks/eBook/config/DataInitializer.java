@@ -361,11 +361,12 @@ public class DataInitializer {
             // Vendor-Hadicha
 
             Vendor vendor = new Vendor();
-            vendor.setFirstName("Hadicha");
-            vendor.setLastName("Hadicha");
-            vendor.setEmail("hadicha@gmail.com");
+            vendor.setFirstName("VendorFirstName");
+            vendor.setLastName("VendorLastName");
+            vendor.setEmail("vendor@gmail.com");
             vendor.setAddress(address);
             vendor.setPhoneNumber("996773015901");
+            vendor.setDateOfRegistration(LocalDate.now());
             vendor.setNameOfBranch("Bishkek");
             vendor.setBooksToSale(Arrays.asList(manas));
             vendor.setAuthenticationInfo(vendor1);
@@ -374,10 +375,11 @@ public class DataInitializer {
             // Vendor2-Beksultan
 
             Vendor vendor2 = new Vendor();
-            vendor2.setFirstName("Beksultan");
-            vendor2.setLastName("Beka");
-            vendor2.setEmail("beksultan@gmail.com");
+            vendor2.setFirstName("Vendor2FirsName");
+            vendor2.setLastName("vendor2LastName");
+            vendor2.setEmail("vendor2@gmail.com");
             vendor2.setAddress(address2);
+            vendor2.setDateOfRegistration(LocalDate.now());
             vendor2.setPhoneNumber("996773015901");
             vendor2.setNameOfBranch("Nookat");
             vendor2.setBooksToSale(Arrays.asList(first_teacher));
@@ -391,6 +393,7 @@ public class DataInitializer {
             maria.setEmail("client@gmail.com");
             maria.setSubscriptionToNewsLetter(true);
             maria.setBasket(basket);
+            maria.setDateOfRegistration(LocalDate.now());
             maria.setSelectedBooks(selectedBooks2);
             maria.setAuthenticationInfo(client);
 
@@ -401,6 +404,7 @@ public class DataInitializer {
             elnura.setEmail("client2@gmail.com");
             elnura.setSubscriptionToNewsLetter(false);
             elnura.setBasket(basket3);
+            elnura.setDateOfRegistration(LocalDate.now());
             elnura.setSelectedBooks(selectedBooks6);
             elnura.setAuthenticationInfo(client2);
 

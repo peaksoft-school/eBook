@@ -68,7 +68,6 @@ public class SignupRequestClntMapper {
         clientDtoResquestResponse.setName(client.getName());
         clientDtoResquestResponse.setEmail(client.getEmail());
         clientDtoResquestResponse.setDateOfRegistration(client.getDateOfRegistration());
-        clientDtoResquestResponse.setPassword(client.getAuthenticationInfo().getPassword());
         return clientDtoResquestResponse;
     }
 

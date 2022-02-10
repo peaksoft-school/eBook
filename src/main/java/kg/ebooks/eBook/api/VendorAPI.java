@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.config.jwt.JwtUtils;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoFindAll;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -42,7 +43,7 @@ public class VendorAPI {
 
     @GetMapping("/getAll")
     @Operation(summary = "Все продавцы", description = "Позволяет получить всех продавцы из базы данных")
-    public ResponseEntity<List<VendorDto>> getAll() {
+    public ResponseEntity<List<VendorDtoFindAll>> getAll() {
         try {
             log.info("getAll vendors {}");
             return new ResponseEntity<>(vendorService.getAllVendors(), OK);
@@ -55,7 +56,7 @@ public class VendorAPI {
     @Operation(summary = "продавец(id)", description = "Позволяет получить продавецу по 'id'")
     public ResponseEntity<VendorDtoResquestResponse> getVendor(@PathVariable("id") Long id) {
         try {
-            log.info("getById {}" + id);
+            log.info("getById vendor {}" + id);
             return new ResponseEntity<>(signupRequestVndr.vendorGetById(vendorService.getByIdVendor(id)), OK);
         } catch (Exception e) {
             return new ResponseEntity<>(BAD_REQUEST);
@@ -86,7 +87,7 @@ public class VendorAPI {
     @Operation(summary = "Добавление продавец", description = "Позволяет добавить нового продавецу")
     public ResponseEntity<Vendor> saveVendor(@Valid @RequestBody VendorDto vendorDto) {
         try {
-            log.info("save a in bood orders" + vendorDto);
+            log.info("save vendor" + vendorDto);
             return new ResponseEntity<>(vendorService.saveVendor(vendorDto), OK);
         } catch (Exception e) {
             return new ResponseEntity<>(BAD_REQUEST);

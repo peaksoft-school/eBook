@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoFindAll;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ public interface ClientService {
 
     SignupRequestClnt registerClient(SignupRequestClnt signupRequest);
 
-    List<ClientDto> getClients();
+    List<ClientDtoFindAll> getClients();
 
     Client getClientById(Long id);
 

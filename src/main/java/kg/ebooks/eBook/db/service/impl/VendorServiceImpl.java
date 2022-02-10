@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoFindAll;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -56,7 +57,7 @@ public class VendorServiceImpl implements VendorService {
 
 
     @Override
-    public List<VendorDto> getAllVendors() {
+    public List<VendorDtoFindAll> getAllVendors() {
         log.info("ClientController  - getClients -: {}");
         return vendorRepository.findAll()
                 .stream()
@@ -65,8 +66,9 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Transactional
-    public VendorDto clientDto(Vendor vendor) {
-        VendorDto vendorDto = new VendorDto();
+    public VendorDtoFindAll clientDto(Vendor vendor) {
+        VendorDtoFindAll vendorDto = new VendorDtoFindAll();
+        vendorDto.setVendorId(vendor.getVendorId());
         vendorDto.setFirstName(vendor.getFirstName());
         vendorDto.setLastName(vendor.getLastName());
         vendorDto.setEmail(vendor.getEmail());
@@ -109,7 +111,6 @@ public class VendorServiceImpl implements VendorService {
     @Override
     @Transactional
     public VendorDto updateVendor(Long id, VendorDto vendorDto) {
-        System.out.println("ruslan");
         Vendor vendorFromDataBase = vendorRepository.findById(id)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "vendor with id = " + id + " does not exists"
@@ -126,7 +127,6 @@ public class VendorServiceImpl implements VendorService {
         vendorFromDataBase.setLastName(vendorDto.getLastName());
         vendorFromDataBase.setPhoneNumber(vendorDto.getPhoneNumber());
         vendorFromDataBase.setEmail(vendorDto.getEmail());
-
         vendorFromDataBase.getAuthenticationInfo()
                 .setPassword((vendorDto.getPassword()));
 

@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoFindAll;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -12,10 +13,8 @@ import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public List<ClientDto> getClients() {
+    public List<ClientDtoFindAll> getClients() {
         log.info("ClientController  - getClients -: {}");
         return clientRepository.findAll()
                 .stream()
@@ -69,8 +68,8 @@ public class ClientServiceImpl implements ClientService {
                 .collect(Collectors.toList());
     }
 
-    public ClientDto clientDto(Client client) {
-        ClientDto clientDto = new ClientDto();
+    public ClientDtoFindAll clientDto(Client client) {
+        ClientDtoFindAll clientDto = new ClientDtoFindAll();
         clientDto.setClientId(client.getClientId());
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());

@@ -20,8 +20,5 @@ public class VendorDto {
     private String lastName;
     private String phoneNumber;
     private String email;
-    private String nameOfBranch;
     private String password;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate minDate;
 }

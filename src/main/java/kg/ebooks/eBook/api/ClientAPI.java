@@ -3,6 +3,7 @@ package kg.ebooks.eBook.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoFindAll;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquestResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
@@ -40,7 +41,7 @@ public class ClientAPI {
 
     @GetMapping("/getAll")
     @Operation(summary = "Все пользователи", description = "Позволяет получить всех пользователей из базы данных")
-    public ResponseEntity<List<ClientDto>> getAllClients() {
+    public ResponseEntity<List<ClientDtoFindAll>> getAllClients() {
         try {
             log.info("ClientController  - getClients -: {}");
             return new ResponseEntity<>(clientService.getClients(), OK);
