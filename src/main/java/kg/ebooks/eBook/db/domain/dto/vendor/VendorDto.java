@@ -1,35 +1,24 @@
-package kg.ebooks.eBook.db.domain.dto.client;
+package kg.ebooks.eBook.db.domain.dto.vendor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import java.time.LocalDate;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDto {
-
-    private Long clientId;
-    @JsonProperty("name")
-    private String name;
-
-    @Email
-    @NotNull
-    @JsonProperty("email")
+@Getter
+@Setter
+@ToString
+public class VendorDto {
+    private Long vendorId;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
     private String email;
-
-    @NotNull
-    @JsonProperty("password")
-    @JsonIgnore
-    // TODO: 7/2/22 fix password
     private String password;
-
-
-
 }

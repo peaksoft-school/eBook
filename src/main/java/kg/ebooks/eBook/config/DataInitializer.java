@@ -24,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -34,7 +33,8 @@ import java.util.HashSet;
 @Component
 public class DataInitializer {
 
-//    @Bean
+
+    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -361,11 +361,12 @@ public class DataInitializer {
             // Vendor-Hadicha
 
             Vendor vendor = new Vendor();
-            vendor.setFirstName("Hadicha");
-            vendor.setLastName("Hadicha");
-            vendor.setEmail("hadicha@gmail.com");
+            vendor.setFirstName("VendorFirstName");
+            vendor.setLastName("VendorLastName");
+            vendor.setEmail("vendor@gmail.com");
             vendor.setAddress(address);
             vendor.setPhoneNumber("996773015901");
+            vendor.setDateOfRegistration(LocalDate.now());
             vendor.setNameOfBranch("Bishkek");
             vendor.setBooksToSale(Arrays.asList(manas));
             vendor.setAuthenticationInfo(vendor1);
@@ -374,10 +375,11 @@ public class DataInitializer {
             // Vendor2-Beksultan
 
             Vendor vendor2 = new Vendor();
-            vendor2.setFirstName("Beksultan");
-            vendor2.setLastName("Beka");
-            vendor2.setEmail("beksultan@gmail.com");
+            vendor2.setFirstName("Vendor2FirsName");
+            vendor2.setLastName("vendor2LastName");
+            vendor2.setEmail("vendor2@gmail.com");
             vendor2.setAddress(address2);
+            vendor2.setDateOfRegistration(LocalDate.now());
             vendor2.setPhoneNumber("996773015901");
             vendor2.setNameOfBranch("Nookat");
             vendor2.setBooksToSale(Arrays.asList(first_teacher));
@@ -387,20 +389,22 @@ public class DataInitializer {
             // Client-maria
 
             Client maria = new Client();
-            maria.setName("Maria");
-            maria.setEmail("maria@gmail.com");
+            maria.setName("client");
+            maria.setEmail("client@gmail.com");
             maria.setSubscriptionToNewsLetter(true);
             maria.setBasket(basket);
+            maria.setDateOfRegistration(LocalDate.now());
             maria.setSelectedBooks(selectedBooks2);
             maria.setAuthenticationInfo(client);
 
             // Client-elnura
 
             Client elnura = new Client();
-            elnura.setName("Elnura");
-            elnura.setEmail("elnura@gmail.com");
+            elnura.setName("client2");
+            elnura.setEmail("client2@gmail.com");
             elnura.setSubscriptionToNewsLetter(false);
             elnura.setBasket(basket3);
+            elnura.setDateOfRegistration(LocalDate.now());
             elnura.setSelectedBooks(selectedBooks6);
             elnura.setAuthenticationInfo(client2);
 

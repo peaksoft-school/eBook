@@ -1,21 +1,19 @@
 package kg.ebooks.eBook.db.domain.dto.client;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
-import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientDto {
-
+public class ClientDtoFindAll {
     private Long clientId;
+
     @JsonProperty("name")
     private String name;
 
@@ -23,13 +21,5 @@ public class ClientDto {
     @NotNull
     @JsonProperty("email")
     private String email;
-
-    @NotNull
-    @JsonProperty("password")
-    @JsonIgnore
-    // TODO: 7/2/22 fix password
-    private String password;
-
-
 
 }
