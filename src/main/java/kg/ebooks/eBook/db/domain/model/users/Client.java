@@ -11,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import java.time.LocalDate;
+
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
@@ -36,6 +38,8 @@ public class Client {
     private String email;
 
     private boolean subscriptionToNewsLetter;
+
+    private LocalDate dateOfRegistration;
 
     @OneToOne(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private Basket basket;
