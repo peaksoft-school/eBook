@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
