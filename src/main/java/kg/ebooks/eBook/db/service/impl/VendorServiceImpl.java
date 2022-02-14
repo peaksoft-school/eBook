@@ -2,7 +2,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
-import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoFindAll;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -57,7 +57,7 @@ public class VendorServiceImpl implements VendorService {
 
 
     @Override
-    public List<VendorDtoFindAll> getAllVendors() {
+    public List<VendorDtoResponse> getAllVendors() {
         log.info("ClientController  - getClients -: {}");
         return vendorRepository.findAll()
                 .stream()
@@ -66,8 +66,8 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Transactional
-    public VendorDtoFindAll clientDto(Vendor vendor) {
-        VendorDtoFindAll vendorDto = new VendorDtoFindAll();
+    public VendorDtoResponse clientDto(Vendor vendor) {
+        VendorDtoResponse vendorDto = new VendorDtoResponse();
         vendorDto.setVendorId(vendor.getVendorId());
         vendorDto.setFirstName(vendor.getFirstName());
         vendorDto.setLastName(vendor.getLastName());
@@ -85,29 +85,7 @@ public class VendorServiceImpl implements VendorService {
                     log.error("error in getting client {}", id, notFoundException);
                     return notFoundException;
                 });
-
     }
-
-
-    @Transactional
-    @Override
-    public Vendor saveVendor(VendorDto vendorDto) {
-        Optional<Vendor> optionalVendor = vendorRepository.findUserByEmail(vendorDto.getEmail());
-        if (optionalVendor.isPresent()) {
-            log.error("vendor with email {} has already exists", vendorDto.getEmail());
-            throw new AlreadyExistsException(
-                    "vendor with email = " + vendorDto.getEmail() + " has already exists"
-            );
-        }
-        Vendor vendor = vendorMapper.vendorMapper(vendorDto);
-        System.out.println(vendor);
-        log.info("create clients service + {} " + vendorDto);
-
-        Vendor vendorSave = vendorRepository.save(vendor);
-        return vendorSave;
-    }
-
-
     @Override
     @Transactional
     public VendorDto updateVendor(Long id, VendorDto vendorDto) {
@@ -122,7 +100,6 @@ public class VendorServiceImpl implements VendorService {
                     "vendor with email = " + vendorDto.getEmail() + " has already exists"
             );
         }
-
         vendorFromDataBase.setFirstName(vendorDto.getFirstName());
         vendorFromDataBase.setLastName(vendorDto.getLastName());
         vendorFromDataBase.setPhoneNumber(vendorDto.getPhoneNumber());
@@ -135,7 +112,11 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public void deleteVendor(Long id) {
-        this.vendorRepository.deleteById(id);
+     if (!vendorRepository.existsById(id)) {
+        throw new ClientNotFoundException(
+                "Client with id " + id + " does not exists");
     }
+        vendorRepository.deleteById(id);
+}
 
 }

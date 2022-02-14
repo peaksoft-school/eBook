@@ -1,6 +1,6 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
-import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquestResponse;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -59,11 +59,11 @@ public class SignupRequestClntMapper {
     }
 
 
-    public ClientDtoResquestResponse clientGetById(Client client) {
+    public ClientDtoResquest clientGetById(Client client) {
         if (client == null) {
             return null;
         }
-        ClientDtoResquestResponse clientDtoResquestResponse = new ClientDtoResquestResponse();
+        ClientDtoResquest clientDtoResquestResponse = new ClientDtoResquest();
         clientDtoResquestResponse.setClientId(client.getClientId());
         clientDtoResquestResponse.setName(client.getName());
         clientDtoResquestResponse.setEmail(client.getEmail());
