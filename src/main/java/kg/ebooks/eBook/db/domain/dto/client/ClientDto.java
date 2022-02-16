@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
 import kg.ebooks.eBook.annotations.password.Password;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,19 +20,15 @@ import javax.validation.constraints.Email;
 public class ClientDto {
 
     private Long clientId;
-    @JsonProperty("name")
+
     private String name;
 
     @Email
-    @NotNull
-    @JsonProperty("email")
     private String email;
 
-    @NotNull
-    @JsonProperty("password")
+    @NotBlank
     @JsonIgnore
-    @Password(message = "senin parolun kata")
+    @Password(message = "you give wrong password")
     private String password;
-
 
 }

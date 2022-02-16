@@ -63,14 +63,13 @@ public class SignupRequestClntMapper {
         if (client == null) {
             return null;
         }
-        ClientDtoResquest clientDtoResquestResponse = new ClientDtoResquest();
-        clientDtoResquestResponse.setClientId(client.getClientId());
-        clientDtoResquestResponse.setName(client.getName());
-        clientDtoResquestResponse.setEmail(client.getEmail());
-        clientDtoResquestResponse.setDateOfRegistration(client.getDateOfRegistration());
-        return clientDtoResquestResponse;
+        ClientDtoResquest clientDtoRequestResponse = new ClientDtoResquest();
+        clientDtoRequestResponse.setClientId(client.getClientId());
+        clientDtoRequestResponse.setName(client.getName());
+        clientDtoRequestResponse.setEmail(client.getEmail());
+        clientDtoRequestResponse.setDateOfRegistration(client.getDateOfRegistration());
+        return clientDtoRequestResponse;
     }
-
 
     @Bean
     public ModelMapper modelMapper() {

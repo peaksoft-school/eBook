@@ -24,4 +24,6 @@ public class BookResponse {
     private BigDecimal netPrice;
     private byte discount;
     private BigDecimal discountedPrice;
+    private int likes;
+    private int inBasket;
 }
