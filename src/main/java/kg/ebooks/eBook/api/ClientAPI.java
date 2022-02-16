@@ -5,33 +5,26 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
-import kg.ebooks.eBook.db.domain.dto.client.ClientDtoFindAll;
-import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquestResponse;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
-import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.exceptions.InvalidFieldException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
 
 
 @RestController
 @RequestMapping("/api/client")
-@Tag(name = "Контроллер для управления пользователем")
+@Tag(name = "Контроллер для управления клиентом")
 @CrossOrigin
 @RequiredArgsConstructor
-@Slf4j
 public class ClientAPI {
 
     private final ClientService clientService;
@@ -45,54 +38,28 @@ public class ClientAPI {
 
 
     @GetMapping("/getAll")
-    @Operation(summary = "Все пользователи", description = "Позволяет получить всех пользователей из базы данных")
-    public ResponseEntity<List<ClientDtoFindAll>> getAllClients() {
-        try {
-            log.info("ClientController  - getClients -: {}");
-            return new ResponseEntity<>(clientService.getClients(), OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
+    @Operation(summary = "Все клиенты", description = "Позволяет получить всех клиентов из базы данных самого себя")
+    public List<ClientDtoResponse> getAllClients() {
+        return clientService.getClients();
+
     }
 
     @GetMapping({"/getById/{id}"})
-    @Operation(summary = "Пользователь(id)", description = "Позволяет получить пользователя по 'id'")
-    public ResponseEntity<ClientDtoResquestResponse> getClient(@PathVariable("id") Long id) {
-        try {
-            log.info("ClientController  - getClient - id: {}", id);
-            return new ResponseEntity<>(clientMapper.clientGetById(clientService.getClientById(id)), OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/save")
-    @Operation(summary = "Добавление пользователя", description = "Позволяет добавить нового пользователя")
-    public ResponseEntity<Client> saveClient(@Valid @RequestBody ClientDto clientDto) {
-        try {
-            log.info("create clients + {} " + clientDto);
-            return new ResponseEntity<>(clientService.saveClient(clientDto), OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
+    @Operation(summary = "получить клиента", description = "Позволяет получить клиента по 'id' ")
+    public ClientDtoResquest getClient(@PathVariable("id") Long id) {
+        return clientMapper.clientGetById(clientService.getClientById(id));
     }
 
     @PutMapping({"/update/{clientId}"})
-    @Operation(summary = "Обновление пользователя", description = "Позволяет обновить пользователя")
-    public ResponseEntity<ClientDto> updateClient(@PathVariable("clientId") Long id,
-                                                  @RequestBody ClientDto client) {
-        log.info("Updating client: {}", client);
-        try {
-            return new ResponseEntity<>(clientService.updateClient(id, client), OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }
+    @Operation(summary = "Обновление клиента", description = "Позволяет обновить свой профиль клиента")
+    public ClientDto updateClient(@PathVariable("clientId") Long id,
+                                  @RequestBody ClientDto client) {
+        return clientService.updateClient(id, client);
     }
 
     @DeleteMapping({"/delete/{clientId}"})
-    @Operation(summary = "Удаление пользователя", description = "Позволяет удалить пользователя")
+    @Operation(summary = "Удаление клиента", description = "Позволяет удалить клиента самого себя")
     public ResponseEntity<Void> deleteClient(@PathVariable("clientId") Long id) {
-        log.info("Deleting client with id: {}, id" + id);
         clientService.deleteClientById(id);
         return ResponseEntity.ok().build();
     }

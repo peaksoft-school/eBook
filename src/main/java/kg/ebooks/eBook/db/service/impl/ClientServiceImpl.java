@@ -2,7 +2,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
-import kg.ebooks.eBook.db.domain.dto.client.ClientDtoFindAll;
+import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public List<ClientDtoFindAll> getClients() {
+    public List<ClientDtoResponse> getClients() {
         log.info("ClientController  - getClients -: {}");
         return clientRepository.findAll()
                 .stream()
@@ -68,8 +68,8 @@ public class ClientServiceImpl implements ClientService {
                 .collect(Collectors.toList());
     }
 
-    public ClientDtoFindAll clientDto(Client client) {
-        ClientDtoFindAll clientDto = new ClientDtoFindAll();
+    public ClientDtoResponse clientDto(Client client) {
+        ClientDtoResponse clientDto = new ClientDtoResponse();
         clientDto.setClientId(client.getClientId());
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());
@@ -87,25 +87,6 @@ public class ClientServiceImpl implements ClientService {
                     log.error("error in getting client {}", id, notFoundException);
                     return notFoundException;
                 });
-    }
-
-
-    @Override
-    public Client saveClient(ClientDto clientDto) {
-        Optional<Client> optionalClient = clientRepository.findUserByEmail(clientDto.getEmail());
-        if (optionalClient.isPresent()) {
-            log.error("client with email {} has already exists", clientDto.getEmail());
-            throw new AlreadyExistsException(
-                    "client with email = " + clientDto.getEmail() + " has already exists"
-            );
-        }
-
-        Client client = clientMapper.makeClient2(clientDto);
-        System.out.println(client);
-        log.info("create clients service + {} " + clientDto);
-        client.setDateOfRegistration(LocalDate.now());
-        Client client1Save = clientRepository.save(client);
-        return client1Save;
     }
 
 

@@ -24,6 +24,7 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminAPI {
 
+
     private final BookGetService bookGetService;
     private final AdminService adminService;
 

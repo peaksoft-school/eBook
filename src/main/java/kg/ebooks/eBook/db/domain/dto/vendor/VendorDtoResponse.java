@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class VendorDtoFindAll {
+public class VendorDtoResponse {
     private Long vendorId;
     private String firstName;
     private String lastName;
