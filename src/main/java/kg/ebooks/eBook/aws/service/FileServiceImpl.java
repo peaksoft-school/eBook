@@ -7,13 +7,10 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
 import kg.ebooks.eBook.aws.working_with_files.FileStore;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.IOException;
 import java.util.*;
@@ -24,6 +21,7 @@ import java.util.*;
  * 16/1/22
  * Sunday 03:45
  */
+
 @Service
 @RequiredArgsConstructor
 @Slf4j

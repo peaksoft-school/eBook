@@ -34,7 +34,7 @@ import java.util.HashSet;
 public class DataInitializer {
 
 
-    @Bean
+//    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,

@@ -33,3 +33,7 @@ build/
 .vscode/
 
 
+### application-dev.properties
+src/main/resources/application-dev.properties
+
+
