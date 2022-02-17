@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.mapper;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
@@ -7,17 +8,21 @@ import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
 public class SignupRequestVndrMapper {
-    @Autowired
+
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public static Vendor makeVendor(SignupRequestVndr signupRequestVndr) {
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
@@ -66,6 +71,7 @@ public class SignupRequestVndrMapper {
         if (vendor == null) {
             return null;
         }
+        System.out.println(vendor);
         VendorDtoResquest vendorDto = new VendorDtoResquest();
         vendorDto.setVendorId(vendor.getVendorId());
         vendorDto.setLastName(vendor.getLastName());
@@ -73,7 +79,11 @@ public class SignupRequestVndrMapper {
         vendorDto.setEmail(vendor.getEmail());
         vendorDto.setDateOfRegistration(vendor.getDateOfRegistration());
         vendorDto.setPhoneNumber(vendor.getPhoneNumber());
-
+        Set<BookResponse> collect = vendor.getBooksToSale()
+                .stream().map(book -> modelMapper.map(book, BookResponse.class))
+                .peek(System.out::println)
+                .collect(Collectors.toSet());
+        vendorDto.setVendorBooks(collect);
         return vendorDto;
     }
 

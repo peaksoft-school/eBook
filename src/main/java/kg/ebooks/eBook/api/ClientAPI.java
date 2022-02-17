@@ -21,7 +21,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/api/clients")
 @Tag(name = "Контроллер для управления клиентом")
 @CrossOrigin
 @RequiredArgsConstructor

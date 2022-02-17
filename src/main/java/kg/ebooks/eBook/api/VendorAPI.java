@@ -43,9 +43,8 @@ public class VendorAPI {
 
     @GetMapping({"/getById/{id}"})
     @Operation(summary = "получить продавца", description = "Позволяет получить продавца по 'id'")
-    public VendorDtoResquest getVendor(@PathVariable("id") Long id) {
+    public VendorDtoResquest getVendor(@PathVariable Long id) {
         return signupRequestVndr.vendorGetById(vendorService.getByIdVendor(id));
-
     }
 
     @PutMapping({"/update/{vendorId}"})
