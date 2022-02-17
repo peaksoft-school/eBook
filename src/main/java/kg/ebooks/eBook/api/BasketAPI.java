@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * Sunday 11:35
  */
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 @RequestMapping("api/basket")
 @RequiredArgsConstructor
