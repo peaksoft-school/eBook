@@ -1,10 +1,13 @@
 package kg.ebooks.eBook.db.domain.dto.basket.impl;
 
+import kg.ebooks.eBook.db.domain.dto.basket.BasketBook;
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -14,8 +17,9 @@ import java.util.List;
  */
 @Getter
 @Setter
+@EqualsAndHashCode
 public class BasketInfoImpl implements BasketInfo {
     private Long basketId;
     private int quantityOfBooks;
-    private List<BookInfoBktImpl> booksBkt;
+    private Set<BasketBook> booksBkt;
 }
