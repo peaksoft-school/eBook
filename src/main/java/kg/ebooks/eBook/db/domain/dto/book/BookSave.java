@@ -55,7 +55,7 @@ public class BookSave<BOOKTYPE extends BookRequest> {
 
     @Min(value = 1, message = "you can give min 1 percent to make a discount")
     @Max(value = 100, message = "you can give max 100 percent to make a discount")
-    private byte discount;
+    private Byte discount;
 
     private BOOKTYPE book;
 

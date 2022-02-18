@@ -42,6 +42,10 @@ public class BasketServiceImpl implements BasketService {
             }
         }
 
+        if (!client.getBasket().getBooks().contains(book)) {
+            book.incrementInBasket();
+        }
+
         client.getBasket().setBook(book);
     }
 

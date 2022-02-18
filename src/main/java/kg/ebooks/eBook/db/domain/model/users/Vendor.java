@@ -66,4 +66,8 @@ public class Vendor {
     public void setBook(Book save) {
         this.booksToSale.add(save);
     }
+
+    public void setPromoCode(Promo promo) {
+        this.promoCodes.add(promo);
+    }
 }
