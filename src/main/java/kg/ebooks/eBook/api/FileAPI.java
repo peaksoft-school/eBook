@@ -6,6 +6,7 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,11 @@ public class FileAPI {
 
     private final FileService fileService;
 
-    @PostMapping("/upload/image")
+    @PostMapping(
+            path = "/upload/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public FileInfo uploadFile(@RequestParam MultipartFile file) {
         return fileService.uploadFile(FolderName.IMAGES, file);
     }
