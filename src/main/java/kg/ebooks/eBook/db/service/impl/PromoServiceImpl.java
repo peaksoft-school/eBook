@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
 import kg.ebooks.eBook.db.domain.model.others.Promo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -8,6 +9,7 @@ import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.PromoService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.InvalidDateException;
+import kg.ebooks.eBook.exceptions.PromoNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -25,7 +29,6 @@ import java.time.LocalDate;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional
 public class PromoServiceImpl implements PromoService {
 
     private final PromoRepository promoRepository;
@@ -33,6 +36,7 @@ public class PromoServiceImpl implements PromoService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
+    @Transactional
     public String createPromo(String email, PromoCreate promo) {
         // check is valid dates
         LocalDate startingDay = promo.getStartingDay();
@@ -71,8 +75,20 @@ public class PromoServiceImpl implements PromoService {
 
         // set Promo to all his books
         vendor.setPromoCode(save);
+        save.setPromoCreator(vendor);
         log.info("promo [{}] successfully created", promo.getPromoName());
 
         return "Promo successfully created";
+    }
+
+    @Override
+    public List<BookResponse> findPromo(String promo) {
+        return promoRepository.findByPromoName(promo)
+                .orElseThrow(() -> new PromoNotFoundException(
+                        "promo with promo-name = " + promo + " does not exists"
+                )).getPromoCreator().getBooksToSale()
+                .stream().map(book -> modelMapper.map(book, BookResponse.class))
+                .collect(Collectors.toList());
+
     }
 }

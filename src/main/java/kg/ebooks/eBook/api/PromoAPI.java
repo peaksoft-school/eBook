@@ -2,6 +2,8 @@ package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
+import kg.ebooks.eBook.db.domain.dto.promo.FindPromo;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
 import kg.ebooks.eBook.db.domain.model.others.Promo;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -46,9 +48,10 @@ public class PromoAPI {
         return promoService.createPromo(authenticationInfo.getEmail(), promo);
     }
 
-//    public List<?> findPromo() {
-//
-//    }
+    @GetMapping("/find")
+    public List<BookResponse> findPromo(@RequestBody FindPromo promo) {
+        return promoService.findPromo(promo.getPromo());
+    }
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
