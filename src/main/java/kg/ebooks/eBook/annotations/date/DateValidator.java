@@ -16,10 +16,7 @@ public class DateValidator implements ConstraintValidator<ValidDate, LocalDate> 
         LocalDate now = LocalDate.now();
         LocalDate expiredAt = LocalDate.now().plusYears(1L);
 
-        if (date.isBefore(now) && date.isBefore(expiredAt)) {
-            return true;
-        }
-        return false;
+        return date.isAfter(now) && date.isBefore(expiredAt);
     }
 
     @Override

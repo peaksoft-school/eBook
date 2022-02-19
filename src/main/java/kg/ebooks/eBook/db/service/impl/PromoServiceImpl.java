@@ -71,6 +71,7 @@ public class PromoServiceImpl implements PromoService {
 
         // set Promo to all his books
         vendor.setPromoCode(save);
+        log.info("promo [{}] successfully created", promo.getPromoName());
 
         return "Promo successfully created";
     }
