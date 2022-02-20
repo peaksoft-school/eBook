@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.others;
 
+import kg.ebooks.eBook.db.domain.dto.basket.BasketBook;
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BasketInfoImpl;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BookInfoBktImpl;
@@ -12,7 +13,10 @@ import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.PERSIST;
@@ -40,7 +44,6 @@ public class Basket implements BookCase, BasketInfo {
 
     private int quantityOfBooks;
 
-
     @Override
     public void setBook(Book book) {
         books.add(book);
@@ -58,35 +61,46 @@ public class Basket implements BookCase, BasketInfo {
     }
 
     @Override
-    public List<BookInfoBktImpl> getBooksBkt() {
+    public Set<BasketBook> getBooksBkt() {
         ModelMapper modelMapper = new ModelMapper();
-//        List<BookInfoBkt> bookInfoBkts = new ArrayList<>();
-        List<BookInfoBktImpl> list = new ArrayList<>();
+        Set<BasketBook> basketBooks = new HashSet<>();
+
         for (Book book : books) {
             BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
-            list.add(map);
+            BasketBook byBookInfoBKT = findByBookInfoBKT(basketBooks, map);
+            if (byBookInfoBKT == null) {
+                basketBooks.add(new BasketBook(map,1L));
+            } else {
+                byBookInfoBKT.increment();
+            }
         }
-        return list;
-//        return books.stream().map(book -> modelMapper.map(book, BookInfoBktImpl.class)).toList();
-//        return null;
-//        return bookInfoBkts;
+        return basketBooks;
+    }
+
+    static BasketBook findByBookInfoBKT(Set<BasketBook> basketBooks, BookInfoBktImpl bookInfoBkt) {
+        return basketBooks.stream()
+                .filter(basketBook -> basketBook.getBook().equals(bookInfoBkt))
+                .findFirst().orElse(null);
     }
 
     public BasketInfo makeBasketInfo() {
-        BasketInfoImpl basketInfo = new BasketInfoImpl();
         ModelMapper modelMapper = new ModelMapper();
-        basketInfo.setBasketId(basketId);
-        List<BookInfoBktImpl> bkts = new ArrayList<>();
+        Set<BasketBook> basketBooks = new HashSet<>();
+
         for (Book book : books) {
             BookInfoBktImpl map = modelMapper.map(book, BookInfoBktImpl.class);
-            bkts.add(map);
+            BasketBook byBookInfoBKT = findByBookInfoBKT(basketBooks, map);
+            if (byBookInfoBKT == null) {
+                basketBooks.add(new BasketBook(map,1L));
+            } else {
+                byBookInfoBKT.increment();
+            }
         }
-        basketInfo.setBooksBkt(bkts);
-//        List<BookInfoBktImpl> bkts = books.stream()
-//                .map(book -> modelMapper.map(book, BookInfoBktImpl.class))
-//                .toList();
-//        basketInfo.setBooksBkt(bkts);
-        basketInfo.setQuantityOfBooks(getQuantityOfBooks());
+
+        BasketInfoImpl basketInfo = new BasketInfoImpl();
+        basketInfo.setBasketId(basketId);
+        basketInfo.setBooksBkt(basketBooks);
+        basketInfo.setQuantityOfBooks(quantityOfBooks);
         return basketInfo;
     }
 }

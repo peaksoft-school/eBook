@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.domain.dto.basket;
 import kg.ebooks.eBook.db.domain.dto.basket.impl.BookInfoBktImpl;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -14,7 +15,7 @@ import java.util.List;
 public interface BasketInfo {
     Long getBasketId();
 
-    List<BookInfoBktImpl> getBooksBkt();
+    Set<BasketBook> getBooksBkt();
 
     int getQuantityOfBooks();
 }
