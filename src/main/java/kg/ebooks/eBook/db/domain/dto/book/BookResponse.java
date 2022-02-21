@@ -20,7 +20,6 @@ public class BookResponse {
     private FileInfo image;
     private String bookName;
     private String author;
-//    private BigDecimal price;
     private BigDecimal netPrice;
     private byte discount;
     private BigDecimal discountedPrice;

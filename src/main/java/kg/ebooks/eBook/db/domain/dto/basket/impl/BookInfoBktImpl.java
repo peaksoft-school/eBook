@@ -2,6 +2,8 @@ package kg.ebooks.eBook.db.domain.dto.basket.impl;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +18,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class BookInfoBktImpl implements BookInfoBkt {
     //    #BOOKINFOBKT
     private Long bookId;
@@ -33,5 +36,7 @@ public class BookInfoBktImpl implements BookInfoBkt {
     private BigDecimal discountedPrice;
     //    ⌘ net prices
     private BigDecimal netPrice;
+
+    private TypeOfBook typeOfBook;
 
 }

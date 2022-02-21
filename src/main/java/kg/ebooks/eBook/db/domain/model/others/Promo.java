@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,10 +44,8 @@ public class Promo {
     private LocalDate finishingDay;
 
     @NotNull(message = "you have to define percent of promo code")
-//    @Size(min = 1, max = 100, message = "incorrect type of percent, you have to define percent between 1 and 100 : 1 <= percent >= 100")
     private Byte percent;
 
-    @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<Book> books;
-
+    @ManyToOne(cascade = ALL)
+    private Vendor promoCreator;
 }

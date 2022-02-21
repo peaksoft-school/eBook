@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Basket;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.repository.BookRepository;
@@ -33,11 +34,18 @@ public class BasketServiceImpl implements BasketService {
 
         Client client = getClientByEmail(clientEmail);
 
-        if (client.getBasket().getBooks().contains(book)) {
-            throw new AlreadyExistsException(
-                    "book [ " + book.getBookName() + " ] is already in a basket"
-            );
+        if (!book.getTypeOfBook().equals(TypeOfBook.PAPER_BOOK)) {
+            if (client.getBasket().getBooks().contains(book)) {
+                throw new AlreadyExistsException(
+                        "book [ " + book.getBookName() + " ] is already in a basket"
+                );
+            }
         }
+
+        if (!client.getBasket().getBooks().contains(book)) {
+            book.incrementInBasket();
+        }
+
         client.getBasket().setBook(book);
     }
 

@@ -268,7 +268,7 @@ public class DataInitializer {
             promo.setStartingDay(LocalDate.of(2022, Month.JANUARY, 12));
             promo.setFinishingDay(LocalDate.of(2022, Month.FEBRUARY, 12));
             promo.setPercent((byte) 2);
-            promo.setBooks(Arrays.asList(manas));
+//            promo.setBooks(Arrays.asList(manas));
 
             //Promo2
 
@@ -277,7 +277,7 @@ public class DataInitializer {
             promo2.setStartingDay(LocalDate.of(2022, Month.JANUARY, 12));
             promo2.setFinishingDay(LocalDate.of(2022, Month.FEBRUARY, 11));
             promo2.setPercent((byte) 5);
-            promo2.setBooks(Arrays.asList(first_teacher));
+//            promo2.setBooks(Arrays.asList(first_teacher));
 
             //Authentication-admin
 
