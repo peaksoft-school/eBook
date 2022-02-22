@@ -21,7 +21,7 @@ public class BookResponse {
     private String bookName;
     private String author;
     private BigDecimal netPrice;
-    private byte discount;
+    private int discount;
     private BigDecimal discountedPrice;
     private int likes;
     private int inBasket;

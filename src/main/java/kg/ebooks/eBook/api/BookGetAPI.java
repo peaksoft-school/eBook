@@ -27,11 +27,6 @@ public class BookGetAPI {
 
     private final BookGetService bookGetService;
 
-    @GetMapping
-    public List<BookResponse> getAllAcceptedBooks() {
-        return bookGetService.getAllAcceptedBooks();
-    }
-
     @GetMapping("/get/{bookId}")
     public BookInfo getBookById(@PathVariable Long bookId) {
         return bookGetService.getBookById(bookId);

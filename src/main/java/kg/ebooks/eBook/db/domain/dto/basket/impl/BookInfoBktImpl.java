@@ -31,7 +31,7 @@ public class BookInfoBktImpl implements BookInfoBkt {
     //    //    ⌘ promo
 //    private Promo promo;
     //    ⌘ discount
-    private byte discount;
+    private int discount;
     //    ⌘ discount price
     private BigDecimal discountedPrice;
     //    ⌘ net prices

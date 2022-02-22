@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.db.domain.dto.admin.BookResponseDTOFromAdmin;
 import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
@@ -31,18 +32,18 @@ public class BookGetServiceImpl implements BookGetService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public List<BookResponse> getAllAcceptedBooks() {
+    public List<BookResponseDTOFromAdmin> getAllAcceptedBooks() {
         return bookRepository.findAll()
                 .stream().filter(book -> book.getRequestStatus().equals(ACCEPTED))
-                .map(book -> modelMapper.map(book, BookResponse.class))
+                .map(book -> modelMapper.map(book, BookResponseDTOFromAdmin.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BookResponse> getAllBooksStorageRequests() {
+    public List<BookResponseDTOFromAdmin> getAllBooksStorageRequests() {
         return bookRepository.findAll()
                 .stream().filter(book -> book.getRequestStatus().equals(INPROGRESS))
-                .map(book -> modelMapper.map(book, BookResponse.class))
+                .map(book -> modelMapper.map(book, BookResponseDTOFromAdmin.class))
                 .collect(Collectors.toList());
     }
 

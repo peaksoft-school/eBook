@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.api;
 
+import kg.ebooks.eBook.db.domain.dto.admin.BookResponseDTOFromAdmin;
 import kg.ebooks.eBook.db.domain.dto.admin.RefuseToBookRequest;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.service.AdminService;
@@ -28,9 +29,14 @@ public class AdminAPI {
     private final BookGetService bookGetService;
     private final AdminService adminService;
 
-    @GetMapping("/get/book/requests")
-    public List<BookResponse> getAllBookStorageRequests() {
+    @GetMapping("/get/books/requests")
+    public List<BookResponseDTOFromAdmin> getAllBookStorageRequests() {
         return bookGetService.getAllBooksStorageRequests();
+    }
+
+    @GetMapping("/get/books/accepted")
+    public List<BookResponseDTOFromAdmin> getAllAcceptedBooks() {
+        return bookGetService.getAllAcceptedBooks();
     }
 
     @PostMapping("/accept/book/request/{bookId}")

@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service;
 
+import kg.ebooks.eBook.db.domain.dto.admin.BookResponseDTOFromAdmin;
 import kg.ebooks.eBook.db.domain.dto.book.BookInfo;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 
@@ -12,9 +13,9 @@ import java.util.List;
  * hello world
  */
 public interface BookGetService {
-    List<BookResponse> getAllAcceptedBooks();
+    List<BookResponseDTOFromAdmin> getAllAcceptedBooks();
 
-    List<BookResponse> getAllBooksStorageRequests();
+    List<BookResponseDTOFromAdmin> getAllBooksStorageRequests();
 
     BookInfo getBookById(Long bookId);
 }
