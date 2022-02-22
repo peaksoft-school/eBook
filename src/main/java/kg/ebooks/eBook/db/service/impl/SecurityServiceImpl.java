@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.service.impl;
 import kg.ebooks.eBook.db.repository.SecurityRepository;
 import kg.ebooks.eBook.db.service.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findAuthenticationInfoByEmail(username)
-                .orElseThrow(() -> new IllegalStateException(
+                .orElseThrow(() -> new BadCredentialsException(
                         String.format("user with email = %s not found", username)
                 ));
     }

@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.dto.book;
 
+import kg.ebooks.eBook.annotations.percent.Percent;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import lombok.Getter;
@@ -53,9 +54,8 @@ public class BookSave<BOOKTYPE extends BookRequest> {
     @NotNull(message = "you have to define prise of book")
     private BigDecimal price;
 
-    @Min(value = 1, message = "you can give min 1 percent to make a discount")
-    @Max(value = 100, message = "you can give max 100 percent to make a discount")
-    private Byte discount;
+    @Percent
+    private int discount;
 
     private BOOKTYPE book;
 

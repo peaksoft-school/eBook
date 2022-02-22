@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.domain.model.books;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
+import kg.ebooks.eBook.db.domain.dto.book.Date;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
@@ -63,7 +64,7 @@ public class Book implements BookInfoBkt {
 
     private Boolean bestSeller;
 
-    private byte discount;
+    private int discount;
 
     @NotNull(message = "you have to define type of book")
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
@@ -104,6 +105,15 @@ public class Book implements BookInfoBkt {
     public void decrementInBasket() {
         this.inBasket--;
     }
+
+    public Date getStorageDate() {
+        Date date = new Date();
+        date.setDay(storageDate.getDayOfMonth());
+        date.setMonth(storageDate.getMonth());
+        date.setYear(storageDate.getYear());
+        return date;
+    }
+
     @Override
     public FileInfo getImage() {
         return images.stream().findAny()
@@ -148,6 +158,8 @@ public class Book implements BookInfoBkt {
         }
         return "hello";
     }
+
+
 
     public String getFragment() {
         if (paperBook != null) {
