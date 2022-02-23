@@ -51,7 +51,7 @@ public class BookSaveMapper {
                                   LocalDate dataOfIssue,
                                   Boolean bestSeller,
                                   BigDecimal price,
-                                  byte discount) {
+                                  int discount) {
         Book book = new Book();
         book.setImages(images);
         book.setBookName(bookName);

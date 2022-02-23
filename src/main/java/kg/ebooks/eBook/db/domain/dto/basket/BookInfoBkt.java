@@ -28,7 +28,7 @@ public interface BookInfoBkt {
 //    Promo getPromo();
 
     //    ⌘ discount
-    byte getDiscount();
+    int getDiscount();
 
     //    ⌘ discount price
     BigDecimal getDiscountedPrice();
