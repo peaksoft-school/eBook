@@ -17,21 +17,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Book findByBookName(String bookName);
 
-
-    @Query("select n from Book n  where" +
-            " n.bookName LIKE CONCAT( :search, '%') or " +
-            "n.genre.genreName LIKE CONCAT(:search, '%') OR " +
-            "n.author LIKE CONCAT(:search, '%')")
-    List<Book> listsearch1(@Param("search") String search);
-
-    @Query("select b.bookId, b.bookName as search from Book b where b.bookName like concat( :search, '%')")
-    List<Book> findBookNameBySearch(@Param("search") String search);
-
-    @Query("select b.bookId, b.genre.genreName as search from Book b where b.genre.genreName like concat( :search, '%')")
-    List<Book> findGenreNameBySearch(@Param("search") String search);
-
-    @Query("select b.bookId, b.author as search from Book b where b.author like concat( :search, '%')")
-    List<Book> findAuthorBySearch(@Param("search") String search);
-
-
 }

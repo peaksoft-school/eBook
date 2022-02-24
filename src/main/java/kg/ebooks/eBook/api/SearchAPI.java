@@ -7,18 +7,15 @@ import kg.ebooks.eBook.db.service.SearchService;
 import kg.ebooks.eBook.exceptions.EmptyListException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("search")
 @CrossOrigin
 @RequiredArgsConstructor
-@Tag(name = "This API to search bar", description = "made by Ruslan")
-@PreAuthorize("permitAll()")
+@Tag(name = "This API to search bar")
 public class SearchAPI {
 
     private final SearchService searchService;
