@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("search")
+@RequestMapping("/api/search")
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "This API to search bar")
