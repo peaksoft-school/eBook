@@ -14,7 +14,7 @@ public class PercentValidator implements ConstraintValidator<Percent, Integer> {
     @Override
     public boolean isValid(Integer integer,
                            ConstraintValidatorContext constraintValidatorContext) {
-        if (integer > 0 && integer <= 100) {
+        if (integer >= 0 && integer <= 100) {
             return true;
         }
         return false;
