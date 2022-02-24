@@ -9,10 +9,7 @@ import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.modelmapper.ModelMapper;
 
@@ -41,6 +38,7 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Book implements BookInfoBkt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,13 +73,13 @@ public class Book implements BookInfoBkt {
 
     private LocalDate storageDate;
 
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     private AudioBook audioBook;
 
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     private ElectronicBook electronicBook;
 
-    @OneToOne(fetch = LAZY, cascade = ALL)
+    @OneToOne(fetch = EAGER, cascade = ALL)
     private PaperBook paperBook;
 
     private RequestStatus requestStatus;

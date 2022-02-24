@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.books;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -34,6 +37,14 @@ public class PaperBook {
     private int pageSize;
 
 //    @NotBlank(message = "Publishing house is required!")
+    @Column(name = "publishing_house")
     private String publishingHouse;
     // #I don't know how to do paper book?
+
+
+    @OneToOne(fetch = EAGER,mappedBy = "paperBook")
+    @JsonIgnore
+    private Book book;
+
+
 }

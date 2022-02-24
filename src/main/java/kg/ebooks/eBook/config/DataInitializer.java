@@ -34,7 +34,7 @@ import java.util.HashSet;
 public class DataInitializer {
 
 
-//    @Bean
+    @Bean
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
@@ -100,7 +100,7 @@ public class DataInitializer {
             PaperBook paperBook = new PaperBook();
             paperBook.setFragment("Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
             // TODO: 10/1/22 set value to fields when finished paper book
-
+            paperBook.setPublishingHouse("Манас");
             //electronic books
 
             ElectronicBook electronicBook = new ElectronicBook(

@@ -36,4 +36,5 @@ build/
 ### application-dev.properties
 src/main/resources/application-bek.properties
 
+src/main/resources/application-dev.properties
 
