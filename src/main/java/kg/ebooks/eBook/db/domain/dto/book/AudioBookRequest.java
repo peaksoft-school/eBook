@@ -20,10 +20,8 @@ import java.time.LocalTime;
  */
 @Getter @Setter
 public class AudioBookRequest implements BookRequest {
-    private Long id;
+
     private Long fragmentId;
-//    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")
-//    @DateTimeFormat(pattern = "hh:MM:ss")
     private Time duration;
     private Long audioBookId;
 }
