@@ -3,7 +3,9 @@ package kg.ebooks.eBook.db.domain.dto.sort;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
@@ -18,6 +20,8 @@ import java.util.List;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SortRequest {
 
     @Nullable

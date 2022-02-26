@@ -20,7 +20,6 @@ import java.time.LocalTime;
  */
 @Getter @Setter
 public class AudioBookRequest implements BookRequest {
-
     private Long fragmentId;
     private Time duration;
     private Long audioBookId;
