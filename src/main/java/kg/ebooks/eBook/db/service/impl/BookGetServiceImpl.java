@@ -2,17 +2,22 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.admin.BookResponseDTOFromAdmin;
 import kg.ebooks.eBook.db.domain.dto.book.*;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.service.BookGetService;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
@@ -62,6 +67,43 @@ public class BookGetServiceImpl implements BookGetService {
                 return null;
         }
     }
+
+    @Override
+    public List<BookMainPage> getThreeBooks() {
+        return bookRepository.bookGetLikesmax()
+                .stream().map(this::bookMainPage).limit(3)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public BookMainPage bookMainPage(Book book) {
+        BookMainPage bookMainPage = new BookMainPage();
+        bookMainPage.setBookId(book.getBookId());
+        bookMainPage.setBookName(book.getBookName());
+        bookMainPage.setAuthor(book.getAuthor());
+        bookMainPage.setPrice(book.getPrice());
+        bookMainPage.setImage(book.getImage());
+        return bookMainPage;
+    }
+
+    @Override
+    public List<GetAudioBookDto> getAudioBook() {
+        return bookRepository.findAll()
+                .stream().map(this::getAudiobooks)
+                .limit(5).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public GetAudioBookDto getAudiobooks(Book book) {
+        GetAudioBookDto getAudioBookDto = new GetAudioBookDto();
+        getAudioBookDto.setBookId(book.getBookId());
+        getAudioBookDto.setBookName(book.getBookName());
+        getAudioBookDto.setAuthor(book.getAuthor());
+        getAudioBookDto.setPrice(book.getPrice());
+        getAudioBookDto.setImage(book.getImage());
+        return getAudioBookDto;
+    }
+
 
     private Book getBook(Long bookId) {
         return bookRepository.findById(bookId)
