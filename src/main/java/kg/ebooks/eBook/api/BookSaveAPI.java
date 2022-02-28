@@ -71,7 +71,6 @@ public class BookSaveAPI {
         return bookService.saveBook(authenticationInfo, PAPER_BOOK, paperBook);
     }
 
-
     @GetMapping("/languages")
     public Language[] getAllLanguage() {
         return Language.values();

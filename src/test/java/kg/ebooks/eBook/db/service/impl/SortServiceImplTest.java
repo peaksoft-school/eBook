@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 import kg.ebooks.eBook.db.domain.model.books.Book;
@@ -13,18 +14,15 @@ import kg.ebooks.eBook.db.service.SortService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,27 +32,26 @@ import static org.junit.jupiter.api.Assertions.*;
  * Saturday 10:17
  * hello world
  */
-@Component
+@SpringBootTest
 class SortServiceImplTest {
 
-    private final BookRepository bookRepository;
     private AutoCloseable autoCloseable;
+
+    @Autowired
     private SortService underTest;
 
-    public SortServiceImplTest(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    @Autowired
+    private BookRepository bookRepository;
 
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new SortServiceImpl(bookRepository);
         bookRepository.saveAll(getBooks());
     }
 
     @AfterEach
     void tearDown() throws Exception {
-        autoCloseable.close();;
+        autoCloseable.close();
     }
 
     @Test
@@ -65,13 +62,19 @@ class SortServiceImplTest {
                 null,
                 null
         ));
+        sort.forEach(System.out::println);
         assertEquals(getBooks().size(), sort.size());
     }
+
     private static List<Book> getBooks() {
         return new ArrayList<>(Arrays.asList(
                 new Book(
                         null,
-                        null,
+                        new HashSet<FileInfo>(
+                                Arrays.asList(
+                                        new FileInfo()
+                                )
+                        ),
                         "Think and Get Rich",
                         "I don't know",
                         new Genre(

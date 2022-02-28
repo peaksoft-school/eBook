@@ -64,7 +64,7 @@ public class SortServiceImpl implements SortService {
                     }
                     return sortRequest.getLanguages().contains(book.getLanguage());
                 })
-                .map(book -> modelMapper.map(book, BookResponseDTOSort.class))
+                .map(book -> book != null ? modelMapper.map(book, BookResponseDTOSort.class) : null)
                 .collect(Collectors.toList());
     }
 
