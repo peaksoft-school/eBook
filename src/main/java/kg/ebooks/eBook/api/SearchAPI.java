@@ -20,8 +20,8 @@ public class SearchAPI {
 
     private final SearchService searchService;
 
-    @GetMapping("/books")
     @Operation(summary = "search by books & genres & authors & publishing house")
+    @GetMapping("/books")
     List<SearchDto> getBooks(@RequestParam String search) {
         List<SearchDto> all = searchService.findAll(search);
         if (all.size() < 1) {
