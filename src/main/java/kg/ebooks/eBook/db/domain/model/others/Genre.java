@@ -43,7 +43,7 @@ public class Genre implements GenreGetDTO {
     @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
-    private Integer quantityOfBooks;
+    private int quantityOfBooks;
 
     @Override
     public Set<BookResponse> getAllBooks() {

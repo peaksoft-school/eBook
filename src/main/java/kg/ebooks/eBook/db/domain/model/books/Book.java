@@ -4,27 +4,28 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.dto.book.Date;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
+import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
-import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -38,7 +39,6 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Book implements BookInfoBkt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -168,5 +168,18 @@ public class Book implements BookInfoBkt {
             return electronicBook.getFragment();
         }
         return "no fragment";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Book book = (Book) o;
+        return bookId != null && Objects.equals(bookId, book.bookId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

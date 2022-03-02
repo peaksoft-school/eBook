@@ -21,6 +21,7 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Table(name = "paper_books")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class PaperBook {
@@ -40,11 +41,4 @@ public class PaperBook {
     @Column(name = "publishing_house")
     private String publishingHouse;
     // #I don't know how to do paper book?
-
-
-    @OneToOne(fetch = EAGER,mappedBy = "paperBook")
-    @JsonIgnore
-    private Book book;
-
-
 }

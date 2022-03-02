@@ -18,6 +18,7 @@ import java.util.Collections;
 @Entity
 @Table(name = "authenticatoin_info")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString

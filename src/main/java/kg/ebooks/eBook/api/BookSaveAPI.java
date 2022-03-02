@@ -71,6 +71,27 @@ public class BookSaveAPI {
         return bookService.saveBook(authenticationInfo, PAPER_BOOK, paperBook);
     }
 
+    @PutMapping("/update/papaer_book/{bookId}")
+    public BookResponse updatePaperBook(
+            @PathVariable Long bookId,
+            @Valid @RequestBody BookSave<PaperBookRequest> bookSave) {
+        return bookService.updateBook(bookId, PAPER_BOOK, bookSave);
+    }
+
+    @PutMapping("/update/audio_book/{bookId}")
+    public BookResponse updateAudioBook(
+            @PathVariable Long bookId,
+            @Valid @RequestBody BookSave<AudioBookRequest> bookSave) {
+        return bookService.updateBook(bookId, AUDIO_BOOK, bookSave);
+    }
+
+    @PutMapping("/update/electronic_book/{bookId}")
+    public BookResponse updateElectronicBook(
+            @PathVariable Long bookId,
+            @Valid @RequestBody BookSave<ElectronicBookRequest> bookSave) {
+        return bookService.updateBook(bookId, ELECTRONIC_BOOK, bookSave);
+    }
+
     @GetMapping("/languages")
     public Language[] getAllLanguage() {
         return Language.values();

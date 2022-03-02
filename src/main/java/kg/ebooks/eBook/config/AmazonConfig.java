@@ -24,7 +24,8 @@ public class AmazonConfig {
 //            "AKIA2ODYHKQAFCC4W7ZK",
 //            "7LKvgCVVndL1lJAusftw+TMbCxN4qmSDSjhFFupx"
             "AKIAZZPYDOROTII6AZMX",
-            "doXbU3YapsOPhiPikUV18FyHjH0j2KI3pxHWAgnc");
+            "doXbU3YapsOPhiPikUV18FyHjH0j2KI3pxHWAgnc"
+    );
 
     @Bean
     public AmazonS3 amazonS3() {

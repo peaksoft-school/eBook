@@ -93,6 +93,7 @@ public class FileServiceImpl implements FileService {
                 ));
         try {
             log.warn("{}/{}", fileInfo.getFolderName().getPath(), fileInfo.getFileName());
+            fileRepository.delete(fileInfo);
             fileStore.delete(fileInfo.getFolderName().getPath(), fileInfo.getFileName());
             log.info("successfully deleted from to database :: file name = {}", fileInfo.getFileName());
         } catch (AmazonServiceException e) {
@@ -101,6 +102,8 @@ public class FileServiceImpl implements FileService {
                     "failed to delete file from amazon s3 bucket"
             );
         }
+
+
     }
 
     @Override
