@@ -15,8 +15,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ClientDto {
 
     private Long clientId;

@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.domain.dto.book;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

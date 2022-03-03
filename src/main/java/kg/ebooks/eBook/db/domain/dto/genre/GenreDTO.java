@@ -15,5 +15,5 @@ import lombok.Setter;
 public class GenreDTO {
     private Long id;
     private String genreName;
-    private Integer quantityOfBooks;
+    private int quantityOfBooks;
 }

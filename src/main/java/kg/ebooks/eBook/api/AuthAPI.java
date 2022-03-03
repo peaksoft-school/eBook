@@ -29,8 +29,6 @@ public class AuthAPI {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-
-
     @PostMapping("/authentication")
     @Operation(summary = "Прохождение аутентификации", description = "Позволяет пройти аутентификацию")
     @PreAuthorize("permitAll()")
