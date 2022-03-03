@@ -23,7 +23,7 @@ import java.util.Objects;
 public class FileInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private FolderName folderName;

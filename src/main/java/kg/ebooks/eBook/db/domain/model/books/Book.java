@@ -44,7 +44,7 @@ public class Book implements BookInfoBkt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
 
-    @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @OneToMany(fetch = EAGER, cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private Set<FileInfo> images;
 
     private String bookName;
@@ -104,6 +104,12 @@ public class Book implements BookInfoBkt {
         this.inBasket--;
     }
 
+    public void setImages(Set<FileInfo> images) {
+        System.out.println("inside book");
+        images.forEach(System.out::println);
+        this.images = images;
+    }
+
     public Date getStorageDate() {
         Date date = new Date();
         date.setDay(storageDate.getDayOfMonth());
@@ -157,7 +163,9 @@ public class Book implements BookInfoBkt {
         return "hello";
     }
 
-
+    public Genre getOriginalGenre() {
+        return this.genre;
+    }
 
     public String getFragment() {
         if (paperBook != null) {
@@ -181,5 +189,9 @@ public class Book implements BookInfoBkt {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void setImage(FileInfo newImage) {
+        this.images.add(newImage);
     }
 }

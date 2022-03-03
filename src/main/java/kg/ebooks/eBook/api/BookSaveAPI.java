@@ -7,6 +7,7 @@ import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
 import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.db.domain.model.enums.Type;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.service.BookSaveService;
@@ -71,7 +72,7 @@ public class BookSaveAPI {
         return bookService.saveBook(authenticationInfo, PAPER_BOOK, paperBook);
     }
 
-    @PutMapping("/update/papaer_book/{bookId}")
+    @PutMapping("/update/paper_book/{bookId}")
     public BookResponse updatePaperBook(
             @PathVariable Long bookId,
             @Valid @RequestBody BookSave<PaperBookRequest> bookSave) {
@@ -97,4 +98,8 @@ public class BookSaveAPI {
         return Language.values();
     }
 
+    @GetMapping("/types")
+    public TypeOfBook[] getTypesOfBook() {
+        return TypeOfBook.values();
+    }
 }

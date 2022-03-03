@@ -1,20 +1,19 @@
 package kg.ebooks.eBook.db.service.impl;
 
-import ch.qos.logback.core.util.COWArrayList;
-import com.google.common.collect.Sets;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.service.FileService;
 import kg.ebooks.eBook.db.domain.dto.book.*;
-import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.mapper.BookSaveMapper;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.users.Admin;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.AdminRepository;
 import kg.ebooks.eBook.db.repository.BookRepository;
+import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.BookSaveService;
 import kg.ebooks.eBook.exceptions.*;
@@ -22,24 +21,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-
 import static kg.ebooks.eBook.db.domain.model.enums.Authority.*;
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
 
 /**
- * created by Beksultan Mamatkadyr uulu
- * 1/2/22
- * Tuesday 14:35
- * hello world
+ * @author Beksultan
  */
 @Service
 @RequiredArgsConstructor
@@ -51,6 +43,7 @@ public class BookSaveServiceImpl implements BookSaveService {
     private final VendorRepository vendorRepository; // TODO: 5/2/22 VendorService*
     private final AdminRepository adminRepository; // TODO: 5/2/22 AdminService*
     private final FileService fileService;
+    private final GenreRepository genreRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
@@ -112,7 +105,7 @@ public class BookSaveServiceImpl implements BookSaveService {
                     byBookName.getLanguage() == book.getLanguage()) {
                 log.error("book already [{}] exists in database", book.getBookName());
                 throw new AlreadyExistsException(
-                        "book already [ " + book.getBookName()+ " ] exists in database"
+                        "book already [ " + book.getBookName() + " ] exists in database"
                 );
             }
         }
@@ -122,179 +115,213 @@ public class BookSaveServiceImpl implements BookSaveService {
     @Transactional
     public BookResponse updateBook(Long bookId,
                                    TypeOfBook type,
-                                   BookSave<?> bookSave) {
-        Book book = isValidToUpdate(bookId, type, bookSave);
-        Book newBook = bookSaveMapper.makeBookFromBookRequest(type, bookSave, false);
-        log.info("there works");
+                                   BookSave<?> newBook) {
+        Book book = isValidToUpdate(bookId);
+        String bookName = book.getBookName();
+        log.info("book '{}' able to update", bookName);
 
-        changeFiles(book, newBook);
-        changeType(book, newBook);
-        changeBookName(book.getBookName(), newBook.getBookName());
-        changeAuthors(book.getAuthor(), newBook.getAuthor());
-        changeGenre(book.getGenre(), newBook.getGenre());
-        changeDescription(book.getDescription(), newBook.getDescription());
-        changeLanguage(book.getLanguage(), newBook.getLanguage());
-        changeYearOfIssue(book, newBook);
-        changePrice(book.getPrice(), newBook.getPrice());
-        changeDiscount(book.getDiscount(), newBook.getDiscount());
-        changeBestSeller(book.getBestSeller(), newBook.getBestSeller());
+        //download images
+        Set<FileInfo> newImages = newBook.getImages().stream()
+                .map(fileService::findById)
+                .collect(Collectors.toSet());
+
+        book.setImages(newImages);
+
+        String newBookName = newBook.getBookName();
+        if (isNotNullAndNotEqual(bookName, newBookName) && !newBookName.isEmpty()) {
+            book.setBookName(newBookName);
+            logInfo("name", bookName, bookName, newBookName);
+        }
+
+        String author = book.getAuthor();
+        String newAuthor = newBook.getAuthor();
+        if (isNotNullAndNotEqual(author, newAuthor) && !newAuthor.isEmpty()) {
+            book.setAuthor(newAuthor);
+            logInfo("author", bookName, author, newAuthor);
+        }
+
+        Genre newGenre = genreRepository.findById(newBook.getGenreId()).orElseThrow(
+                () -> new DoesNotExistsException("genre with id = " + newBook.getGenreId() + " does not exists in database")
+        );
+
+        Genre currentGenre = book.getOriginalGenre();
+
+        if (isNotNullAndNotEqual(currentGenre, newGenre)) {
+            book.setGenre(newGenre);
+            logInfo("genre", bookName, currentGenre.getGenreName(), newGenre.getGenreName());
+        }
+
+        String currentDescription = book.getDescription();
+        String newDescription = newBook.getDescription();
+
+        if (isNotNullAndNotEqual(currentDescription, newDescription) && newDescription.length() > 0) {
+            book.setDescription(newDescription);
+            logInfo("description", bookName, currentDescription, newDescription);
+        }
+
+        Language currentLanguage = book.getLanguage();
+        Language newLanguage = newBook.getLanguage();
+
+        if (isNotNullAndNotEqual(currentLanguage, newLanguage)) {
+            book.setLanguage(newLanguage);
+            assert currentLanguage != null;
+            logInfo("language", bookName, currentLanguage.name(), newLanguage.name());
+        }
+
+        LocalDate currentDateOfIssue = book.getDateOfIssue();
+        LocalDate newDateOfIssue = newBook.getDataOfIssue();
+
+        if (isNotNullAndNotEqual(currentDateOfIssue, newDateOfIssue)) {
+            book.setDateOfIssue(newDateOfIssue);
+            logInfo("dataOfIssue", bookName, currentDateOfIssue.toString(), newDateOfIssue.toString());
+        }
+
+        boolean currentBestSeller = book.getBestSeller();
+        boolean newBestSeller = newBook.getBestSeller();
+
+        if (currentBestSeller == newBestSeller) {
+            book.setBestSeller(newBestSeller);
+            logInfo("bestSeller", bookName, String.valueOf(currentBestSeller), String.valueOf(newBestSeller));
+        }
+
+        BigDecimal currentPrice = book.getPrice();
+        BigDecimal newPrice = newBook.getPrice();
+
+        if (isNotNullAndNotEqual(currentPrice, newPrice) && newPrice.intValue() > 0) {
+            book.setPrice(newPrice);
+            logInfo("price", bookName, currentPrice.toString(), newPrice.toString());
+        }
+
+        int currentDiscount = book.getDiscount();
+        int newDisCount = newBook.getDiscount();
+
+        if (newDisCount != currentDiscount) {
+            book.setDiscount(newDisCount);
+            logInfo("discount", bookName, String.valueOf(currentDiscount), String.valueOf(newDisCount));
+        }
+
         switch (type) {
             case PAPER_BOOK:
-                changeFragment(book.getPaperBook().getFragment(), newBook.getPaperBook().getFragment());
-                changePageSize(book.getPaperBook().getPageSize(), newBook.getPaperBook().getPageSize());
-                changeQuantityOfBooks(book.getPaperBook().getQuantityOfBooks(), newBook.getPaperBook().getQuantityOfBooks());
-                changePublishingHouse(book.getPaperBook().getPublishingHouse(), newBook.getPaperBook().getPublishingHouse());
-                break;
-            case AUDIO_BOOK:
-                changeAudioFragment(book.getAudioBook().getFragment(), newBook.getAudioBook().getFragment());
-                changeDuration(book.getAudioBook().getDuration(), newBook.getAudioBook().getDuration());
-                changeFile(book.getAudioBook().getAudioBook(), newBook.getAudioBook().getAudioBook());
+                PaperBookRequest paperBookRequest = (PaperBookRequest) newBook.getBook();
+
+                String currentFragment = book.getPaperBook().getFragment();
+                String newFragment = paperBookRequest.getFragment();
+
+                if (isNotNullAndNotEqual(currentFragment, newFragment)) {
+                    book.getPaperBook().setFragment(newFragment);
+                    logInfo("fragment", bookName, currentFragment, newFragment);
+                }
+
+                int currentQuantityOfBooks = book.getPaperBook().getQuantityOfBooks();
+                int newQuantityOfBooks = paperBookRequest.getQuantityOfBooks();
+
+                if (isNotNullAndNotEqual(currentQuantityOfBooks, newQuantityOfBooks)) {
+                    book.getPaperBook().setQuantityOfBooks(newQuantityOfBooks);
+                    logInfo("quantityOfBooks", bookName, String.valueOf(currentQuantityOfBooks), String.valueOf(newQuantityOfBooks));
+                }
+
+                int currentPageSize = book.getPaperBook().getPageSize();
+                int newPageSize = paperBookRequest.getPageSize();
+
+                if (isNotNullAndNotEqual(currentPageSize, newPageSize)) {
+                    book.getPaperBook().setPageSize(newPageSize);
+                    logInfo("pageSize", bookName, String.valueOf(currentPageSize), String.valueOf(newPageSize));
+                }
+
+                String currentPublishingHouse = book.getPaperBook().getPublishingHouse();
+                String newPublishingHouse = paperBookRequest.getPublishingHouse();
+
+                if (isNotNullAndNotEqual(currentPublishingHouse, newPublishingHouse)) {
+                    book.getPaperBook().setPublishingHouse(newPublishingHouse);
+                    logInfo("publishingHouse", bookName, currentPublishingHouse, newPublishingHouse);
+                }
                 break;
             case ELECTRONIC_BOOK:
-                changeFragment(book.getElectronicBook().getFragment(), newBook.getFragment());
-                changePageSize(book.getElectronicBook().getPageSize(), newBook.getElectronicBook().getPageSize());
-                changePublishingHouse(book.getElectronicBook().getPublishingHouse(), newBook.getElectronicBook().getPublishingHouse());
-                changeFile(book.getElectronicBook().getElectronicBook(), newBook.getElectronicBook().getElectronicBook());
+                ElectronicBookRequest electronicBookRequest = (ElectronicBookRequest) newBook.getBook();
+
+                String currentEFragment = book.getPaperBook().getFragment();
+                String newEFragment = electronicBookRequest.getFragment();
+
+                if (isNotNullAndNotEqual(currentEFragment, newEFragment)) {
+                    book.getPaperBook().setFragment(newEFragment);
+                    logInfo("fragment", bookName, currentEFragment, newEFragment);
+                }
+
+                int currentEPageSize = book.getPaperBook().getPageSize();
+                int newEPageSize = electronicBookRequest.getPageSize();
+
+                if (isNotNullAndNotEqual(currentEPageSize, newEPageSize)) {
+                    book.getPaperBook().setPageSize(newEPageSize);
+                    logInfo("pageSize", bookName, String.valueOf(currentEPageSize), String.valueOf(newEPageSize));
+                }
+
+                String currentEPublishingHouse = book.getPaperBook().getPublishingHouse();
+                String newEPublishingHouse = electronicBookRequest.getPublishingHouse();
+
+                if (isNotNullAndNotEqual(currentEPublishingHouse, newEPublishingHouse)) {
+                    book.getPaperBook().setPublishingHouse(newEPublishingHouse);
+                    logInfo("publishingHouse", bookName, currentEPublishingHouse, newEPublishingHouse);
+                }
+
+                FileInfo currentElectronicBook = book.getElectronicBook().getElectronicBook();
+                FileInfo newElectronicBook = fileService.findById(electronicBookRequest.getElectronicBookId());
+
+                if (isNotNullAndNotEqual(currentElectronicBook, newElectronicBook)) {
+                    fileService.deleteFile(currentElectronicBook.getId());
+                    book.getElectronicBook().setElectronicBook(newElectronicBook);
+                    logInfo("electronicBook", bookName, currentElectronicBook.toString(), newElectronicBook.toString());
+                }
+                break;
+            case AUDIO_BOOK:
+
+                AudioBookRequest audioBookRequest = (AudioBookRequest) newBook.getBook();
+
+                FileInfo currentAFragment = book.getAudioBook().getFragment();
+                FileInfo newAFragment = fileService.findById(audioBookRequest.getFragmentId());
+
+                if (isNotNullAndNotEqual(currentAFragment, newAFragment)) {
+                    fileService.deleteFile(currentAFragment.getId());
+                    book.getAudioBook().setFragment(newAFragment);
+                    logInfo("fragmentId", bookName, currentAFragment.toString(), newAFragment.toString());
+                }
+
+
+                LocalTime currentDuration = book.getAudioBook().getDuration();
+                LocalTime newDuration = audioBookRequest.getDuration().makeLocalTime();
+                if (isNotNullAndNotEqual(currentDuration, newDuration)) {
+                    book.getAudioBook().setDuration(newDuration);
+                    logInfo("duration", bookName, currentDuration.toString(), newDuration.toString());
+                }
+
+                FileInfo currentAudioBook = book.getAudioBook().getAudioBook();
+                FileInfo newAudioBook = fileService.findById(audioBookRequest.getAudioBookId());
+
+                if (isNotNullAndNotEqual(currentAudioBook, newAudioBook)) {
+                    fileService.deleteFile(currentAudioBook.getId());
+                    book.getAudioBook().setAudioBook(newAudioBook);
+                    logInfo("audioBook", bookName, currentAudioBook.toString(), newAudioBook.toString());
+                }
+
                 break;
         }
-        return null;
+        System.out.println("this so crazy");
+
+        return modelMapper.map(book, BookResponse.class);
     }
 
-    private void changeFile(FileInfo file, FileInfo newFile) {
-        if (!file.equals(newFile)) {
-            fileService.deleteFile(file.getId());
-            file = newFile;
-        }
+    private <T> boolean isNotNullAndNotEqual(T current, T news) {
+        return news != null && !Objects.equals(current, news);
     }
 
-    private void changeDuration(LocalTime duration, LocalTime newDuration) {
-        if (!duration.equals(newDuration)) {
-            duration = newDuration;
-        }
-    }
-
-    private void changeAudioFragment(FileInfo fragment, FileInfo newFragment) {
-        if (!fragment.equals(newFragment)) {
-            fileService.deleteFile(fragment.getId());
-            fragment = newFragment;
-        }
-    }
-
-    private void changePublishingHouse(String publishingHouse, String newPublishingHouse) {
-        if (!publishingHouse.equals(newPublishingHouse)) {
-            publishingHouse = newPublishingHouse;
-        }
-    }
-
-    private void changeQuantityOfBooks(int quantityOfBooks, int newQuantityOfBooks) {
-        if (quantityOfBooks != newQuantityOfBooks) {
-            quantityOfBooks = newQuantityOfBooks;
-        }
-    }
-
-    private void changePageSize(int pageSize, int newPageSize) {
-        if (pageSize != newPageSize) {
-            pageSize = newPageSize;
-        }
-    }
-
-    private void changeFragment(String fragment, String newFragment) {
-        if (!fragment.equals(newFragment)) {
-            fragment = newFragment;
-        }
-    }
-
-    private void changeBestSeller(Boolean bestSeller, Boolean bestSeller1) {
-        if (bestSeller != bestSeller1) {
-            bestSeller = bestSeller1;
-        }
-    }
-
-    private void changeDiscount(int discount, int newDiscount) {
-        if (discount != newDiscount) {
-            discount = newDiscount;
-        }
-    }
-
-    private void changePrice(BigDecimal price, BigDecimal price1) {
-        if (!price.equals(price1)) {
-            price = price1;
-        }
-    }
-
-    private void changeYearOfIssue(Book book, Book newBook) {
-        if (!(book.getYearOfIssue() == newBook.getYearOfIssue())) {
-            book.setDateOfIssue(newBook.getDateOfIssue());
-        }
-    }
-
-    private void changeLanguage(Language language, Language newLanguage) {
-        if (!language.equals(newLanguage)) {
-            language = newLanguage;
-        }
-    }
-
-    private void changeDescription(String description, String newDescription) {
-        if (!description.equals(newDescription)) {
-            description = newDescription;
-        }
-    }
-
-    private void changeGenre(GenreDTO genre, GenreDTO newGenre) {
-        if (!genre.equals(newGenre)) {
-            genre = newGenre;
-        }
-    }
-
-    private void changeAuthors(String author, String author1) {
-        if (!author.equals(author1)) {
-            author = author1;
-        }
-    }
-
-    private void changeBookName(String bookName, String newBookName) {
-        if (!bookName.equals(newBookName)) {
-            bookName = newBookName;
-        }
-    }
-
-    private void changeType(Book book, Book newBook) {
-        if (!book.getTypeOfBook().equals(newBook.getTypeOfBook())) {
-            book.setTypeOfBook(newBook.getTypeOfBook());
-        }
-    }
-
-    private void changeFiles(Book book, Book newBook) {
-        log.info("there works 2");
-
-        List<FileInfo> images = book.getImages().stream().collect(Collectors.toList());
-        FileInfo[] newImages = (FileInfo[]) newBook.getImages().toArray();
-
-//        for (int i = 0; i < 3; i++) {
-//            if (newImages[i] == null) {
-//                fileService.deleteFile(images[i].getId());
-//                continue;
-//            }
-//
-//            if (!images[i].equals(newImages[i])) {
-//                images[i] = newImages[i];
-//            }
-//        }
+    private void logInfo(String what, String which, String current, String news) {
+        log.info("{} of book '{}' updated from '{}' to '{}'", what, which, current, news);
     }
 
 
-
-    private Book isValidToUpdate(Long bookId, TypeOfBook type, BookSave<?> bookSave) {
-        Book book = bookRepository.findById(bookId)
+    private Book isValidToUpdate(Long bookId) {
+        return bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(
                         "book with id = " + bookId + " does not exists in database"
                 ));
-        if (!type.equals(book.getTypeOfBook())) {
-            throw new InvalidRequestException(
-                    "books are not same"
-            );
-        }
-
-        return book;
     }
 }
