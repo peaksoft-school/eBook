@@ -23,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @PreAuthorize("hasAuthority('ADMIN')")
+@CrossOrigin
 public class AdminAPI {
 
 
