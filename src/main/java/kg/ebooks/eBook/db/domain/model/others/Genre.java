@@ -53,6 +53,9 @@ public class Genre implements GenreGetDTO {
                 .collect(Collectors.toSet());
     }
 
+    public Set<Book> getOriginalBooks() {
+        return this.books;
+    }
     public void setBook(Book book) {
         books.add(book);
     }

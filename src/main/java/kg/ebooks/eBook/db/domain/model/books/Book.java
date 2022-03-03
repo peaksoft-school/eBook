@@ -104,6 +104,9 @@ public class Book implements BookInfoBkt {
         this.inBasket--;
     }
 
+    public LocalDate getOriginalStorageDate() {
+        return this.storageDate;
+    }
     public Date getStorageDate() {
         Date date = new Date();
         date.setDay(storageDate.getDayOfMonth());
@@ -134,6 +137,8 @@ public class Book implements BookInfoBkt {
 
     public GenreDTO getGenre() {
         ModelMapper modelMapper = new ModelMapper();
+        System.out.println(genre);
+        System.out.println(bookName);
         return modelMapper.map(genre, GenreDTO.class);
     }
 
@@ -156,7 +161,6 @@ public class Book implements BookInfoBkt {
         }
         return "hello";
     }
-
 
 
     public String getFragment() {

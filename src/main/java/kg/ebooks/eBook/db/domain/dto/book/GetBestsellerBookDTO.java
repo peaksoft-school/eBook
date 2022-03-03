@@ -1,22 +1,21 @@
 package kg.ebooks.eBook.db.domain.dto.book;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class GetAudioBookDto {
+public class GetBestsellerBookDTO {
     private Long bookId;
     private String bookName;
-    private String author;
-    private FileInfo image;
     private BigDecimal price;
-    private LocalTime duration;
-
-
+    private String description;
+    private FileInfo image;
 }

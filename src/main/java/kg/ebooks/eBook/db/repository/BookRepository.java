@@ -4,6 +4,7 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +19,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b order by b.likes desc")
     List<Book> bookGetLikesmax();
+
+    @Query("select b from Book b where b.audioBook is not null")
+    List<Book> bookGetAudio();
+
+    @Query("select b from Book b where b.electronicBook is not null")
+    List<Book> bookGetElectronic();
+
+    @Query("select b from Book b where b.bestSeller = true ")
+    List<Book> bookGetBestseller();
 }
