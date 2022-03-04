@@ -2,6 +2,7 @@ package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 import kg.ebooks.eBook.db.service.SortService;
@@ -31,5 +32,16 @@ public class SortAPI {
             " but it thinks that it's nothing, It helps code to work fastly")
     public List<BookResponseDTOSort> sortList(@RequestBody SortRequest sortRequest) {
         return service.sort(sortRequest);
+    }
+
+    @Operation(summary = "sort by type", description = " This method for sort books by type, " +
+            "you should give type of books like that <br/>" +
+            "'paperBook' -> OK <br/>" +
+            "'electronicBook' -> OK <br/>" +
+            "'audioBook' -> OK <br/>" +
+            "'baibolot' -> BADREQUEST 400 ")
+    @GetMapping("/sort/by/type")
+    public List<BookResponse> sortBooksByType(@RequestParam String type) {
+        return service.findAllByType(type);
     }
 }

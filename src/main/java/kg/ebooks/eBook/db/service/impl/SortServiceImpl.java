@@ -1,13 +1,16 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.Price;
 import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SortService;
+import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -35,7 +40,7 @@ public class SortServiceImpl implements SortService {
     public List<BookResponseDTOSort> sort(SortRequest sortRequest) {
         return bookRepository.findAll().stream()
                 .filter(book -> {
-                    if (sortRequest.getGenres() == null){
+                    if (sortRequest.getGenres() == null) {
                         return true;
                     }
                     if (sortRequest.getGenres().size() < 0) {
@@ -70,4 +75,29 @@ public class SortServiceImpl implements SortService {
 
     public BiPredicate<Book, List<Long>> filterA = (book, genres) -> genres.contains(book.getGenre().getId());
     public BiPredicate<Book, Price> filterC = (book, price) -> price.valid(book.getNetPrice());
+
+    @Override
+    public List<BookResponse> findAllByType(String type) {
+        switch (type) {
+            case "paperBook":
+                return bookRepository.findByBookType(PAPER_BOOK)
+                        .stream()
+                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .collect(Collectors.toList());
+            case "audioBook":
+                return bookRepository.findByBookType(AUDIO_BOOK)
+                        .stream()
+                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .collect(Collectors.toList());
+            case "electronicBook":
+                return bookRepository.findByBookType(ELECTRONIC_BOOK)
+                        .stream()
+                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .collect(Collectors.toList());
+            default:
+                throw new InvalidRequestException(
+                        "you give wrong type of book [" + type + "]"
+                );
+        }
+    }
 }
