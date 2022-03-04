@@ -7,7 +7,5 @@ package kg.ebooks.eBook.db.domain.model.enums;
  * Saturday 20:57
  */
 public enum Language {
-    KYRGYZ, RUSSIAN, ENGLISH, CHINESE,
-    SPANISH, ARABIC, PORTUGUESE, JAPANESE,
-    GERMAN, KOREAN, FRENCH, TURKISH, ITALIAN
+    KYRGYZ, RUSSIAN, ENGLISH
 }
