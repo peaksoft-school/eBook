@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
 
 /**
@@ -21,6 +23,7 @@ import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class AdminServiceImpl implements AdminService {
 
     private final BookRepository bookRepository;

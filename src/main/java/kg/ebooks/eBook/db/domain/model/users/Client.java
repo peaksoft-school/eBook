@@ -41,11 +41,11 @@ public class Client {
 
     private LocalDate dateOfRegistration;
 
-    @OneToOne(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private Basket basket;
+    @OneToOne(fetch = LAZY, cascade = ALL)
+    private Basket basket = new Basket();
 
-    @OneToOne(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private SelectedBooks selectedBooks;
+    @OneToOne(fetch = LAZY, cascade = ALL)
+    private SelectedBooks selectedBooks = new SelectedBooks();
 
     @OneToOne(fetch = EAGER, cascade = ALL)
     private AuthenticationInfo authenticationInfo;

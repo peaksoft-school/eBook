@@ -81,7 +81,7 @@ public class BookSaveServiceImpl implements BookSaveService {
             response.setStorageDate(LocalDate.now());
             System.out.println("test3 " + response);
             save = bookRepository.save(response);
-            Vendor vendor = vendorRepository.findById(authority.getAuthenticationInfoId())
+            Vendor vendor = vendorRepository.findUserByEmail(authority.getEmail())
                     .orElseThrow(() -> new DoesNotExistsException(
                             "vendor not found"
                     ));
