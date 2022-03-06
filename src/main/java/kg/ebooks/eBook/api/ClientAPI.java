@@ -64,6 +64,7 @@ public class ClientAPI {
         return ResponseEntity.ok().build();
     }
 
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleValidationExceptions (
             MethodArgumentNotValidException ex) {
