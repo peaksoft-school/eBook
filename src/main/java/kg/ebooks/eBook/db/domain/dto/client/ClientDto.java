@@ -28,5 +28,4 @@ public class ClientDto {
     @JsonIgnore
     @Password(message = "you give wrong password")
     private String password;
-
 }

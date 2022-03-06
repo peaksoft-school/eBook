@@ -44,7 +44,7 @@ public class BookSaveServiceImpl implements BookSaveService {
     private final AdminRepository adminRepository; // TODO: 5/2/22 AdminService*
     private final FileService fileService;
     private final GenreRepository genreRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     @Override
     public Set<BookResponse> findALLBooks() {

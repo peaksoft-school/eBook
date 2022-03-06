@@ -10,8 +10,8 @@ import javax.validation.constraints.Email;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientDtoResponse {
-
     private Long clientId;
+
     private String name;
     @Email
     private String email;

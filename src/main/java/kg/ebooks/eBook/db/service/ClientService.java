@@ -21,4 +21,5 @@ public interface ClientService {
 
     void deleteClientById(Long id);
 
+    ClientDtoResponse getInfo(String name);
 }
