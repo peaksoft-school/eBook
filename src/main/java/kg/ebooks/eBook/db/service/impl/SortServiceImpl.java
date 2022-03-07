@@ -34,7 +34,7 @@ import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 public class SortServiceImpl implements SortService {
 
     private final BookRepository bookRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     @Override
     public List<BookResponseDTOSort> sort(SortRequest sortRequest) {

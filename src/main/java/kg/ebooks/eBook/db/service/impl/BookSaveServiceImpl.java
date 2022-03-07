@@ -44,7 +44,7 @@ public class BookSaveServiceImpl implements BookSaveService {
     private final AdminRepository adminRepository; // TODO: 5/2/22 AdminService*
     private final FileService fileService;
     private final GenreRepository genreRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     @Override
     public Set<BookResponse> findALLBooks() {
@@ -56,6 +56,7 @@ public class BookSaveServiceImpl implements BookSaveService {
         return bookDTOS;
     }
 
+
     @Override
     @Transactional
     public BookResponse saveBook(AuthenticationInfo authority, TypeOfBook typeOfBook, BookSave<?> book) {
@@ -66,16 +67,23 @@ public class BookSaveServiceImpl implements BookSaveService {
                 book.getBookName(), typeOfBook);
         Book save;
         if (Objects.equals(authority.getAuthority(), ADMIN)) {
+            works("works");
             response.setStorageDate(LocalDate.now());
+            works("works 2");
             response.setRequestStatus(ACCEPTED);
+            works("works 3");
             System.out.println("test2 " + response);
             save = bookRepository.save(response);
+            works("works 4");
             Admin admin = adminRepository.findById(authority.getAuthenticationInfoId())
                     .orElseThrow(() -> new DoesNotExistsException(
                             "admin not found"
                     ));
+            works("works 5");
             admin.setBook(save);
+            works("works 6");
             save.getImages().forEach(FileInfo::makeIsNotFree);
+            works("works 7");
         } else if (Objects.equals(authority.getAuthority(), VENDOR)) {
             response.setRequestStatus(INPROGRESS);
             response.setStorageDate(LocalDate.now());
@@ -96,6 +104,10 @@ public class BookSaveServiceImpl implements BookSaveService {
 
         log.info("book with name = [{}], with type = [{}] successfully saved to database", book.getBookName(), typeOfBook);
         return modelMapper.map(save, BookResponse.class);
+    }
+
+    private void works(String works) {
+        System.out.println(works);
     }
 
     private void isBookValid(TypeOfBook typeOfBook, BookSave<?> book) {
