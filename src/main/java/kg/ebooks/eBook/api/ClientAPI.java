@@ -7,6 +7,7 @@ import kg.ebooks.eBook.aws.exceptions.InvalidFileException;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResquest;
+import kg.ebooks.eBook.db.domain.dto.client.ClientUpdateRequest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -56,10 +58,11 @@ public class ClientAPI {
     public ClientDtoResponse showInfo(Authentication authentication) {
         return clientService.getInfo(authentication.getName());
     }
+
     @PutMapping({"/update/{clientId}"})
     @Operation(summary = "Обновление клиента", description = "Позволяет обновить свой профиль клиента")
     public ClientDto updateClient(@PathVariable("clientId") Long id,
-                                  @RequestBody ClientDto client) {
+                                  @Valid @RequestBody ClientUpdateRequest client) {
         return clientService.updateClient(id, client);
     }
 

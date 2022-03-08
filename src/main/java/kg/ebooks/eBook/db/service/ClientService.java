@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
+import kg.ebooks.eBook.db.domain.dto.client.ClientUpdateRequest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public interface ClientService {
 
     Client getClientById(Long id);
 
-    ClientDto updateClient(Long id, ClientDto client);
+    ClientDto updateClient(Long id, ClientUpdateRequest client);
 
     void deleteClientById(Long id);
 

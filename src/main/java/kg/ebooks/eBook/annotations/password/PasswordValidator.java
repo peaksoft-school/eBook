@@ -14,15 +14,10 @@ public class PasswordValidator implements ConstraintValidator<Password, String> 
     @Override
     public boolean isValid(String password,
                            ConstraintValidatorContext constraintValidatorContext) {
-        if (password == null) {
+        if (password.isEmpty()) {
             return false;
-        } else if (password.length() > 6) {
-            return false;
-        } else if (!password.matches("[A-Za-z0-9]*")) {
-            return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override
