@@ -18,7 +18,7 @@ public interface BookGetService {
 
     BookInfo getBookById(Long bookId);
 
-    List<BookMainPage> getThreeBooks();
+    List<GetLikesMaxBooks> getLikesMaxBooks();
 
     List<GetAudioBookDto> getAudioBook();
 

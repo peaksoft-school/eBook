@@ -68,10 +68,10 @@ public class BookGetServiceImpl implements BookGetService {
     }
 
     @Override
-    public List<BookMainPage> getThreeBooks() {
+    public List<GetLikesMaxBooks> getLikesMaxBooks() {
         return bookRepository.bookGetLikesmax()
                 .stream()
-                .map(book -> modelMapper.map(book, BookMainPage.class))
+                .map(book -> modelMapper.map(book, GetLikesMaxBooks.class))
                 .limit(3)
                 .collect(Collectors.toList());
     }
@@ -96,7 +96,8 @@ public class BookGetServiceImpl implements BookGetService {
     @Override
     public List<GetBestsellerBookDTO> getBestsellerBook() {
         return bookRepository.bookGetBestseller()
-                .stream().map(book -> modelMapper.map(book, GetBestsellerBookDTO.class))
+                .stream()
+                .map(book -> modelMapper.map(book, GetBestsellerBookDTO.class))
                 .limit(3).collect(Collectors.toList());
     }
 

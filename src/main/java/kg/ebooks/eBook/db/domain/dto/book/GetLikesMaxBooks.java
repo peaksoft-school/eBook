@@ -12,10 +12,10 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookMainPage {
+public class GetLikesMaxBooks {
     private Long bookId;
     private String bookName;
     private String author;
-    private FileInfo image;
+    private FileInfo images;
     private BigDecimal price;
 }

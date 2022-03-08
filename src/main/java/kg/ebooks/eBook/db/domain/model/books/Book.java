@@ -137,8 +137,8 @@ public class Book implements BookInfoBkt {
 
     public GenreDTO getGenre() {
         ModelMapper modelMapper = new ModelMapper();
-        System.out.println(genre);
-        System.out.println(bookName);
+        System.out.println(genre + " hello this is have a mistake");
+        System.out.println(bookName + " hello this is have a mistake");
         return modelMapper.map(genre, GenreDTO.class);
     }
 

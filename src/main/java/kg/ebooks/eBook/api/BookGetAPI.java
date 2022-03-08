@@ -30,8 +30,8 @@ public class BookGetAPI {
     }
 
     @GetMapping("/getLikes")
-    public List<BookMainPage> bookMainPageList() {
-        return bookGetService.getThreeBooks();
+    public List<GetLikesMaxBooks> getLikesMaxBooks() {
+        return bookGetService.getLikesMaxBooks();
     }
 
     @GetMapping("/getAudio")
@@ -46,7 +46,7 @@ public class BookGetAPI {
 
     @GetMapping("/getBestseller")
     public List<GetBestsellerBookDTO> getBestsellerBook() {
-        return bookGetService.getBestsellerBook();
+        return  bookGetService.getBestsellerBook();
     }
 
     @GetMapping("/getGenreLastPublication")
