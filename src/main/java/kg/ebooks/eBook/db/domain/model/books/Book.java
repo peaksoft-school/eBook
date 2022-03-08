@@ -4,27 +4,28 @@ import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.dto.book.Date;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
+import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
-import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.EAGER;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -38,13 +39,12 @@ import static javax.persistence.FetchType.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Book implements BookInfoBkt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookId;
 
-    @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @OneToMany(fetch = EAGER, cascade = {PERSIST, MERGE, DETACH, REFRESH})
     private Set<FileInfo> images;
 
     private String bookName;
@@ -107,6 +107,12 @@ public class Book implements BookInfoBkt {
     public LocalDate getOriginalStorageDate() {
         return this.storageDate;
     }
+    public void setImages(Set<FileInfo> images) {
+        System.out.println("inside book");
+        images.forEach(System.out::println);
+        this.images = images;
+    }
+
     public Date getStorageDate() {
         Date date = new Date();
         date.setDay(storageDate.getDayOfMonth());
@@ -137,8 +143,6 @@ public class Book implements BookInfoBkt {
 
     public GenreDTO getGenre() {
         ModelMapper modelMapper = new ModelMapper();
-        System.out.println(genre + " hello this is have a mistake");
-        System.out.println(bookName + " hello this is have a mistake");
         return modelMapper.map(genre, GenreDTO.class);
     }
 
@@ -162,6 +166,10 @@ public class Book implements BookInfoBkt {
         return "hello";
     }
 
+    public Genre getOriginalGenre() {
+        return this.genre;
+    }
+
 
     public String getFragment() {
         if (paperBook != null) {
@@ -172,5 +180,22 @@ public class Book implements BookInfoBkt {
             return electronicBook.getFragment();
         }
         return "no fragment";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Book book = (Book) o;
+        return bookId != null && Objects.equals(bookId, book.bookId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
+    public void setImage(FileInfo newImage) {
+        this.images.add(newImage);
     }
 }

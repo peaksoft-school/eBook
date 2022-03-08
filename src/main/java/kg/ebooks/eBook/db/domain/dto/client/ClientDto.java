@@ -15,8 +15,6 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class ClientDto {
 
     private Long clientId;
@@ -30,5 +28,4 @@ public class ClientDto {
     @JsonIgnore
     @Password(message = "you give wrong password")
     private String password;
-
 }

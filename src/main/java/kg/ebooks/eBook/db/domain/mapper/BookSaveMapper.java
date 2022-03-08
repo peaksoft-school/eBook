@@ -65,16 +65,18 @@ public class BookSaveMapper {
         return book;
     }
 
-    public Book makeBookFromBookRequest(TypeOfBook typeOfBook, BookSave<? extends BookRequest> bookSave) {
+    public Book makeBookFromBookRequest(TypeOfBook typeOfBook, BookSave<? extends BookRequest> bookSave, boolean toSave) {
 
         Set<FileInfo> fileInfos = bookSave.getImages().stream()
                 .map(fileId -> {
                     FileInfo fileInfoById = fileService.findById(fileId);
-                    if (!fileInfoById.isFree()) {
-                        log.error("file with id = [{}] has already in a book", fileId);
-                        throw new InvalidRequestException(
-                                String.format("file with id = [%d] has already in a book", fileId)
-                        );
+                    if (toSave) {
+                        if (!fileInfoById.isFree()) {
+                            log.error("file with id = [{}] has already in a book", fileId);
+                            throw new InvalidRequestException(
+                                    String.format("file with id = [%d] has already in a book", fileId)
+                            );
+                        }
                     }
                     return fileInfoById;
                 }).collect(Collectors.toSet());
@@ -96,8 +98,9 @@ public class BookSaveMapper {
                 PaperBook paperBook = new PaperBook();
                 paperBook.setFragment(paperBookRequest.getFragment());
                 paperBook.setPublishingHouse(paperBookRequest.getPublishingHouse());
-                paperBook.setPageSize(paperBook.getPageSize());
-                paperBook.setQuantityOfBooks(paperBook.getQuantityOfBooks());
+                System.out.println(paperBookRequest.getPageSize());
+                paperBook.setPageSize(paperBookRequest.getPageSize());
+                paperBook.setQuantityOfBooks(paperBookRequest.getQuantityOfBooks());
                 book.setPaperBook(paperBook);
                 book.setTypeOfBook(PAPER_BOOK);
                 break;

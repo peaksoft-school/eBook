@@ -15,6 +15,7 @@ import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
     private final AuthenticationInfoRepository authenticationInfoRepository;
     private final SignupRequestClntMapper clientMapper;
 
@@ -121,6 +123,15 @@ public class ClientServiceImpl implements ClientService {
             );
         }
         clientRepository.deleteById(id);
+    }
+
+    @Override
+    public ClientDtoResponse getInfo(String email) {
+        Client client = clientRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ClientNotFoundException(
+                        String.format("client with email = %s does not exists", email)
+                ));
+        return modelMapper.map(client, ClientDtoResponse.class);
     }
 }
 

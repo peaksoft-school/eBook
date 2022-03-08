@@ -11,7 +11,6 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo $CODEBUILD_SRC_DIR
 artifacts:
   files:
     - target/eBook.jar

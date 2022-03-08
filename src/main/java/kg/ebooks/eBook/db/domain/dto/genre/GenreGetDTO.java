@@ -16,7 +16,7 @@ public interface GenreGetDTO {
 
     String getGenreName();
 
-    Integer getQuantityOfBooks();
+    int getQuantityOfBooks();
 
     Set<BookResponse> getAllBooks();
 }

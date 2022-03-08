@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.book.SearchDto;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SearchService;
@@ -23,16 +24,18 @@ public class SearchServiceImpl implements SearchService {
     public List<SearchDto> findAll(String search) {
         List<SearchDto> all = new ArrayList<>();
 
-        String finalSearch = search.toLowerCase();
-        ;
+        String finalSearch = search.toLowerCase();;
+
+
         repository.findAll().forEach(book -> {
+            System.out.println(book);
             if (book.getBookName().toLowerCase().startsWith(finalSearch)) {
                 all.add(new SearchDto(book.getBookId(), book.getBookName(), BOOK));
             }
             if (book.getAuthor().toLowerCase().startsWith(finalSearch)) {
                 all.add(new SearchDto(book.getBookId(), book.getAuthor(), AUTHOR));
             }
-            if (book.getPublishingHouse().toLowerCase().startsWith(finalSearch)) {
+            if ((!book.getTypeOfBook().equals(TypeOfBook.AUDIO_BOOK)) && book.getPublishingHouse().toLowerCase().startsWith(finalSearch)) {
                 all.add(new SearchDto(book.getBookId(), book.getPublishingHouse(), BOOK));
             }
         });

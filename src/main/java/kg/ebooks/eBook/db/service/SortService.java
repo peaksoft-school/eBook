@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 
@@ -13,4 +14,6 @@ import java.util.List;
  */
 public interface SortService {
     List<BookResponseDTOSort> sort(SortRequest sortRequest);
+
+    List<BookResponse> findAllByType(String type);
 }

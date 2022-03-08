@@ -33,7 +33,7 @@ public class PromoServiceImpl implements PromoService {
 
     private final PromoRepository promoRepository;
     private final VendorRepository vendorRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     @Override
     @Transactional

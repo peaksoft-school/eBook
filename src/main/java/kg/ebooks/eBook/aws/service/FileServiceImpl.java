@@ -94,13 +94,16 @@ public class FileServiceImpl implements FileService {
         try {
             log.warn("{}/{}", fileInfo.getFolderName().getPath(), fileInfo.getFileName());
             fileStore.delete(fileInfo.getFolderName().getPath(), fileInfo.getFileName());
-            log.info("successfully deleted from to database :: file name = {}", fileInfo.getFileName());
+            fileRepository.deleteById(fileInfo.getId());
+            log.info("successfully deleted from database :: file name = {}", fileInfo.getFileName());
         } catch (AmazonServiceException e) {
             log.info("failed to delete file from amazon s3 bucket");
             throw new AmazonServiceException(
                     "failed to delete file from amazon s3 bucket"
             );
         }
+
+
     }
 
     @Override

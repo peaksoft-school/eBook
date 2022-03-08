@@ -34,6 +34,7 @@ public class BookGetServiceImpl implements BookGetService {
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
     private final ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper;
 
     @Override
     public List<BookResponseDTOFromAdmin> getAllAcceptedBooks() {
