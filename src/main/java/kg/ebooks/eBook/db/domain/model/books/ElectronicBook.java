@@ -36,6 +36,6 @@ public class ElectronicBook {
     @NotBlank(message = "Publishing house is required!")
     private String publishingHouse;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private FileInfo electronicBook;
 }

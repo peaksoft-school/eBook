@@ -29,9 +29,11 @@ public enum FolderName {
 
     AUDIO_FILES(
             String.format("%s/%s", AWS_BOOKS.getBucketName(), "AUDIO_FILES"),
-            new HashSet<>(Arrays.asList(create("audio/basic"),
+            new HashSet<>(Arrays.asList(
+                    create("audio/basic"),
                     create("audio/mpeg"),
                     create("audio/mp3"),
+                    create("audio/m4a"),
                     create("audio/vnd.wav")))
     ),
     PDF_FILES(
@@ -46,6 +48,7 @@ public enum FolderName {
             new HashSet<>(Arrays.asList( create("audio/basic"),
                     create("audio/mpeg"),
                     create("audio/mp3"),
+                    create("audio/m4a"),
                     create("audio/vnd.wav")))
     );
 

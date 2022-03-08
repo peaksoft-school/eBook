@@ -40,7 +40,7 @@ public class Admin {
     @Email(message = "you must define '@' in email address")
     private String email;
 
-    @OneToMany(cascade = ALL)
+    @OneToMany(cascade = MERGE)
     private List<Book> books = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)

@@ -1,33 +1,34 @@
 package kg.ebooks.eBook.config;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;
+import kg.ebooks.eBook.aws.repository.FileRepository;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
 import kg.ebooks.eBook.db.domain.model.books.PaperBook;
-import kg.ebooks.eBook.db.domain.model.enums.Authority;
-import kg.ebooks.eBook.db.domain.model.enums.Country;
-import kg.ebooks.eBook.db.domain.model.enums.Language;
-import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import kg.ebooks.eBook.db.domain.model.enums.*;
 import kg.ebooks.eBook.db.domain.model.others.*;
 import kg.ebooks.eBook.db.domain.model.users.Admin;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import kg.ebooks.eBook.db.repository.AdminRepository;
-import kg.ebooks.eBook.db.repository.ClientRepository;
-import kg.ebooks.eBook.db.repository.VendorRepository;
+import kg.ebooks.eBook.db.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 
 @Component
@@ -35,395 +36,256 @@ public class DataInitializer {
 
 
 //    @Bean
+//    @Transactional
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
             ClientRepository clientRepository,
             VendorRepository vendorRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            GenreRepository genreRepository,
+            BookRepository bookRepository,
+            FileRepository fileRepository,
+            PromoRepository promoRepository) {
         return args -> {
-
-            //images
-            FileInfo fileInfo1 = new FileInfo();
-            fileInfo1.setId(null);
-            fileInfo1.setFolderName(FolderName.IMAGES);
-            fileInfo1.setFileName("test");
-
-            FileInfo fileInfo2 = new FileInfo();
-            fileInfo1.setId(null);
-            fileInfo1.setFolderName(FolderName.IMAGES);
-            fileInfo1.setFileName("test");
-
-            FileInfo fileInfo3 = new FileInfo();
-            fileInfo1.setId(null);
-            fileInfo1.setFolderName(FolderName.IMAGES);
-            fileInfo1.setFileName("test");
-
-            FileInfo fileInfo4 = new FileInfo();
-            fileInfo1.setId(null);
-            fileInfo1.setFolderName(FolderName.IMAGES);
-            fileInfo1.setFileName("test");
-
-            FileInfo fileInfo5 = new FileInfo();
-            fileInfo1.setId(null);
-            fileInfo1.setFolderName(FolderName.IMAGES);
-            fileInfo1.setFileName("test");
-
-
-            //genres
-            Genre genre1 = new Genre();
-            genre1.setGenreName("Romantic");
-            genre1.setQuantityOfBooks(12); //test
-
-            Genre genre3 = new Genre();
-            genre3.setGenreName("loves");
-            genre3.setQuantityOfBooks(12); //test
-
-            Genre genre4 = new Genre();
-            genre4.setGenreName("Romantic");
-            genre4.setQuantityOfBooks(12); //test
-
-            Genre genre5 = new Genre();
-            genre5.setGenreName("loves");
-            genre5.setQuantityOfBooks(12); //test
-
-            Genre genre2 = new Genre();
-            genre2.setGenreName("Biography");
-            genre2.setQuantityOfBooks(50); //test
-
-            // audioBooks
-            AudioBook audioBook = new AudioBook();
-            audioBook.setFragment(new FileInfo(null, FolderName.AUDIO_FILES, "test", false));
-            audioBook.setDuration(LocalTime.of(19, 23, 12));
-            // TODO: 10/1/22 set value to fields when finished audiobook
-
-            // paper books
-            PaperBook paperBook = new PaperBook();
-            paperBook.setFragment("Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            // TODO: 10/1/22 set value to fields when finished paper book
-            paperBook.setPublishingHouse("Манас");
-            //electronic books
-
-            ElectronicBook electronicBook = new ElectronicBook(
-                    null,
-                    "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
-                    123,
-                    "hello world",
-                    new FileInfo()
-            );
-            ElectronicBook electronicBook2 = new ElectronicBook(
-                    null,
-                    "Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).",
-                    123,
-                    "hello world",
-                    new FileInfo()
-            );
-            // TODO: 10/1/22 set value to fields when finished electronic book
-
-            // book-educated
-
-            Book educated = new Book();
-            educated.setImages(new HashSet<>(Arrays.asList(fileInfo1)));
-            educated.setBookName("Educated");
-            educated.setAuthor("Tara Westover");
-            educated.setGenre(genre2);
-//            educated.setPublishingHouse("Amazo/n"); //test
-            educated.setLanguage(Language.ENGLISH);
-            educated.setDateOfIssue(LocalDate.of(2018, Month.FEBRUARY, 18));
-//            educated.setPageSize(420);
-            educated.setPrice(new BigDecimal("24.3"));
-            educated.setBestSeller(true);
-            educated.setDiscount((byte) 50);
-            educated.setDescription("This book is the best book i had ever read! Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            educated.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
-            educated.setAudioBook(audioBook);
-            educated.setStorageDate(LocalDate.of(2022, Month.JANUARY, 20));
-
-            System.err.println(educated);
-            //book-first_teacher
-
-            Book first_teacher = new Book();
-            first_teacher.setImages(new HashSet<>(Arrays.asList(fileInfo2)));
-            first_teacher.setBookName("First Teacher");
-            first_teacher.setAuthor("CHYNGYZ AITMATOV");
-            first_teacher.setGenre(genre4);
-//            first_teacher.setPublishingHouse("Amazon"); //test
-            first_teacher.setLanguage(Language.ENGLISH);
-            first_teacher.setDateOfIssue(LocalDate.of(2018, Month.JULY, 18));
-//            first_teacher.setPageSize(420);
-            first_teacher.setPrice(new BigDecimal("24.3"));
-            first_teacher.setBestSeller(true);
-            first_teacher.setDiscount((byte) 20);
-            first_teacher.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            first_teacher.setTypeOfBook(TypeOfBook.PAPER_BOOK);
-            first_teacher.setPaperBook(paperBook);
-            first_teacher.setStorageDate(LocalDate.of(2018, Month.JULY, 18));
-            //book-asia_lion
-
-            Book asia_lion = new Book();
-            asia_lion.setImages(new HashSet<>(Arrays.asList(fileInfo3)));
-            asia_lion.setBookName("Азия арстаны");
-            asia_lion.setAuthor("Нуржигит Кадырбеков");
-            asia_lion.setGenre(genre5);
-//            asia_lion.setPublishingHouse("Frunze"); //test
-            asia_lion.setLanguage(Language.KYRGYZ);
-            asia_lion.setDateOfIssue(LocalDate.of(2019, Month.JULY, 18));
-//            asia_lion.setPageSize(212);
-            asia_lion.setPrice(new BigDecimal("24.3"));
-            asia_lion.setBestSeller(false);
-            asia_lion.setDiscount((byte) 20);
-            asia_lion.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            asia_lion.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
-            asia_lion.setElectronicBook(electronicBook2);
-            asia_lion.setStorageDate(LocalDate.of(2019, Month.JULY, 18));
-
-            //book-alykul_osmonov
-
-            Book alykul_osmonov = new Book();
-            alykul_osmonov.setImages(new HashSet<>(Arrays.asList(fileInfo4)));
-            alykul_osmonov.setBookName("Алыкул Осмонов");
-            alykul_osmonov.setAuthor("Мундузбек Тентимишев");
-            alykul_osmonov.setGenre(genre1);
-//            alykul_osmonov.setPublishingHouse("Globu/s"); //test
-            alykul_osmonov.setLanguage(Language.KYRGYZ);
-            alykul_osmonov.setDateOfIssue(LocalDate.of(2016, Month.JULY, 18));
-//            alykul_osmonov.setPageSize(596);
-            alykul_osmonov.setPrice(new BigDecimal("1400"));
-            alykul_osmonov.setBestSeller(false);
-            alykul_osmonov.setDiscount((byte) 50);
-            alykul_osmonov.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            alykul_osmonov.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
-            alykul_osmonov.setAudioBook(audioBook);
-            alykul_osmonov.setStorageDate(LocalDate.of(2016, Month.JULY, 18));
-
-            //book-manas
-
-            Book manas = new Book();
-            manas.setImages(new HashSet<>(Arrays.asList(fileInfo5)));
-            manas.setBookName("Манас");
-            manas.setAuthor("Редекция жамааты");
-            manas.setGenre(genre3);
-//            manas.setPublishingHouse("Frunze"); //test
-            manas.setLanguage(Language.RUSSIAN);
-            manas.setDateOfIssue(LocalDate.of(2010, Month.JULY, 18));
-//            manas.setPageSize(212);
-            manas.setPrice(new BigDecimal("1500"));
-            manas.setBestSeller(true);
-            manas.setDiscount((byte) 50);
-            manas.setDescription("This book is the best book i had ever read!Kubernetes was first developed by engineers at Google before being open sourced in 2014. It is a descendant of Borg, a container orchestration platform used internally at Google. Kubernetes is Greek for helmsman or pilot, hence the helm in the Kubernetes logo (link resides outside IBM).");
-            manas.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
-            manas.setElectronicBook(electronicBook);
-            manas.setStorageDate(LocalDate.of(2010, Month.JULY, 18));
-            //selectedBooks
-
-            SelectedBooks selectedBooks = new SelectedBooks();
-            selectedBooks.setBooks(Arrays.asList(first_teacher));
-            selectedBooks.setQuantityOfBooks(2);
-
-            //selectedBooks2
-
-            SelectedBooks selectedBooks2 = new SelectedBooks();
-            selectedBooks2.setBooks(Arrays.asList(educated));
-            selectedBooks2.setQuantityOfBooks(3);
-
-            //selectedBooks3
-
-            SelectedBooks selectedBooks4 = new SelectedBooks();
-            selectedBooks4.setBooks(Arrays.asList(alykul_osmonov));
-            selectedBooks4.setQuantityOfBooks(9);
-
-            //selectedBooks4
-
-            SelectedBooks selectedBooks6 = new SelectedBooks();
-            selectedBooks6.setBooks(Arrays.asList(asia_lion));
-            selectedBooks6.setQuantityOfBooks(6);
-
-            //basket1
-
-            Basket basket = new Basket();
-            basket.setBooks(Arrays.asList(educated));
-            basket.setQuantityOfBooks(32);
-
-            //basket2
-
-            Basket basket2 = new Basket();
-            basket2.setBooks(Arrays.asList(alykul_osmonov));
-            basket2.setQuantityOfBooks(30);
-
-            //basket3
-
-            Basket basket3 = new Basket();
-            basket3.setBooks(Arrays.asList(asia_lion));
-            basket3.setQuantityOfBooks(6);
-
-            //basket4
-
-            Basket basket4 = new Basket();
-            basket4.setBooks(Arrays.asList(manas));
-            basket4.setQuantityOfBooks(30);
-
-            //Promo
-
-            Promo promo = new Promo();
-            promo.setPromoName("manas");
-            promo.setStartingDay(LocalDate.of(2022, Month.JANUARY, 12));
-            promo.setFinishingDay(LocalDate.of(2022, Month.FEBRUARY, 12));
-            promo.setPercent((byte) 2);
-//            promo.setBooks(Arrays.asList(manas));
-
-            //Promo2
-
-            Promo promo2 = new Promo();
-            promo2.setPromoName("first_teacher");
-            promo2.setStartingDay(LocalDate.of(2022, Month.JANUARY, 12));
-            promo2.setFinishingDay(LocalDate.of(2022, Month.FEBRUARY, 11));
-            promo2.setPercent((byte) 5);
-//            promo2.setBooks(Arrays.asList(first_teacher));
-
-            //Authentication-admin
-
-            AuthenticationInfo admin = new AuthenticationInfo();
-            admin.setAuthority(Authority.ADMIN);
-            admin.setEmail("admin@gmail.com");
-            admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setAccountNonLocked(true);
-            admin.setAccountNonExpired(true);
-            admin.setCredentialsNonExpired(true);
-            admin.setEnabled(true);
-
-            //Authentication-client
-
-            AuthenticationInfo client = new AuthenticationInfo();
-            client.setAuthority(Authority.CLIENT);
+            //client
+            Client client = new Client();
+            client.setName("client");
             client.setEmail("client@gmail.com");
-            client.setPassword(passwordEncoder.encode("client"));
-            client.setAccountNonLocked(true);
-            client.setAccountNonExpired(true);
-            client.setCredentialsNonExpired(true);
+            client.setAuthenticationInfo(
+                    new AuthenticationInfo(
+                            null,
+                            Authority.CLIENT,
+                            passwordEncoder.encode("client"),
+                            "client@gmail.com",
+                            true,
+                            true,
+                            true,
+                            true
+                    )
+            );
 
-            //Authentication-client-2
-
-            AuthenticationInfo client2 = new AuthenticationInfo();
-            client2.setAuthority(Authority.CLIENT);
-            client2.setEmail("client2@gmail.com");
-            client2.setPassword(passwordEncoder.encode("client2"));
-            client2.setAccountNonLocked(true);
-            client2.setAccountNonExpired(true);
-            client2.setCredentialsNonExpired(true);
-            client2.setEnabled(true);
-
-            //Authentication-vendor
-
-            AuthenticationInfo vendor1 = new AuthenticationInfo();
-            vendor1.setAuthority(Authority.VENDOR);
-            vendor1.setEmail("vendor@gmail.com");
-            vendor1.setPassword(passwordEncoder.encode("vendor"));
-            vendor1.setAccountNonLocked(true);
-            vendor1.setAccountNonExpired(true);
-            vendor1.setCredentialsNonExpired(true);
-            vendor1.setEnabled(true);
-
-            //Authentication-vendor2
-
-            AuthenticationInfo vendor_Role = new AuthenticationInfo();
-            vendor_Role.setAuthority(Authority.VENDOR);
-            vendor_Role.setEmail("vendor2@gmail.com");
-            vendor_Role.setPassword(passwordEncoder.encode("vendor2"));
-            vendor_Role.setAccountNonLocked(true);
-            vendor_Role.setAccountNonExpired(true);
-            vendor_Role.setCredentialsNonExpired(true);
-            vendor_Role.setEnabled(true);
-
-            // Admin
-
-            Admin admin1 = new Admin();
-            admin1.setFirstName("admin");
-            admin1.setLastName("admin");
-            admin1.setEmail("admin@gmail.com");
-            admin1.setAuthenticationInfo(admin);
-
-
-            //address
-
-            Address address = new Address();
-            address.setCountry(Country.UNITED_KINGDOM);
-            address.setCityName("Osh");
-            address.setAddress("home-5");
-            address.setPostCode("N28-34");
-
-            //address-2
-
-            Address address2 = new Address();
-            address2.setCountry(Country.RUSSIA);
-            address2.setCityName("Nookat");
-            address2.setAddress("vostok-5");
-            address2.setPostCode("N28-34");
-
-            // Vendor-Hadicha
-
+            //vendor
             Vendor vendor = new Vendor();
-            vendor.setFirstName("VendorFirstName");
-            vendor.setLastName("VendorLastName");
+            vendor.setFirstName("vendor");
+            vendor.setLastName("vendorovic");
             vendor.setEmail("vendor@gmail.com");
-            vendor.setAddress(address);
-            vendor.setPhoneNumber("996773015901");
+            vendor.setPhoneNumber("+996552123456");
+            vendor.setNameOfBranch("Book House");
+            vendor.setAddress(
+                    new Address(
+                            null,
+                            Country.KYRGYZSTAN,
+                            "Bishkek",
+                            "Grazhdanski 119",
+                            "723843"
+                    )
+            );
+            vendor.setAuthenticationInfo(
+                    new AuthenticationInfo(
+                            null,
+                            Authority.VENDOR,
+                            passwordEncoder.encode("vendor"),
+                            "vendor@gmail.com",
+                            true,
+                            true,
+                            true,
+                            true
+                    )
+            );
+
+            //admin
+
+            Admin admin = new Admin();
+            admin.setFirstName("admin");
+            admin.setLastName("admin uulu");
+            admin.setEmail("admin@gmail.com");
+            admin.setAuthenticationInfo(
+                    new AuthenticationInfo(
+                            null,
+                            Authority.ADMIN,
+                            passwordEncoder.encode("admin"),
+                            "admin@gmail.com",
+                            true,
+                            true,
+                            true,
+                            true
+                    )
+            );
+
+            Genre genre = new Genre("Adventure");
+            Genre genre2 = new Genre("Romance");
+            Genre genre3 = new Genre("Children Fiction");
+
+            genreRepository.save(genre);
+            genreRepository.save(genre2);
+            genreRepository.save(genre3);
+
+            FileInfo audioFragment = new FileInfo();
+            audioFragment.setFileName("503be825-1f37-4c49-9966-61395de63a51/Erlan_Andashev_Uyalasyin_go_(super.kg).mp3");
+            audioFragment.setFolderName(FolderName.AUDIO_FRAGMENTS_FILES);
+            audioFragment.setFree(true);
+            fileRepository.save(audioFragment);
+
+            FileInfo audioBookFile = new FileInfo();
+            audioBookFile.setFileName("9eca87f1-adca-4e7e-9e37-106d88cc15eb/Erlan_Andashev_Uyalasyin_go_(super.kg).mp3");
+            audioBookFile.setFolderName(FolderName.AUDIO_FILES);
+            audioBookFile.setFree(true);
+            fileRepository.save(audioBookFile);
+
+            FileInfo electronicBookFile = new FileInfo();
+            electronicBookFile.setFolderName(FolderName.PDF_FILES);
+            electronicBookFile.setFileName("ba10dfad-82cb-4e04-9240-67b8e167d8a7/Занятие_18___Домашнее_задание.pdf");
+            electronicBookFile.setFree(true);
+            fileRepository.save(electronicBookFile);
+
+            //audio book
+            Book audioBook = new Book();
+            HashSet<FileInfo> images2 = Sets.newHashSet(
+                    makeAnNewImage("85f9419c-60e5-41bb-8e9c-2a51b673971f/davincicode.png"),
+                    makeAnNewImage("9cbdfa57-bccb-4307-9608-8d3c156ee569/davincicode.png"),
+                    makeAnNewImage("2c8593be-b6d2-4d71-9668-86e888a105c1/davincicode.png")
+            );
+            fileRepository.saveAll(images2);
+
+            audioBook.setImages(images2);
+            audioBook.setBookName("The Da Vinci Code");
+            audioBook.setAuthor("Dan Brown");
+            audioBook.setGenre(genre);
+            audioBook.setDescription("this is audio book description");
+            audioBook.setLanguage(Language.ENGLISH);
+            audioBook.setDateOfIssue(LocalDate.of(2017, Month.APRIL, 23));
+            audioBook.setBestSeller(false);
+            audioBook.setPrice(new BigDecimal(1234));
+            audioBook.setDiscount(30);
+            audioBook.setAudioBook(
+                    new AudioBook(
+                            null,
+                            audioFragment,
+                            LocalTime.of(4, 23, 54),
+                            audioBookFile
+                    )
+            );
+            audioBook.setTypeOfBook(TypeOfBook.AUDIO_BOOK);
+
+            //electronic book
+            Book electronicBook = new Book();
+            HashSet<FileInfo> images1 = Sets.newHashSet(
+                    makeAnNewImage("e8aae7e9-4f6e-4895-b540-8fb5cb712594/electronicBooks.png"),
+                    makeAnNewImage("f579de9b-c959-43fb-8fc4-d8348c4c7589/electronicBooks.png"),
+                    makeAnNewImage("a4dad1ab-1aed-4329-92eb-d96cdd9a94bc/electronicBooks.png")
+            );
+            fileRepository.saveAll(images1);
+
+            electronicBook.setImages(
+                    images1
+            );
+            electronicBook.setBookName("GreenLights");
+            electronicBook.setAuthor("Matthew McConaughey");
+            electronicBook.setGenre(genre2);
+            electronicBook.setDescription("this is electronic book description");
+            electronicBook.setLanguage(Language.RUSSIAN);
+            electronicBook.setDateOfIssue(LocalDate.of(2020, Month.OCTOBER, 20));
+            electronicBook.setBestSeller(true);
+            electronicBook.setPrice(new BigDecimal(2350));
+            electronicBook.setDiscount(15);
+            electronicBook.setElectronicBook(
+                    new ElectronicBook(
+                            null,
+                            "this is electronic book fragment",
+                            304,
+                            "Crown Publishing Group",
+                            electronicBookFile
+                    )
+            );
+            electronicBook.setTypeOfBook(TypeOfBook.ELECTRONIC_BOOK);
+
+            //paper book
+            Book paperBook = new Book();
+            HashSet<FileInfo> images3 = Sets.newHashSet(
+                    makeAnNewImage("dd90f5fd-1497-424b-973a-a6ee7369519b/atomic-habits-dots.png"),
+                    makeAnNewImage("dd346267-c5bc-4abb-8047-cca2742bcd08/atomic-habits-dots.png"),
+                    makeAnNewImage("fb307941-ed1d-45e3-a4e9-247b1d1c0195/atomic-habits-dots.png")
+            );
+            fileRepository.saveAll(images3);
+            paperBook.setImages(
+                    images3
+            );
+            paperBook.setBookName("Atomic Habits");
+            paperBook.setAuthor("James Clear");
+            paperBook.setGenre(genre3);
+            paperBook.setDescription("this is paper book description");
+            paperBook.setLanguage(Language.KYRGYZ);
+            paperBook.setDateOfIssue(LocalDate.of(2018, Month.NOVEMBER, 3));
+            paperBook.setBestSeller(true);
+            paperBook.setPrice(new BigDecimal(3400));
+            paperBook.setDiscount(10);
+            paperBook.setPaperBook(
+                    new PaperBook(
+                            null,
+                            "this is paper book fragment",
+                            30,
+                            240,
+                            "Amazon official publishing house"
+                    )
+            );
+            paperBook.setTypeOfBook(TypeOfBook.PAPER_BOOK);
+
+            Promo promoCode = new Promo(
+                    null,
+                    "InternationWomensDay",
+                    LocalDate.of(2022, Month.APRIL, 20),
+                    LocalDate.of(2022, Month.SEPTEMBER, 20),
+                    (byte) 40,
+                    vendor
+            );
+
+            audioBook.setRequestStatus(RequestStatus.ACCEPTED);
+            paperBook.setRequestStatus(RequestStatus.ACCEPTED);
+            electronicBook.setRequestStatus(RequestStatus.ACCEPTED);
+
+            audioBook.setStorageDate(LocalDate.now());
+            paperBook.setStorageDate(LocalDate.now());
+            electronicBook.setStorageDate(LocalDate.now());
+
+            client.setDateOfRegistration(LocalDate.now());
             vendor.setDateOfRegistration(LocalDate.now());
-            vendor.setNameOfBranch("Bishkek");
-            vendor.setBooksToSale(Arrays.asList(manas));
-            vendor.setAuthenticationInfo(vendor1);
-            vendor.setPromoCodes(Arrays.asList(promo));
 
-            // Vendor2-Beksultan
+            promoRepository.save(promoCode);
 
-            Vendor vendor2 = new Vendor();
-            vendor2.setFirstName("Vendor2FirsName");
-            vendor2.setLastName("vendor2LastName");
-            vendor2.setEmail("vendor2@gmail.com");
-            vendor2.setAddress(address2);
-            vendor2.setDateOfRegistration(LocalDate.now());
-            vendor2.setPhoneNumber("996773015901");
-            vendor2.setNameOfBranch("Nookat");
-            vendor2.setBooksToSale(Arrays.asList(first_teacher));
-            vendor2.setAuthenticationInfo(vendor_Role);
-            vendor2.setPromoCodes(Arrays.asList(promo2));
+            vendor.setPromoCode(promoCode);
 
-            // Client-maria
+            bookRepository.save(paperBook);
+            bookRepository.save(audioBook);
+            bookRepository.save(electronicBook);
 
-            Client maria = new Client();
-            maria.setName("client");
-            maria.setEmail("client@gmail.com");
-            maria.setSubscriptionToNewsLetter(true);
-            maria.setBasket(basket);
-            maria.setDateOfRegistration(LocalDate.now());
-            maria.setSelectedBooks(selectedBooks2);
-            maria.setAuthenticationInfo(client);
+            admin.setBooks(Lists.newArrayList(audioBook));
+            vendor.setBooksToSale(Lists.newArrayList(paperBook, electronicBook));
 
-            // Client-elnura
+            client.getBasket().setBooks(Lists.newArrayList(audioBook, paperBook));
+            client.getSelectedBooks().setBooks(Lists.newArrayList(electronicBook));
 
-            Client elnura = new Client();
-            elnura.setName("client2");
-            elnura.setEmail("client2@gmail.com");
-            elnura.setSubscriptionToNewsLetter(false);
-            elnura.setBasket(basket3);
-            elnura.setDateOfRegistration(LocalDate.now());
-            elnura.setSelectedBooks(selectedBooks6);
-            elnura.setAuthenticationInfo(client2);
+            clientRepository.save(client);
+            adminRepository.save(admin);
+            vendorRepository.save(vendor);
 
-            genre1.setBooks(new HashSet<Book>(Arrays.asList(
-                    manas, alykul_osmonov, asia_lion
-            )));
+            genreRepository.save(genre);
+            genreRepository.save(genre2);
+            genreRepository.save(genre3);
 
-            //save-admin
-            System.out.println(adminRepository.save(admin1));
-            //save-vendors
-            System.out.println(vendorRepository.save(vendor));
-            System.out.println(vendorRepository.save(vendor2));
-
-            //save-clients
-            System.out.println(clientRepository.save(maria));
-            System.out.println(clientRepository.save(elnura));
-
+            bookRepository.save(paperBook);
+            bookRepository.save(audioBook);
+            bookRepository.save(electronicBook);
 
         };
+    }
+
+    private FileInfo makeAnNewImage(String fileName) {
+        return new FileInfo(
+                null,
+                FolderName.IMAGES,
+                fileName,
+                true
+        );
     }
 }
 
