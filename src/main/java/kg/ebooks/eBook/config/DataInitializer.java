@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
+import kg.ebooks.eBook.aws.service.FileService;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
@@ -16,21 +17,29 @@ import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.*;
+import org.apache.http.entity.ContentType;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+
+import org.springframework.mock.web.MockMultipartFile;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.HashSet;
+import static com.amazonaws.util.IOUtils.toByteArray;
 
 @Component
 public class DataInitializer {
 
 
-//    @Bean
+    @Bean
 //    @Transactional
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
@@ -39,6 +48,7 @@ public class DataInitializer {
             PasswordEncoder passwordEncoder,
             GenreRepository genreRepository,
             BookRepository bookRepository,
+            FileService fileService,
             FileRepository fileRepository,
             PromoRepository promoRepository) {
         return args -> {
@@ -133,12 +143,41 @@ public class DataInitializer {
             electronicBookFile.setFree(true);
             fileRepository.save(electronicBookFile);
 
+            File daVinciCode = new File("images/davincicode.png");
+            File atomicHabits = new File("images/atomic-habits-dots.png");
+            File electronicBookFiles = new File("images/electronicBooks.png");
+
+            FileInputStream daVinciCodeFileInputStream = new FileInputStream(daVinciCode);
+            FileInputStream atomicHabitsFileInputStream = new FileInputStream(atomicHabits);
+            FileInputStream electronicBookFileInputStream = new FileInputStream(electronicBookFiles);
+
+            MultipartFile daVinciImage = new MockMultipartFile(
+                    "file",
+                    daVinciCode.getName(),
+                    ContentType.IMAGE_PNG.getMimeType(),
+                    toByteArray(daVinciCodeFileInputStream)
+            );
+
+            MultipartFile atomicHabitsImage = new MockMultipartFile(
+                    "file",
+                    atomicHabits.getName(),
+                    ContentType.IMAGE_PNG.getMimeType(),
+                    toByteArray(atomicHabitsFileInputStream)
+            );
+
+            MultipartFile electronicBooksImage = new MockMultipartFile(
+                    "file",
+                    electronicBookFiles.getName(),
+                    ContentType.IMAGE_PNG.getMimeType(),
+                    toByteArray(electronicBookFileInputStream)
+            );
+
             //audio book
             Book audioBook = new Book();
             HashSet<FileInfo> images2 = Sets.newHashSet(
-                    makeAnNewImage("85f9419c-60e5-41bb-8e9c-2a51b673971f/davincicode.png"),
-                    makeAnNewImage("9cbdfa57-bccb-4307-9608-8d3c156ee569/davincicode.png"),
-                    makeAnNewImage("2c8593be-b6d2-4d71-9668-86e888a105c1/davincicode.png")
+                    fileService.uploadFile(FolderName.IMAGES, daVinciImage),
+                    fileService.uploadFile(FolderName.IMAGES, daVinciImage),
+                    fileService.uploadFile(FolderName.IMAGES, daVinciImage)
             );
             fileRepository.saveAll(images2);
 
@@ -165,9 +204,9 @@ public class DataInitializer {
             //electronic book
             Book electronicBook = new Book();
             HashSet<FileInfo> images1 = Sets.newHashSet(
-                    makeAnNewImage("e8aae7e9-4f6e-4895-b540-8fb5cb712594/electronicBooks.png"),
-                    makeAnNewImage("f579de9b-c959-43fb-8fc4-d8348c4c7589/electronicBooks.png"),
-                    makeAnNewImage("a4dad1ab-1aed-4329-92eb-d96cdd9a94bc/electronicBooks.png")
+                    fileService.uploadFile(FolderName.IMAGES, electronicBooksImage),
+                    fileService.uploadFile(FolderName.IMAGES, electronicBooksImage),
+                    fileService.uploadFile(FolderName.IMAGES, electronicBooksImage)
             );
             fileRepository.saveAll(images1);
 
@@ -196,10 +235,11 @@ public class DataInitializer {
 
             //paper book
             Book paperBook = new Book();
+
             HashSet<FileInfo> images3 = Sets.newHashSet(
-                    makeAnNewImage("dd90f5fd-1497-424b-973a-a6ee7369519b/atomic-habits-dots.png"),
-                    makeAnNewImage("dd346267-c5bc-4abb-8047-cca2742bcd08/atomic-habits-dots.png"),
-                    makeAnNewImage("fb307941-ed1d-45e3-a4e9-247b1d1c0195/atomic-habits-dots.png")
+                    fileService.uploadFile(FolderName.IMAGES, atomicHabitsImage),
+                    fileService.uploadFile(FolderName.IMAGES, atomicHabitsImage),
+                    fileService.uploadFile(FolderName.IMAGES, atomicHabitsImage)
             );
             fileRepository.saveAll(images3);
             paperBook.setImages(
@@ -274,13 +314,8 @@ public class DataInitializer {
         };
     }
 
-    private FileInfo makeAnNewImage(String fileName) {
-        return new FileInfo(
-                null,
-                FolderName.IMAGES,
-                fileName,
-                true
-        );
+    private FileInfo makeAnNewImage(String s) {
+        return null;
     }
 }
 
