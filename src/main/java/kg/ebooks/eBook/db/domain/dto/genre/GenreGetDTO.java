@@ -1,6 +1,10 @@
 package kg.ebooks.eBook.db.domain.dto.genre;
 
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Set;
 
@@ -10,13 +14,16 @@ import java.util.Set;
  * Sunday 18:09
  * hello world
  */
-public interface GenreGetDTO {
 
-    Long getId();
+@Getter @Setter
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class GenreGetDTO {
 
-    String getGenreName();
+    Long id;
 
-    int getQuantityOfBooks();
+    String genreName;
 
-    Set<BookResponse> getAllBooks();
+    int quantityOfBooks;
+
+    Set<BookResponse> books;
 }

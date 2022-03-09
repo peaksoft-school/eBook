@@ -31,7 +31,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Genre implements GenreGetDTO {
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Genre implements GenreGetDTO {
 
     private String genreName;
 
-    @OneToMany(fetch = EAGER, cascade = {REFRESH, PERSIST, DETACH, MERGE})
+    @OneToMany(fetch = EAGER, cascade = MERGE)
     @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
@@ -49,17 +49,10 @@ public class Genre implements GenreGetDTO {
         this.genreName = genreName;
     }
 
-    @Override
-    public Set<BookResponse> getAllBooks() {
-        ModelMapper modelMapper = new ModelMapper();
-        return books.stream()
-                .map(book -> modelMapper.map(book, BookResponse.class))
-                .collect(Collectors.toSet());
-    }
-
     public Set<Book> getOriginalBooks() {
         return this.books;
     }
+
     public void setBook(Book book) {
         books.add(book);
     }
@@ -67,6 +60,4 @@ public class Genre implements GenreGetDTO {
     public void count() {
         quantityOfBooks++;
     }
-
-
 }
