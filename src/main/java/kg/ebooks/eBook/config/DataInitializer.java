@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.aws.repository.FileRepository;
+import kg.ebooks.eBook.aws.service.FileService;
 import kg.ebooks.eBook.db.domain.model.books.AudioBook;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
@@ -19,6 +20,8 @@ import kg.ebooks.eBook.db.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,6 +41,7 @@ public class DataInitializer {
             PasswordEncoder passwordEncoder,
             GenreRepository genreRepository,
             BookRepository bookRepository,
+            FileService fileService,
             FileRepository fileRepository,
             PromoRepository promoRepository) {
         return args -> {
@@ -135,7 +139,7 @@ public class DataInitializer {
             //audio book
             Book audioBook = new Book();
             HashSet<FileInfo> images2 = Sets.newHashSet(
-                    makeAnNewImage("85f9419c-60e5-41bb-8e9c-2a51b673971f/davincicode.png"),
+//                    fileService.uploadFile(FolderName.IMAGES)
                     makeAnNewImage("9cbdfa57-bccb-4307-9608-8d3c156ee569/davincicode.png"),
                     makeAnNewImage("2c8593be-b6d2-4d71-9668-86e888a105c1/davincicode.png")
             );
@@ -195,6 +199,7 @@ public class DataInitializer {
 
             //paper book
             Book paperBook = new Book();
+
             HashSet<FileInfo> images3 = Sets.newHashSet(
                     makeAnNewImage("dd90f5fd-1497-424b-973a-a6ee7369519b/atomic-habits-dots.png"),
                     makeAnNewImage("dd346267-c5bc-4abb-8047-cca2742bcd08/atomic-habits-dots.png"),
@@ -273,13 +278,8 @@ public class DataInitializer {
         };
     }
 
-    private FileInfo makeAnNewImage(String fileName) {
-        return new FileInfo(
-                null,
-                FolderName.IMAGES,
-                fileName,
-                true
-        );
+    private FileInfo makeAnNewImage(String s) {
+        return null;
     }
 }
 

@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -117,5 +118,21 @@ public class FileServiceImpl implements FileService {
                 });
         log.info("founded file info [{}]", fileInfo);
         return fileInfo;
+    }
+
+    @Override
+    public void clean() {
+        List<Long> collect = fileRepository.findAll()
+                .stream()
+                .map(FileInfo::getId)
+                .collect(Collectors.toList());
+
+        for (Long aLong : collect) {
+            try {
+                deleteFile(aLong);
+            } catch (Exception exception) {
+                log.error("file defence another entity");
+            }
+        }
     }
 }

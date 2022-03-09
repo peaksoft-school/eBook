@@ -12,11 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.ACCEPTED;
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.INPROGRESS;
 
@@ -33,7 +31,7 @@ public class BookGetServiceImpl implements BookGetService {
 
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+//    private final ModelMapper modelMapper = new ModelMapper();
     private final ModelMapper modelMapper;
 
     @Override
