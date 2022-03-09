@@ -17,18 +17,12 @@ import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import javax.transaction.Transactional;
-import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 
 @Component
