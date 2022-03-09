@@ -47,7 +47,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public GenreGetDTO findGenreById(Long genreId) {
-        return findById(genreId);
+        return modelMapper.map(findById(genreId), GenreGetDTO.class);
     }
 
     private Genre findById(Long genreId) {
