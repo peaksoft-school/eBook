@@ -1,10 +1,12 @@
 package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kg.ebooks.eBook.db.domain.dto.book.BookInfo;
-import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
+import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.service.BookGetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,4 +32,33 @@ public class BookGetAPI {
         return bookGetService.getBookById(bookId);
     }
 
+    @GetMapping("/getLikes")
+    public List<GetLikesMaxBooks> getLikesMaxBooks() {
+        return bookGetService.getLikesMaxBooks();
+    }
+
+    @GetMapping("/getAudio")
+    public List<GetAudioBookDto> getAudioBook() {
+        return bookGetService.getAudioBook();
+    }
+
+    @GetMapping("/getElectronic")
+    public List<GetElectronicBookDTO> getElectronicBook() {
+        return bookGetService.getElectronicBook();
+    }
+
+    @GetMapping("/getBestseller")
+    public List<GetBestsellerBookDTO> getBestsellerBook() {
+        return  bookGetService.getBestsellerBook();
+    }
+
+    @GetMapping("/getGenreLastPublication")
+    public ResponseEntity<GetGenreLastPostBookDTO> getGenreLastPostBook(@RequestParam("genreId") Long genreId) {
+
+        try {
+            return new ResponseEntity<>(bookGetService.getGenreLastPost(genreId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

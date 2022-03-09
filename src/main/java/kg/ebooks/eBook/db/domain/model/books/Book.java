@@ -105,6 +105,9 @@ public class Book implements BookInfoBkt {
         this.inBasket--;
     }
 
+    public LocalDate getOriginalStorageDate() {
+        return this.storageDate;
+    }
     public void setImages(Set<FileInfo> images) {
         System.out.println("inside book");
         images.forEach(System.out::println);
@@ -167,6 +170,7 @@ public class Book implements BookInfoBkt {
     public Genre getOriginalGenre() {
         return this.genre;
     }
+
 
     public String getFragment() {
         if (paperBook != null) {

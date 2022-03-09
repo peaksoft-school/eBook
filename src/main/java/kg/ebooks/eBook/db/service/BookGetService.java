@@ -1,8 +1,7 @@
 package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.admin.BookResponseDTOFromAdmin;
-import kg.ebooks.eBook.db.domain.dto.book.BookInfo;
-import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
+import kg.ebooks.eBook.db.domain.dto.book.*;
 
 import java.util.List;
 
@@ -19,6 +18,15 @@ public interface BookGetService {
 
     BookInfo getBookById(Long bookId);
 
+    List<GetLikesMaxBooks> getLikesMaxBooks();
+
+    List<GetAudioBookDto> getAudioBook();
+
+    List<GetElectronicBookDTO> getElectronicBook();
+
+    List<GetBestsellerBookDTO> getBestsellerBook();
+
+    GetGenreLastPostBookDTO getGenreLastPost(Long genreId);
 
 
 }
