@@ -21,6 +21,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -41,17 +42,17 @@ import static javax.persistence.FetchType.EAGER;
 @Setter
 public class Book implements BookInfoBkt {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long bookId;
 
-    @OneToMany(fetch = EAGER, cascade = {PERSIST, MERGE, DETACH, REFRESH})
+    @OneToMany(cascade = MERGE)
     private Set<FileInfo> images;
 
     private String bookName;
 
     private String author;
 
-    @ManyToOne(fetch = EAGER, cascade = {DETACH, REFRESH, PERSIST})
+    @ManyToOne(fetch = EAGER, cascade = MERGE)
     private Genre genre;
 
     private Language language;

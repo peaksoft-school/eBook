@@ -31,10 +31,8 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long clientId;
 
-    @NotBlank(message = "you have to define a first name for the CLient")
     private String name;
 
-    @Email(message = "you must define '@' in email address")
     private String email;
 
     private boolean subscriptionToNewsLetter;
@@ -50,9 +48,4 @@ public class Client {
     @OneToOne(fetch = EAGER, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
 
-    public Client(Long clientId, String name, String email) {
-        this.clientId = clientId;
-        this.name = name;
-        this.email = email;
-    }
 }

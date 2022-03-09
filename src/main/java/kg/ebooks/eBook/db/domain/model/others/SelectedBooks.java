@@ -30,7 +30,7 @@ public class SelectedBooks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long selectedBooksId;
 
-    @ManyToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @ManyToMany(fetch = EAGER, cascade = MERGE)
     private List<Book> books;
 
     private int quantityOfBooks;
