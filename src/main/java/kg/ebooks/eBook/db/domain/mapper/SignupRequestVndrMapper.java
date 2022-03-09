@@ -67,25 +67,6 @@ public class SignupRequestVndrMapper {
     }
 
 
-    public VendorDtoResquest vendorGetById(Vendor vendor) {
-        if (vendor == null) {
-            return null;
-        }
-        System.out.println(vendor);
-        VendorDtoResquest vendorDto = new VendorDtoResquest();
-        vendorDto.setVendorId(vendor.getVendorId());
-        vendorDto.setLastName(vendor.getLastName());
-        vendorDto.setFirstName(vendor.getFirstName());
-        vendorDto.setEmail(vendor.getEmail());
-        vendorDto.setDateOfRegistration(vendor.getDateOfRegistration());
-        vendorDto.setPhoneNumber(vendor.getPhoneNumber());
-        Set<BookResponse> collect = vendor.getBooksToSale()
-                .stream().map(book -> modelMapper.map(book, BookResponse.class))
-                .peek(System.out::println)
-                .collect(Collectors.toSet());
-        vendorDto.setVendorBooks(collect);
-        return vendorDto;
-    }
 
 }
 

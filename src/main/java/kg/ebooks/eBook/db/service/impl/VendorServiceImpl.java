@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.service.impl;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -14,6 +15,7 @@ import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,7 @@ public class VendorServiceImpl implements VendorService {
 
     private final VendorRepository vendorRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
     private final AuthenticationInfoRepository authenticationInfoRepository;
     private final SignupRequestVndrMapper vendorMapper;
 
@@ -77,14 +80,14 @@ public class VendorServiceImpl implements VendorService {
     }
 
     @Override
-    public Vendor getByIdVendor(Long id) {
-        return vendorRepository.findById(id)
+    public VendorDtoResquest getByIdVendor(Long id) {
+        return modelMapper.map(vendorRepository.findById(id)
                 .orElseThrow(() -> {
                     ClientNotFoundException notFoundException = new ClientNotFoundException(
                             "client with id  " + id + "  not found");
                     log.error("error in getting client {}", id, notFoundException);
                     return notFoundException;
-                });
+                }), VendorDtoResquest.class);
     }
     @Override
     @Transactional
