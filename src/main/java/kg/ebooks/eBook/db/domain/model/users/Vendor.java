@@ -54,13 +54,13 @@ public class Vendor {
 
     private LocalDate dateOfRegistration;
 
-    @OneToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @OneToMany(fetch = EAGER, cascade = MERGE)
     private List<Book> booksToSale = new ArrayList();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
 
-    @OneToMany(fetch = LAZY, cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    @OneToMany(fetch = LAZY, cascade = MERGE)
     private List<Promo> promoCodes = new ArrayList();
 
     public void setBook(Book save) {
