@@ -1,9 +1,11 @@
 package kg.ebooks.eBook.exceptions.handler;
 
+import kg.ebooks.eBook.exceptions.AlreadyExistsException;
+import kg.ebooks.eBook.exceptions.InvalidPasswordException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -13,8 +15,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleConflict(RuntimeException err) {
-        return new ResponseEntity<>(err.getMessage(), HttpStatus.BAD_REQUEST);
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public String handleConflict(InvalidPasswordException e) {
+        return e.getMessage();
     }
 }
