@@ -39,8 +39,8 @@ public class Basket implements BookCase, BasketInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long basketId;
 
-    @ManyToMany(fetch = EAGER, cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private List<Book> books;
+    @ManyToMany(cascade = MERGE)
+    private List<Book> books = new ArrayList<>();
 
     private int quantityOfBooks;
 

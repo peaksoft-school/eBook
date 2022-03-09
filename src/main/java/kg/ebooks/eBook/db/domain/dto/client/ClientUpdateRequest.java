@@ -2,6 +2,8 @@ package kg.ebooks.eBook.db.domain.dto.client;
 
 import kg.ebooks.eBook.annotations.password.Password;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,7 +14,8 @@ import javax.validation.constraints.NotBlank;
  * Sunday 21:26
  * hello world
  */
-@Data
+@Getter
+@Setter
 public class ClientUpdateRequest {
 
     @NotBlank(message = "incorrect name")

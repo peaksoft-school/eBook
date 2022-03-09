@@ -55,4 +55,12 @@ public class Client {
         this.name = name;
         this.email = email;
     }
+
+    public void setPassword(String password) {
+        this.authenticationInfo.setPassword(password);
+    }
+
+    public String getPassword() {
+        return this.authenticationInfo.getPassword();
+    }
 }

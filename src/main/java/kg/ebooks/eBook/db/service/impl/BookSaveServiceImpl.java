@@ -62,32 +62,22 @@ public class BookSaveServiceImpl implements BookSaveService {
     public BookResponse saveBook(AuthenticationInfo authority, TypeOfBook typeOfBook, BookSave<?> book) {
         isBookValid(typeOfBook, book);
         Book response = bookSaveMapper.makeBookFromBookRequest(typeOfBook, book, true);
-        System.out.println("test1 : " + response);
         log.info("book with name = [{}], type = {} is storing to database",
                 book.getBookName(), typeOfBook);
         Book save;
         if (Objects.equals(authority.getAuthority(), ADMIN)) {
-            works("works");
             response.setStorageDate(LocalDate.now());
-            works("works 2");
             response.setRequestStatus(ACCEPTED);
-            works("works 3");
-            System.out.println("test2 " + response);
             save = bookRepository.save(response);
-            works("works 4");
-            Admin admin = adminRepository.findById(authority.getAuthenticationInfoId())
+            Admin admin = adminRepository.findByEmail(authority.getEmail())
                     .orElseThrow(() -> new DoesNotExistsException(
                             "admin not found"
                     ));
-            works("works 5");
             admin.setBook(save);
-            works("works 6");
             save.getImages().forEach(FileInfo::makeIsNotFree);
-            works("works 7");
         } else if (Objects.equals(authority.getAuthority(), VENDOR)) {
             response.setRequestStatus(INPROGRESS);
             response.setStorageDate(LocalDate.now());
-            System.out.println("test3 " + response);
             save = bookRepository.save(response);
             Vendor vendor = vendorRepository.findUserByEmail(authority.getEmail())
                     .orElseThrow(() -> new DoesNotExistsException(

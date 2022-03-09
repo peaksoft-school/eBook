@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
+import kg.ebooks.eBook.db.domain.dto.client.ClientUpdateRequest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
@@ -13,6 +14,7 @@ import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import kg.ebooks.eBook.exceptions.InvalidPasswordException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -94,25 +96,40 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional
-    public ClientDto updateClient(Long id, ClientDto clientDto) {
+    public ClientDto updateClient(Long id, ClientUpdateRequest clientDto) {
+
         Client clientFromDatabase = clientRepository.findById(id)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "client with id = " + id + " does not exists"
                 ));
-        Optional<Client> clientOptional = clientRepository.findUserByEmail(clientDto.getEmail());
-        if (clientOptional.isPresent()) {
-            log.error("client with email {} has already exists", clientDto.getEmail());
-            throw new AlreadyExistsException(
-                    "client with email = " + clientDto.getEmail() + " has already exists"
+        if (!clientDto.getEmail().equals(clientFromDatabase.getEmail())) {
+            Optional<Client> clientOptional = clientRepository.findUserByEmail(clientDto.getEmail());
+
+            if (clientOptional.isPresent()) {
+                log.error("client with email {} has already exists", clientDto.getEmail());
+                throw new AlreadyExistsException(
+                        "client with email = " + clientDto.getEmail() + " has already exists"
+                );
+            }
+        }
+        String currentPassword = clientFromDatabase.getAuthenticationInfo().getPassword();
+        String currentPassword2 = passwordEncoder.encode(clientDto.getCurrentPassword());
+        System.out.println(currentPassword);
+        System.out.println(currentPassword2);
+
+        boolean matches = passwordEncoder.matches(clientDto.getCurrentPassword(), clientFromDatabase.getPassword());
+
+        if (!matches) {
+            throw new InvalidPasswordException(
+                    "invalid current password "
             );
         }
+
         clientFromDatabase.setName(clientDto.getName());
         clientFromDatabase.setEmail(clientDto.getEmail());
-        clientFromDatabase.getAuthenticationInfo().setPassword(
-                passwordEncoder.encode(clientDto.getPassword()));
+        clientFromDatabase.getAuthenticationInfo().setPassword(passwordEncoder.encode(clientDto.getNewPassword()));
 
-        clientRepository.save(clientFromDatabase);
-        return clientDto;
+        return modelMapper.map(clientFromDatabase, ClientDto.class);
     }
 
     @Override

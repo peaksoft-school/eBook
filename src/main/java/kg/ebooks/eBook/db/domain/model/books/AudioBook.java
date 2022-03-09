@@ -27,15 +27,13 @@ public class AudioBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private FileInfo fragment;
 
     @DateTimeFormat(pattern = "hh-MM-ss")
     private LocalTime duration;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private FileInfo audioBook;
-    // TODO: 8/1/22 add fragment
-    // TODO: 8/1/22 add audio book
 
 }

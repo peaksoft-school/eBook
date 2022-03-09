@@ -51,7 +51,7 @@ public class FileServiceImpl implements FileService {
         if (!getMimeTypes(folderName).contains(multipartFile.getContentType())) {
             log.error("file should be like {} this files", getMimeTypes(folderName));
             throw new InvalidFileException(
-                    "file should be an " + folderName.name()
+                    "file should be an " + folderName.getContentTypes()
             );
         }
 

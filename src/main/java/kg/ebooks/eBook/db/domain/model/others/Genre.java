@@ -43,7 +43,11 @@ public class Genre implements GenreGetDTO {
     @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
-    private int quantityOfBooks;
+    private int quantityOfBooks = 0;
+
+    public Genre(String genreName) {
+        this.genreName = genreName;
+    }
 
     @Override
     public Set<BookResponse> getAllBooks() {
@@ -60,4 +64,6 @@ public class Genre implements GenreGetDTO {
     public void count() {
         quantityOfBooks++;
     }
+
+
 }
