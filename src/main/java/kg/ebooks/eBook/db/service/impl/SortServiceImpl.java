@@ -1,10 +1,12 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
-import kg.ebooks.eBook.db.domain.dto.sort.Price;
-import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
+import kg.ebooks.eBook.db.domain.dto.sort.*;
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.BookRepository;
@@ -12,10 +14,21 @@ import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SortService;
 import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.criteria.internal.CriteriaQueryImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -30,6 +43,7 @@ import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
  * hello world
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SortServiceImpl implements SortService {
 
@@ -99,5 +113,21 @@ public class SortServiceImpl implements SortService {
                         "you give wrong type of book [" + type + "]"
                 );
         }
+    }
+
+    private final XStream xStream = new XStream(new JsonHierarchicalStreamDriver());
+
+    @Override
+    public List<BookResponseDTOSort> sort(String filterBy, String sortBy) {
+//        try {
+        FilterBy filter = (FilterBy) xStream.fromXML(filterBy);
+        SortBy sort = (SortBy) xStream.fromXML(sortBy);
+//        }
+
+        System.out.println("+=============================================+");
+        System.out.println(filter);
+        System.out.println(sort);
+        System.out.println("+=============================================+");
+        return null;
     }
 }

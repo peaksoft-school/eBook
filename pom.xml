@@ -118,8 +118,23 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
+
+		<!-- This is for using JSON -->
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.19</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.jettison</groupId>
+			<artifactId>jettison</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+
         <!--		<dependency>-->
-<!--			<groupId>com.h2database</groupId>-->
+<!--			<groupId>com.h2database<
+/groupId>-->
 <!--			<artifactId>h2</artifactId>-->
 <!--			<scope>runtime</scope>-->
 <!--		</dependency>-->

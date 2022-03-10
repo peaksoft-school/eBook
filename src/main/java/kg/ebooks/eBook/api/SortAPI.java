@@ -30,8 +30,9 @@ public class SortAPI {
     @Operation(summary = "sort", description = "This method to sort books with genres & price & languages and also book type" +
             " and I have one problem I can fix it but if you're giving genre id that doesn't exists it will work," +
             " but it thinks that it's nothing, It helps code to work fastly")
-    public List<BookResponseDTOSort> sortList(@RequestBody SortRequest sortRequest) {
-        return service.sort(sortRequest);
+    public List<BookResponseDTOSort> sortList(@RequestParam(required = false) String filterBy,
+                                              @RequestParam(required = false) String sortBy) {
+        return service.sort(filterBy, sortBy);
     }
 
     @Operation(summary = "sort by type", description = " This method for sort books by type, " +

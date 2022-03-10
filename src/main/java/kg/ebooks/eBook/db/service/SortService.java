@@ -16,4 +16,6 @@ public interface SortService {
     List<BookResponseDTOSort> sort(SortRequest sortRequest);
 
     List<BookResponse> findAllByType(String type);
+
+    List<BookResponseDTOSort> sort(String filterBy, String sortBy);
 }
