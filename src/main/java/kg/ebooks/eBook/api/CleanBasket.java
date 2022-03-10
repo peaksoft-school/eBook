@@ -21,13 +21,7 @@ public class CleanBasket {
 
     @DeleteMapping("/bucket/clean")
     public String cleanBucket() {
-        for (int i = 1; i < 300; i++) {
-            try {
-                fileService.deleteFile((long) i);
-            } catch (Exception e) {
-                System.out.println("nothing");
-            }
-        }
+        fileService.clean();
         return "success";
     }
 }
