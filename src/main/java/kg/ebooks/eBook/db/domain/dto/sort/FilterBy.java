@@ -1,10 +1,10 @@
 package kg.ebooks.eBook.db.domain.dto.sort;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.lang.Nullable;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@XStreamAlias(value = "filterBy")
+@ToString
 public class FilterBy {
     @Nullable
     private Set<Long> genres;
