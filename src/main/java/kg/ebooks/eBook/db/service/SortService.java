@@ -2,9 +2,9 @@ package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
-import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -13,7 +13,8 @@ import java.util.List;
  * hello world
  */
 public interface SortService {
-    List<BookResponseDTOSort> sort(SortRequest sortRequest);
 
     List<BookResponse> findAllByType(String type);
+
+    Set<BookResponseDTOSort> sort(String filterBy);
 }

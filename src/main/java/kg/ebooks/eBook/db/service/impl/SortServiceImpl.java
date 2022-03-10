@@ -1,26 +1,21 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import com.google.gson.Gson;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
-import kg.ebooks.eBook.db.domain.dto.sort.Price;
-import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
+import kg.ebooks.eBook.db.domain.dto.sort.*;
 import kg.ebooks.eBook.db.domain.model.books.Book;
-import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
-import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.BookRepository;
-import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SortService;
 import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
-
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
 import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
@@ -30,51 +25,12 @@ import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
  * hello world
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class SortServiceImpl implements SortService {
 
     private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
-
-    @Override
-    public List<BookResponseDTOSort> sort(SortRequest sortRequest) {
-        return bookRepository.findAll().stream()
-                .filter(book -> {
-                    if (sortRequest.getGenres() == null) {
-                        return true;
-                    }
-                    if (sortRequest.getGenres().size() < 0) {
-                        return true;
-                    }
-                    return filterA.test(book, sortRequest.getGenres());
-                })
-                .filter(book -> {
-                    if (sortRequest.getTypeOfBook() == null) {
-                        return true;
-                    }
-                    return book.getTypeOfBook().equals(sortRequest.getTypeOfBook());
-                })
-                .filter(book -> {
-                    if (sortRequest.getPrice() == null) {
-                        return true;
-                    }
-                    return filterC.test(book, sortRequest.getPrice());
-                })
-                .filter(book -> {
-                    if (sortRequest.getLanguages() == null) {
-                        return true;
-                    }
-                    if (sortRequest.getLanguages().size() < 0) {
-                        return true;
-                    }
-                    return sortRequest.getLanguages().contains(book.getLanguage());
-                })
-                .map(book -> book != null ? modelMapper.map(book, BookResponseDTOSort.class) : null)
-                .collect(Collectors.toList());
-    }
-
-    public BiPredicate<Book, List<Long>> filterA = (book, genres) -> genres.contains(book.getGenre().getId());
-    public BiPredicate<Book, Price> filterC = (book, price) -> price.valid(book.getNetPrice());
 
     @Override
     public List<BookResponse> findAllByType(String type) {
@@ -100,4 +56,60 @@ public class SortServiceImpl implements SortService {
                 );
         }
     }
+
+    public BiPredicate<Book, Set<Long>> filterA = (book, genres) -> genres.contains(book.getGenre().getId());
+    public BiPredicate<Book, Price> filterC = (book, price) -> price.valid(book.getNetPrice());
+
+    @Override
+    public Set<BookResponseDTOSort> sort(String filterBy) {
+
+        final FilterBy filter;
+        try {
+            Gson gson = new Gson();
+            filter = gson.fromJson(filterBy, FilterBy.class);
+        } catch (Exception exception) {
+            throw new InvalidRequestException(
+                    "Invalid JSON type + " + filterBy
+            );
+        }
+
+        log.info("filterBy = {}", filter);
+
+        return bookRepository.findAll().stream()
+                .filter(book -> {
+                    if (filter.getGenres() == null) {
+                        return true;
+                    }
+                    if (filter.getGenres().size() == 0) {
+                        return true;
+                    }
+                    boolean test = filterA.test(book, filter.getGenres());
+                    System.out.println(test);
+                    return test;
+                })
+                .filter(book -> {
+                    if (filter.getTypeOfBook() == null) {
+                        return true;
+                    }
+                    return book.getTypeOfBook().equals(filter.getTypeOfBook());
+                })
+                .filter(book -> {
+                    if (filter.getPrice() == null) {
+                        return true;
+                    }
+                    return filterC.test(book, filter.getPrice());
+                })
+                .filter(book -> {
+                    if (filter.getLanguages() == null) {
+                        return true;
+                    }
+                    if (filter.getLanguages().size() == 0) {
+                        return true;
+                    }
+                    return filter.getLanguages().contains(book.getLanguage());
+                })
+                .map(book -> book != null ? modelMapper.map(book, BookResponseDTOSort.class) : null)
+                .collect(Collectors.toSet());
+    }
+
 }

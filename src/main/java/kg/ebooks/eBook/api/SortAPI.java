@@ -7,9 +7,12 @@ import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.SortRequest;
 import kg.ebooks.eBook.db.service.SortService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -22,6 +25,7 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "This API to sort books")
+@Slf4j
 public class SortAPI {
 
     private final SortService service;
@@ -30,8 +34,9 @@ public class SortAPI {
     @Operation(summary = "sort", description = "This method to sort books with genres & price & languages and also book type" +
             " and I have one problem I can fix it but if you're giving genre id that doesn't exists it will work," +
             " but it thinks that it's nothing, It helps code to work fastly")
-    public List<BookResponseDTOSort> sortList(@RequestBody SortRequest sortRequest) {
-        return service.sort(sortRequest);
+    public Set<BookResponseDTOSort> sortList(@RequestParam(required = false) String filterBy) {
+        log.info("filterBy = {}", filterBy);
+        return service.sort(filterBy);
     }
 
     @Operation(summary = "sort by type", description = " This method for sort books by type, " +
