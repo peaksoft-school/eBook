@@ -20,5 +20,6 @@ public class VendorDto {
     private String lastName;
     private String phoneNumber;
     private String email;
+    @JsonIgnore
     private String password;
 }

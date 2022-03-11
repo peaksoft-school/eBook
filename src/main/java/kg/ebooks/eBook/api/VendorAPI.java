@@ -12,6 +12,7 @@ import kg.ebooks.eBook.db.service.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,6 +34,11 @@ public class VendorAPI {
     @Operation(summary = "Прохождение регистрации", description = "Позволяет пройти регистрацию продавцу")
     public SignupRequestVndr registerVendor(@RequestBody SignupRequestVndr signupRequest) {
         return vendorService.registerVendor(signupRequest);
+    }
+
+    @GetMapping("/show/info")
+    public VendorDto showVendorInfo(Authentication authentication) {
+        return vendorService.showInfo(authentication.getName());
     }
 
     @GetMapping("/getAll")

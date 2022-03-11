@@ -20,4 +20,6 @@ public interface VendorService {
     VendorDto updateVendor(Long id, VendorDto vendorDto);
 
     void deleteVendor(Long id);
+
+    VendorDto showInfo(String name);
 }

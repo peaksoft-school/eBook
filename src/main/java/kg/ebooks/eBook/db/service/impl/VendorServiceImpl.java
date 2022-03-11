@@ -89,6 +89,7 @@ public class VendorServiceImpl implements VendorService {
                     return notFoundException;
                 }), VendorDtoResquest.class);
     }
+
     @Override
     @Transactional
     public VendorDto updateVendor(Long id, VendorDto vendorDto) {
@@ -115,11 +116,17 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public void deleteVendor(Long id) {
-     if (!vendorRepository.existsById(id)) {
-        throw new ClientNotFoundException(
-                "Client with id " + id + " does not exists");
-    }
+        if (!vendorRepository.existsById(id)) {
+            throw new ClientNotFoundException(
+                    "Client with id " + id + " does not exists");
+        }
         vendorRepository.deleteById(id);
-}
+    }
 
+    @Override
+    public VendorDto showInfo(String name) {
+        return modelMapper.map(vendorRepository.findUserByEmail(name)
+                .orElseThrow(() -> new ClientNotFoundException(
+                "Client with email " + name + " does not exists")), VendorDto.class);
+    }
 }

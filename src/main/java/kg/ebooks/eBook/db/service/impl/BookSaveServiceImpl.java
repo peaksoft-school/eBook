@@ -5,7 +5,9 @@ import kg.ebooks.eBook.aws.service.FileService;
 import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.mapper.BookSaveMapper;
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.Authority;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.db.domain.model.enums.Response;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.domain.model.users.Admin;
@@ -21,12 +23,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static kg.ebooks.eBook.db.domain.model.enums.Authority.*;
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
 
@@ -150,6 +154,7 @@ public class BookSaveServiceImpl implements BookSaveService {
 
         if (isNotNullAndNotEqual(currentGenre, newGenre)) {
             book.setGenre(newGenre);
+            newGenre.setBook(book);
             logInfo("genre", bookName, currentGenre.getGenreName(), newGenre.getGenreName());
         }
 
@@ -319,5 +324,37 @@ public class BookSaveServiceImpl implements BookSaveService {
                 .orElseThrow(() -> new BookNotFoundException(
                         "book with id = " + bookId + " does not exists in database"
                 ));
+    }
+
+    @Override
+    public Response deleteBook(String email, Authority authority, Long bookId) {
+        switch (authority) {
+            case ADMIN:
+                try {
+                    bookRepository.deleteById(bookId);
+                    return Response.SUCCESS;
+                } catch (Exception e) {
+                    return Response.FAIL;
+                }
+            case VENDOR:
+                Vendor vendor = vendorRepository.findUserByEmail(email)
+                        .orElseThrow(() -> new NotFoundException(
+                                "Vendor with email = " + email + " does not exists!"
+                        ));
+
+                if (!vendor.getBooksToSale().contains(bookRepository.findById(bookId).orElse(null))) {
+                    throw new InvalidRequestException(
+                            "book is not yours or book with id = " + bookId + " does not exist"
+                    );
+                }
+
+                try {
+                    bookRepository.deleteById(bookId);
+                    return Response.SUCCESS;
+                } catch (Exception e) {
+                    return Response.FAIL;
+                }
+        }
+        return Response.SUCCESS;
     }
 }
