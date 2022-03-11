@@ -9,10 +9,7 @@ import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
 import org.modelmapper.ModelMapper;
@@ -183,20 +180,8 @@ public class Book implements BookInfoBkt {
         return "no fragment";
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Book book = (Book) o;
-        return bookId != null && Objects.equals(bookId, book.bookId);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
-
     public void setImage(FileInfo newImage) {
         this.images.add(newImage);
     }
+
 }
