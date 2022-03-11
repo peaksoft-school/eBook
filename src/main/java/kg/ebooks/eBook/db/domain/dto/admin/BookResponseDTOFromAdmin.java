@@ -18,6 +18,8 @@ import java.time.LocalDate;
 @Setter
 public class BookResponseDTOFromAdmin {
 
+    private Long bookId;
+
     private FileInfo image;
 
     private String bookName;

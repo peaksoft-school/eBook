@@ -43,12 +43,12 @@ import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 @CrossOrigin("*")
 @Tag(name = "This API for saving books")
 @Slf4j
+@PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
 public class BookSaveAPI {
 
     private final BookSaveService bookService;
 
     @PostMapping("/save/audio_book")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
     public BookResponse saveAudioBook(Authentication authentication,
                                       @Valid @RequestBody BookSave<AudioBookRequest> audioBook) {
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
@@ -56,7 +56,6 @@ public class BookSaveAPI {
     }
 
     @PostMapping("/save/electronic_book")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
     public BookResponse saveElectronicBook(Authentication authentication,
                                            @Valid @RequestBody BookSave<ElectronicBookRequest> electronicBook) {
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
@@ -65,7 +64,6 @@ public class BookSaveAPI {
 
     @PostMapping("/save/paper_book")
     @ResponseStatus(value = HttpStatus.OK)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
     public BookResponse savePaperBook(Authentication authentication,
                                       @Valid @RequestBody BookSave<PaperBookRequest> paperBook) {
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();

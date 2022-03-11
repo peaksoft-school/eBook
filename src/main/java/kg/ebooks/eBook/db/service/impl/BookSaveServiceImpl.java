@@ -178,13 +178,7 @@ public class BookSaveServiceImpl implements BookSaveService {
             logInfo("dataOfIssue", bookName, currentDateOfIssue.toString(), newDateOfIssue.toString());
         }
 
-        boolean currentBestSeller = book.getBestSeller();
-        boolean newBestSeller = newBook.getBestSeller();
-
-        if (currentBestSeller == newBestSeller) {
-            book.setBestSeller(newBestSeller);
-            logInfo("bestSeller", bookName, String.valueOf(currentBestSeller), String.valueOf(newBestSeller));
-        }
+        book.setBestSeller(newBook.getBestSeller());
 
         BigDecimal currentPrice = book.getPrice();
         BigDecimal newPrice = newBook.getPrice();
