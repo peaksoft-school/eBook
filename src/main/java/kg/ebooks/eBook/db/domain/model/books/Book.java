@@ -12,6 +12,8 @@ import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
@@ -42,14 +44,14 @@ public class Book implements BookInfoBkt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long bookId;
 
-    @OneToMany(cascade = MERGE)
+    @OneToMany(cascade = {MERGE, REFRESH})
     private Set<FileInfo> images;
 
     private String bookName;
 
     private String author;
 
-    @ManyToOne(fetch = EAGER, cascade = MERGE)
+    @ManyToOne(cascade = MERGE)
     private Genre genre;
 
     private Language language;
@@ -63,7 +65,6 @@ public class Book implements BookInfoBkt {
     private int discount;
 
     @NotNull(message = "you have to define type of book")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private TypeOfBook typeOfBook;
 
     @Column(length = 10000)

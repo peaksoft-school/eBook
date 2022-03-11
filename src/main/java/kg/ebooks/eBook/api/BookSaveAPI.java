@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.annotations.CurrentUser;
 import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.model.books.ElectronicBook;
-import kg.ebooks.eBook.db.domain.model.enums.Authority;
-import kg.ebooks.eBook.db.domain.model.enums.Language;
-import kg.ebooks.eBook.db.domain.model.enums.Type;
-import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
+import kg.ebooks.eBook.db.domain.model.enums.*;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.service.BookSaveService;
 import kg.ebooks.eBook.exceptions.InvalidRequestException;
@@ -19,6 +16,7 @@ import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -89,6 +87,13 @@ public class BookSaveAPI {
             @PathVariable Long bookId,
             @Valid @RequestBody BookSave<ElectronicBookRequest> bookSave) {
         return bookService.updateBook(bookId, ELECTRONIC_BOOK, bookSave);
+    }
+
+    @DeleteMapping("/delete/{bookId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'VENDOR')")
+    public Response deleteBook(@PathVariable Long bookId, Authentication authentication) {
+       AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
+        return bookService.deleteBook(authenticationInfo.getEmail(), authenticationInfo.getAuthority(), bookId);
     }
 
     @GetMapping("/languages")
