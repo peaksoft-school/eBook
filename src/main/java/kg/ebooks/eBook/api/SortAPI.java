@@ -25,15 +25,15 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Tag(name = "This API to sort books")
 @Slf4j
-@CrossOrigin
 public class SortAPI {
 
     private final SortService service;
 
-    @GetMapping("/sort")
     @Operation(summary = "sort", description = "This method to sort books with genres & price & languages and also book type" +
             " and I have one problem I can fix it but if you're giving genre id that doesn't exists it will work," +
             " but it thinks that it's nothing, It helps code to work fastly")
+    @CrossOrigin
+    @GetMapping("/sort")
     public Set<BookResponseDTOSort> sortList(@RequestParam String filterBy) {
         log.info("filterBy = {}", filterBy);
         return service.sort(filterBy);
@@ -45,6 +45,7 @@ public class SortAPI {
             "'electronicBook' -> OK <br/>" +
             "'audioBook' -> OK <br/>" +
             "'baibolot' -> BADREQUEST 400 ")
+    @CrossOrigin
     @GetMapping("/sort/by/type")
     public List<BookResponse> sortBooksByType(@RequestParam String type) {
         return service.findAllByType(type);
