@@ -194,6 +194,10 @@ public class Book implements BookInfoBkt {
                 typeOfBook.equals(ELECTRONIC_BOOK) ? electronicBook.getPageSize() : 0;
     }
 
+    public int getQuantityOfBooks() {
+        return typeOfBook.equals(PAPER_BOOK) ? paperBook.getQuantityOfBooks() : 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
