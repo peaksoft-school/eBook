@@ -178,13 +178,14 @@ public class BookSaveServiceImpl implements BookSaveService {
             logInfo("language", bookName, currentLanguage.name(), newLanguage.name());
         }
 
-        LocalDate currentDateOfIssue = book.getDateOfIssue();
-        LocalDate newDateOfIssue = newBook.getDataOfIssue();
-
-        if (isNotNullAndNotEqual(currentDateOfIssue, newDateOfIssue)) {
-            book.setDateOfIssue(newDateOfIssue);
-            logInfo("dataOfIssue", bookName, currentDateOfIssue.toString(), newDateOfIssue.toString());
-        }
+        // FIXME: 12/3/22 fix
+//        LocalDate currentDateOfIssue = book.getDateOfIssue();
+////        LocalDate newDateOfIssue = newBook.getYearOfIssue();
+//
+//        if (isNotNullAndNotEqual(currentDateOfIssue, newDateOfIssue)) {
+//            book.setDateOfIssue(newDateOfIssue);
+//            logInfo("dataOfIssue", bookName, currentDateOfIssue.toString(), newDateOfIssue.toString());
+//        }
 
         book.setBestSeller(newBook.getBestSeller());
 

@@ -46,7 +46,7 @@ public class BookSave<BOOKTYPE extends BookRequest> {
     private Language language;
 
     @NotNull(message = "you missed date of issue")
-    private LocalDate dataOfIssue;
+    private int yearOfIssue;
 
     @NotNull(message = "you have to define is Book bestSeller or not")
     private Boolean bestSeller;

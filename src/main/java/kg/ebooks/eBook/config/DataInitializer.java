@@ -39,7 +39,7 @@ import static com.amazonaws.util.IOUtils.toByteArray;
 public class DataInitializer {
 
 
-//    @Bean
+    @Bean
 //    @Transactional
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
@@ -187,7 +187,7 @@ public class DataInitializer {
             audioBook.setGenre(genre);
             audioBook.setDescription("this is audio book description");
             audioBook.setLanguage(Language.ENGLISH);
-            audioBook.setDateOfIssue(LocalDate.of(2017, Month.APRIL, 23));
+            audioBook.setYearOfIssue(2013);
             audioBook.setBestSeller(false);
             audioBook.setPrice(new BigDecimal(1234));
             audioBook.setDiscount(30);
@@ -218,7 +218,7 @@ public class DataInitializer {
             electronicBook.setGenre(genre2);
             electronicBook.setDescription("this is electronic book description");
             electronicBook.setLanguage(Language.RUSSIAN);
-            electronicBook.setDateOfIssue(LocalDate.of(2020, Month.OCTOBER, 20));
+            electronicBook.setYearOfIssue(2017);
             electronicBook.setBestSeller(true);
             electronicBook.setPrice(new BigDecimal(2350));
             electronicBook.setDiscount(15);
@@ -250,7 +250,7 @@ public class DataInitializer {
             paperBook.setGenre(genre3);
             paperBook.setDescription("this is paper book description");
             paperBook.setLanguage(Language.KYRGYZ);
-            paperBook.setDateOfIssue(LocalDate.of(2018, Month.NOVEMBER, 3));
+            paperBook.setYearOfIssue(2020);
             paperBook.setBestSeller(true);
             paperBook.setPrice(new BigDecimal(3400));
             paperBook.setDiscount(10);

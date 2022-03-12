@@ -48,7 +48,7 @@ public class BookSaveMapper {
                                   String author,
                                   String description,
                                   Language language,
-                                  LocalDate dataOfIssue,
+                                  int yearOfIssue,
                                   Boolean bestSeller,
                                   BigDecimal price,
                                   int discount) {
@@ -58,7 +58,7 @@ public class BookSaveMapper {
         book.setAuthor(author);
         book.setDescription(description);
         book.setLanguage(language);
-        book.setDateOfIssue(dataOfIssue);
+        book.setYearOfIssue(yearOfIssue);
         book.setBestSeller(bestSeller);
         book.setPrice(price);
         book.setDiscount(discount);
@@ -87,7 +87,7 @@ public class BookSaveMapper {
                 bookSave.getAuthor(),
                 bookSave.getDescription(),
                 bookSave.getLanguage(),
-                bookSave.getDataOfIssue(),
+                bookSave.getYearOfIssue(),
                 bookSave.getBestSeller(),
                 bookSave.getPrice(),
                 bookSave.getDiscount());

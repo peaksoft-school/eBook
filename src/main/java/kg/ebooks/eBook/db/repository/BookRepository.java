@@ -29,6 +29,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("select b from Book b where b.bestSeller = true ")
     List<Book> bookGetBestseller();
+
     @Query("SELECT b FROM Book b WHERE b.typeOfBook = ?1")
     List<Book> findByBookType(TypeOfBook typeOfBook);
 }

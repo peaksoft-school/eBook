@@ -54,7 +54,7 @@ public class Book implements BookInfoBkt {
 
     private Language language;
 
-    private LocalDate dateOfIssue;
+    private int yearOfIssue;
 
     private BigDecimal price;
 
@@ -153,10 +153,6 @@ public class Book implements BookInfoBkt {
         return now.isBefore(storageDate);
     }
 
-    public int getYearOfIssue() {
-        return dateOfIssue.getYear();
-    }
-
     public String getPublishingHouse() {
         if (paperBook != null) {
             return paperBook.getPublishingHouse();
@@ -203,11 +199,11 @@ public class Book implements BookInfoBkt {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return discount == book.discount && likes == book.likes && inBasket == book.inBasket && Objects.equals(bookId, book.bookId) && Objects.equals(images, book.images) && Objects.equals(bookName, book.bookName) && Objects.equals(author, book.author) && Objects.equals(genre, book.genre) && language == book.language && Objects.equals(dateOfIssue, book.dateOfIssue) && Objects.equals(price, book.price) && Objects.equals(bestSeller, book.bestSeller) && typeOfBook == book.typeOfBook && Objects.equals(description, book.description) && Objects.equals(storageDate, book.storageDate) && Objects.equals(audioBook, book.audioBook) && Objects.equals(electronicBook, book.electronicBook) && Objects.equals(paperBook, book.paperBook) && requestStatus == book.requestStatus;
+        return yearOfIssue == book.yearOfIssue && discount == book.discount && likes == book.likes && inBasket == book.inBasket && Objects.equals(bookId, book.bookId) && Objects.equals(images, book.images) && Objects.equals(bookName, book.bookName) && Objects.equals(author, book.author) && Objects.equals(genre, book.genre) && language == book.language && Objects.equals(price, book.price) && Objects.equals(bestSeller, book.bestSeller) && typeOfBook == book.typeOfBook && Objects.equals(description, book.description) && Objects.equals(storageDate, book.storageDate) && Objects.equals(audioBook, book.audioBook) && Objects.equals(electronicBook, book.electronicBook) && Objects.equals(paperBook, book.paperBook) && requestStatus == book.requestStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookId, images, bookName, author, genre, language, dateOfIssue, price, bestSeller, discount, typeOfBook, description, storageDate, audioBook, electronicBook, paperBook, requestStatus, likes, inBasket);
+        return Objects.hash(bookId, images, bookName, author, genre, language, yearOfIssue, price, bestSeller, discount, typeOfBook, description, storageDate, audioBook, electronicBook, paperBook, requestStatus, likes, inBasket);
     }
 }

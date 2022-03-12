@@ -22,10 +22,10 @@ import java.util.Set;
  */
 @RestController
 @RequestMapping("api/books")
-@CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "This API to sort books")
 @Slf4j
+@CrossOrigin
 public class SortAPI {
 
     private final SortService service;
@@ -34,7 +34,7 @@ public class SortAPI {
     @Operation(summary = "sort", description = "This method to sort books with genres & price & languages and also book type" +
             " and I have one problem I can fix it but if you're giving genre id that doesn't exists it will work," +
             " but it thinks that it's nothing, It helps code to work fastly")
-    public Set<BookResponseDTOSort> sortList(@RequestParam(required = false) String filterBy) {
+    public Set<BookResponseDTOSort> sortList(@RequestParam String filterBy) {
         log.info("filterBy = {}", filterBy);
         return service.sort(filterBy);
     }

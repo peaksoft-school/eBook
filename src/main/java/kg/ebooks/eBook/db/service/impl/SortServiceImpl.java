@@ -66,6 +66,7 @@ public class SortServiceImpl implements SortService {
         final FilterBy filter;
         try {
             Gson gson = new Gson();
+            log.info("filterBy = {}", filterBy );
             filter = gson.fromJson(filterBy, FilterBy.class);
         } catch (Exception exception) {
             throw new InvalidRequestException(
