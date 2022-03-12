@@ -39,17 +39,6 @@ public class SignupRequestVndrMapper {
         return vendor;
     }
 
-    public static SignupRequestVndr makeSignupRequestsVndr(Vendor vendor) {
-        SignupRequestVndr signupRequestVndr = new SignupRequestVndr();
-        signupRequestVndr.setFirstName(vendor.getFirstName());
-        signupRequestVndr.setLastName(vendor.getLastName());
-        signupRequestVndr.setPhoneNumber(vendor.getPhoneNumber());
-        signupRequestVndr.setEmail(vendor.getEmail());
-        signupRequestVndr.setPassword(vendor.getAuthenticationInfo().getPassword());
-        return signupRequestVndr;
-    }
-
-
     public Vendor vendorMapper(VendorDto vendorDto) {
         AuthenticationInfo authenticationInfo = new AuthenticationInfo();
         authenticationInfo.setEmail(vendorDto.getEmail());

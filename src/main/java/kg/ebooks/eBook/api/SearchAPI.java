@@ -25,8 +25,8 @@ public class SearchAPI {
 
     @Operation(summary = "search by books & genres & authors & publishing house")
     @GetMapping("/books")
-    List<SearchDto> getBooks(@RequestParam String search) {
-        List<SearchDto> all = searchService.findAll(search);
+    Set<SearchDto> getBooks(@RequestParam String search) {
+        Set<SearchDto> all = searchService.findAll(search);
         if (all.size() < 1) {
             throw new EmptyListException("No results found for your search \"" + search + "\"");
         }

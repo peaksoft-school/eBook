@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
+import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
@@ -18,14 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeSignupRequestsVndr;
 import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeVendor;
 
 @Service
@@ -41,7 +39,7 @@ public class VendorServiceImpl implements VendorService {
     private final SignupRequestVndrMapper vendorMapper;
 
     @Override
-    public SignupRequestVndr registerVendor(SignupRequestVndr signupRequest) {
+    public SignupResponseVndr registerVendor(SignupRequestVndr signupRequest) {
         String email = signupRequest.getEmail();
         log.info("Saving new user {} to the database", email);
         Optional<AuthenticationInfo> byEmail =
@@ -55,7 +53,7 @@ public class VendorServiceImpl implements VendorService {
         Vendor vendor = makeVendor(signupRequest);
         vendor.getAuthenticationInfo().setPassword(passwordEncoder.encode(vendor.getAuthenticationInfo().getPassword()));
         vendor.setDateOfRegistration(LocalDate.now());
-        return makeSignupRequestsVndr(vendorRepository.save(vendor));
+        return modelMapper.map(vendorRepository.save(vendor), SignupResponseVndr.class);
     }
 
 

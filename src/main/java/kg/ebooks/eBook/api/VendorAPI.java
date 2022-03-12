@@ -3,6 +3,7 @@ package kg.ebooks.eBook.api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
+import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
@@ -32,7 +33,7 @@ public class VendorAPI {
 
     @PostMapping("/signup/vendor")
     @Operation(summary = "Прохождение регистрации", description = "Позволяет пройти регистрацию продавцу")
-    public SignupRequestVndr registerVendor(@RequestBody SignupRequestVndr signupRequest) {
+    public SignupResponseVndr registerVendor(@RequestBody SignupRequestVndr signupRequest) {
         return vendorService.registerVendor(signupRequest);
     }
 

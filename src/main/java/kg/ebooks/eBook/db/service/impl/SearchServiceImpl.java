@@ -3,20 +3,14 @@ package kg.ebooks.eBook.db.service.impl;
 import com.google.common.collect.Lists;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.SearchDto;
-import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
-import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static kg.ebooks.eBook.db.domain.model.enums.RequestStatus.*;
@@ -32,14 +26,12 @@ public class SearchServiceImpl implements SearchService {
     private final ModelMapper modelMapper;
 
     @Override
-    public List<SearchDto> findAll(String search) {
-        List<SearchDto> all = new ArrayList<>();
+    public Set<SearchDto> findAll(String search) {
+        Set<SearchDto> all = new HashSet<>();
 
         String finalSearch = search.toLowerCase();;
 
-
         repository.findAll().forEach(book -> {
-            System.out.println(book);
             if (book.getBookName().toLowerCase().startsWith(finalSearch)) {
                 all.add(new SearchDto(book.getBookId(), book.getBookName(), BOOK));
             }
@@ -47,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
                 all.add(new SearchDto(book.getBookId(), book.getAuthor(), AUTHOR));
             }
             if ((!book.getTypeOfBook().equals(AUDIO_BOOK)) && book.getPublishingHouse().toLowerCase().startsWith(finalSearch)) {
-                all.add(new SearchDto(book.getBookId(), book.getPublishingHouse(), BOOK));
+                all.add(new SearchDto(book.getBookId(), book.getPublishingHouse(), PUBLISHER));
             }
         });
 

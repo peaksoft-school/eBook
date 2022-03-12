@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
+import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
@@ -11,7 +12,7 @@ import java.util.List;
 @Service
 public interface VendorService {
 
-    SignupRequestVndr registerVendor(SignupRequestVndr signupRequest);
+    SignupResponseVndr registerVendor(SignupRequestVndr signupRequest);
 
     List<VendorDtoResponse> getAllVendors();
 
