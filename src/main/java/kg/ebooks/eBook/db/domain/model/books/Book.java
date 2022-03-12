@@ -22,6 +22,7 @@ import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
+import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -189,6 +190,12 @@ public class Book implements BookInfoBkt {
 
     public void removeGenre() {
         this.genre = null;
+    }
+
+    public int getPageSize() {
+        return typeOfBook.equals(PAPER_BOOK) ?
+                paperBook.getPageSize() :
+                typeOfBook.equals(ELECTRONIC_BOOK) ? electronicBook.getPageSize() : 0;
     }
 
     @Override
