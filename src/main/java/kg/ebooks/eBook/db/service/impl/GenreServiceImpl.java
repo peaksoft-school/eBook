@@ -3,12 +3,15 @@ package kg.ebooks.eBook.db.service.impl;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreSV;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.GenreService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import kg.ebooks.eBook.exceptions.ImpossibleException;
+import kg.ebooks.eBook.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -34,6 +37,7 @@ import java.util.stream.Collectors;
 public class GenreServiceImpl implements GenreService {
 
     private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -103,5 +107,24 @@ public class GenreServiceImpl implements GenreService {
             genreById.setGenreName(genreName1);
         }
         log.info("genre [{}] updated to [{}]", genreName, genreName1);
+    }
+
+    @Override
+    @Transactional
+    public void addBookToGenre(Long id, Long bookId) {
+        Genre genre = findById(id);
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException(
+                        "Book with id = " + bookId + " does not exists"
+                ));
+        genre.setBook(book);
+    }
+
+    @Override
+    public void removeFromGenre(Long id, Book book) {
+        Genre genre = findById(id);
+        genre.remove(book);
+        genreRepository.save(genre);
     }
 }

@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.service;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreSV;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface GenreService {
     void deleteGenreById(Long genreId);
 
     void updateGenre(Long genreId, GenreSV genre);
+
+    void addBookToGenre(Long id, Long bookId);
+
+    void removeFromGenre(Long id, Book book);
 }
