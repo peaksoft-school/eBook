@@ -2,6 +2,8 @@ package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.db.domain.dto.book.*;
+import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.service.BookGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -60,5 +62,15 @@ public class BookGetAPI {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/languages")
+    public Language[] getAllLanguage() {
+        return Language.values();
+    }
+
+    @GetMapping("/types")
+    public TypeOfBook[] getTypesOfBook() {
+        return TypeOfBook.values();
     }
 }

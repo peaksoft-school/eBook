@@ -95,14 +95,4 @@ public class BookSaveAPI {
        AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
         return bookService.deleteBook(authenticationInfo.getEmail(), authenticationInfo.getAuthority(), bookId);
     }
-
-    @GetMapping("/languages")
-    public Language[] getAllLanguage() {
-        return Language.values();
-    }
-
-    @GetMapping("/types")
-    public TypeOfBook[] getTypesOfBook() {
-        return TypeOfBook.values();
-    }
 }
