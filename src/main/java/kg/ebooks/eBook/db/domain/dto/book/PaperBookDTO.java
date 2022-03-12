@@ -34,6 +34,8 @@ public class PaperBookDTO implements BookInfo {
     private String publishingHouse;
     private int yearOfIssue;
     private int pageSize;
+    private int discount;
+    private int quantityOfBooks;
     private String description;
     private String fragment;
     private boolean isNew;

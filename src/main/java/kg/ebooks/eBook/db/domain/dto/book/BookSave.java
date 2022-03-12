@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.domain.dto.book;
 
 import kg.ebooks.eBook.annotations.percent.Percent;
+import kg.ebooks.eBook.annotations.yearofissue.YearOfIssue;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import lombok.Getter;
@@ -46,6 +47,7 @@ public class BookSave<BOOKTYPE extends BookRequest> {
     private Language language;
 
     @NotNull(message = "you missed date of issue")
+    @YearOfIssue
     private int yearOfIssue;
 
     @NotNull(message = "you have to define is Book bestSeller or not")

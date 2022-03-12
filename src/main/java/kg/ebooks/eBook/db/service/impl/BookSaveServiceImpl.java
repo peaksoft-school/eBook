@@ -178,14 +178,13 @@ public class BookSaveServiceImpl implements BookSaveService {
             logInfo("language", bookName, currentLanguage.name(), newLanguage.name());
         }
 
-        // FIXME: 12/3/22 fix
-//        LocalDate currentDateOfIssue = book.getDateOfIssue();
-////        LocalDate newDateOfIssue = newBook.getYearOfIssue();
-//
-//        if (isNotNullAndNotEqual(currentDateOfIssue, newDateOfIssue)) {
-//            book.setDateOfIssue(newDateOfIssue);
-//            logInfo("dataOfIssue", bookName, currentDateOfIssue.toString(), newDateOfIssue.toString());
-//        }
+        int currentYearOfIssue = book.getYearOfIssue();
+        int newYearOfIssue = newBook.getYearOfIssue();
+
+        if (isNotNullAndNotEqual(currentYearOfIssue, newYearOfIssue)) {
+            book.setYearOfIssue(newYearOfIssue);
+            logInfo("dataOfIssue", bookName, String.valueOf(currentYearOfIssue), String.valueOf(newYearOfIssue));
+        }
 
         book.setBestSeller(newBook.getBestSeller());
 
@@ -197,6 +196,7 @@ public class BookSaveServiceImpl implements BookSaveService {
             logInfo("price", bookName, currentPrice.toString(), newPrice.toString());
         }
 
+        // FIXME: 12/3/22 discount
         int currentDiscount = book.getDiscount();
         int newDisCount = newBook.getDiscount();
 
@@ -217,6 +217,7 @@ public class BookSaveServiceImpl implements BookSaveService {
                     logInfo("fragment", bookName, currentFragment, newFragment);
                 }
 
+                // FIXME: 12/3/22 quantity of books
                 int currentQuantityOfBooks = book.getPaperBook().getQuantityOfBooks();
                 int newQuantityOfBooks = paperBookRequest.getQuantityOfBooks();
 
@@ -252,6 +253,7 @@ public class BookSaveServiceImpl implements BookSaveService {
                     logInfo("fragment", bookName, currentEFragment, newEFragment);
                 }
 
+                // FIXME: 12/3/22 quantity of books
                 int currentEPageSize = book.getPaperBook().getPageSize();
                 int newEPageSize = electronicBookRequest.getPageSize();
 
