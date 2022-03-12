@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreGetDTO;
 import kg.ebooks.eBook.db.domain.model.books.Book;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
@@ -31,6 +28,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Genre {
 
     @Id
@@ -39,7 +37,7 @@ public class Genre {
 
     private String genreName;
 
-    @OneToMany(fetch = EAGER, cascade = MERGE)
+    @OneToMany(fetch = EAGER, cascade = MERGE, orphanRemoval = true)
     @JsonIgnore
     private Set<Book> books = new HashSet<>();
 
@@ -59,5 +57,9 @@ public class Genre {
 
     public void count() {
         quantityOfBooks++;
+    }
+
+    public void remove(Book book) {
+        books.remove(book);
     }
 }

@@ -18,6 +18,7 @@ import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.BookSaveService;
+import kg.ebooks.eBook.db.service.GenreService;
 import kg.ebooks.eBook.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,7 @@ public class BookSaveServiceImpl implements BookSaveService {
     private final FileService fileService;
     private final GenreRepository genreRepository;
     private final ModelMapper modelMapper;
+    private final GenreService genreService;
 
     @Override
     public Set<BookResponse> findALLBooks() {
@@ -118,7 +120,7 @@ public class BookSaveServiceImpl implements BookSaveService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public BookResponse updateBook(Long bookId,
                                    TypeOfBook type,
                                    BookSave<?> newBook) {
@@ -150,13 +152,14 @@ public class BookSaveServiceImpl implements BookSaveService {
                 () -> new DoesNotExistsException("genre with id = " + newBook.getGenreId() + " does not exists in database")
         );
 
-        Genre currentGenre = book.getOriginalGenre();
+        Genre byGenreName = genreRepository.findByGenreName(book.getGenre().getGenreName());
 
-        if (isNotNullAndNotEqual(currentGenre, newGenre)) {
+        if (isNotNullAndNotEqual(byGenreName, newGenre)) {
+            genreService.removeFromGenre(byGenreName.getId(), book);
             book.setGenre(newGenre);
             newGenre.setBook(book);
-            logInfo("genre", bookName, currentGenre.getGenreName(), newGenre.getGenreName());
         }
+
 
         String currentDescription = book.getDescription();
         String newDescription = newBook.getDescription();
@@ -306,8 +309,8 @@ public class BookSaveServiceImpl implements BookSaveService {
                 break;
         }
         System.out.println("this so crazy");
-
-        return modelMapper.map(book, BookResponse.class);
+        Book save = bookRepository.save(book);
+        return modelMapper.map(save, BookResponse.class);
     }
 
     private <T> boolean isNotNullAndNotEqual(T current, T news) {
@@ -328,9 +331,15 @@ public class BookSaveServiceImpl implements BookSaveService {
 
     @Override
     public Response deleteBook(String email, Authority authority, Long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException(
+                        "book with id = " + bookId + " does not exists"
+                ));
+        removeFromVendor(book);
         switch (authority) {
             case ADMIN:
                 try {
+                    remove(book);
                     bookRepository.deleteById(bookId);
                     return Response.SUCCESS;
                 } catch (Exception e) {
@@ -342,19 +351,39 @@ public class BookSaveServiceImpl implements BookSaveService {
                                 "Vendor with email = " + email + " does not exists!"
                         ));
 
-                if (!vendor.getBooksToSale().contains(bookRepository.findById(bookId).orElse(null))) {
+                if (!vendor.getBooksToSale().contains(book)) {
                     throw new InvalidRequestException(
-                            "book is not yours or book with id = " + bookId + " does not exist"
+                            "book is not yours"
                     );
                 }
 
+                remove(book);
+
                 try {
-                    bookRepository.deleteById(bookId);
+//                    bookRepository.deleteById(bookId);
                     return Response.SUCCESS;
                 } catch (Exception e) {
                     return Response.FAIL;
                 }
         }
         return Response.SUCCESS;
+    }
+
+    private void remove(Book book) {
+        Genre originalGenre = book.getOriginalGenre();
+        genreService.removeFromGenre(originalGenre.getId(), book);
+        genreRepository.save(originalGenre);
+    }
+    private void removeFromVendor(Book book) {
+        Vendor vendor = vendorRepository.findAll()
+                .stream()
+                .filter(v -> v.getBooksToSale().contains(book))
+                .findAny()
+                .orElseThrow(() -> new NotFoundException(
+                        "vendor with book = " + book.getBookName() + " does not exists"
+                ));
+        log.info("removing book: {}", book.getBookName());
+        vendor.getBooksToSale().remove(book);
+        vendorRepository.save(vendor);
     }
 }

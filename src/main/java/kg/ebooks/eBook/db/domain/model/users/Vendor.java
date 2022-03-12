@@ -54,7 +54,7 @@ public class Vendor {
 
     private LocalDate dateOfRegistration;
 
-    @OneToMany(fetch = EAGER, cascade = MERGE)
+    @OneToMany(fetch = EAGER, cascade = MERGE, orphanRemoval = true)
     private List<Book> booksToSale = new ArrayList();
 
     @OneToOne(fetch = LAZY, cascade = ALL)

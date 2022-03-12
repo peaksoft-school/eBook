@@ -11,16 +11,12 @@ import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -39,6 +35,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Book implements BookInfoBkt {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +48,7 @@ public class Book implements BookInfoBkt {
 
     private String author;
 
-    @ManyToOne(cascade = MERGE)
+    @ManyToOne(cascade = {MERGE, REMOVE})
     private Genre genre;
 
     private Language language;
@@ -106,6 +103,7 @@ public class Book implements BookInfoBkt {
     public LocalDate getOriginalStorageDate() {
         return this.storageDate;
     }
+
     public void setImages(Set<FileInfo> images) {
         System.out.println("inside book");
         images.forEach(System.out::println);
@@ -141,8 +139,12 @@ public class Book implements BookInfoBkt {
     }
 
     public GenreDTO getGenre() {
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(genre, GenreDTO.class);
+        try {
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(genre, GenreDTO.class);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean isNew() {
@@ -185,4 +187,20 @@ public class Book implements BookInfoBkt {
         this.images.add(newImage);
     }
 
+    public void removeGenre() {
+        this.genre = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return discount == book.discount && likes == book.likes && inBasket == book.inBasket && Objects.equals(bookId, book.bookId) && Objects.equals(images, book.images) && Objects.equals(bookName, book.bookName) && Objects.equals(author, book.author) && Objects.equals(genre, book.genre) && language == book.language && Objects.equals(dateOfIssue, book.dateOfIssue) && Objects.equals(price, book.price) && Objects.equals(bestSeller, book.bestSeller) && typeOfBook == book.typeOfBook && Objects.equals(description, book.description) && Objects.equals(storageDate, book.storageDate) && Objects.equals(audioBook, book.audioBook) && Objects.equals(electronicBook, book.electronicBook) && Objects.equals(paperBook, book.paperBook) && requestStatus == book.requestStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookId, images, bookName, author, genre, language, dateOfIssue, price, bestSeller, discount, typeOfBook, description, storageDate, audioBook, electronicBook, paperBook, requestStatus, likes, inBasket);
+    }
 }
