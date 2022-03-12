@@ -51,8 +51,8 @@ public class PromoAPI {
     @GetMapping("/find")
     @Operation(summary = "find promo", description = "this get method to get books of promocode" +
             ", you need to use client token to use this method")
-    public List<BookResponse> findPromo(@RequestBody FindPromo promo) {
-        return promoService.findPromo(promo.getPromo());
+    public List<BookResponse> findPromo(@RequestParam String promo) {
+        return promoService.findPromo(promo);
     }
 
     @ResponseStatus(BAD_REQUEST)
