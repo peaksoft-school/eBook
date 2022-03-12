@@ -11,7 +11,9 @@ import javax.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.PERSIST;
@@ -55,7 +57,7 @@ public class Vendor {
     private LocalDate dateOfRegistration;
 
     @OneToMany(fetch = EAGER, cascade = MERGE, orphanRemoval = true)
-    private List<Book> booksToSale = new ArrayList();
+    private Set<Book> booksToSale = new HashSet<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;

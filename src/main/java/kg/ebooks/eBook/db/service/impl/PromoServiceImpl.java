@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -82,13 +82,15 @@ public class PromoServiceImpl implements PromoService {
     }
 
     @Override
-    public List<BookResponse> findPromo(String promo) {
+    public Set<BookResponse> findPromo(String promo) {
         return promoRepository.findByPromoName(promo)
                 .orElseThrow(() -> new PromoNotFoundException(
                         "promo with promo-name = " + promo + " does not exists"
                 )).getPromoCreator().getBooksToSale()
-                .stream().map(book -> modelMapper.map(book, BookResponse.class))
-                .collect(Collectors.toList());
+                .stream()
+                .peek(System.out::println)
+                .map(book -> modelMapper.map(book, BookResponse.class))
+                .collect(Collectors.toSet());
 
     }
 }

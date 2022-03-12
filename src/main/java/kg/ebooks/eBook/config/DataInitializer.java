@@ -294,7 +294,7 @@ public class DataInitializer {
             bookRepository.save(electronicBook);
 
             admin.setBooks(Lists.newArrayList(audioBook));
-            vendor.setBooksToSale(Lists.newArrayList(paperBook, electronicBook));
+            vendor.setBooksToSale(Sets.newHashSet(paperBook, electronicBook));
 
             client.getBasket().setBooks(Lists.newArrayList(audioBook, paperBook));
             client.getSelectedBooks().setBooks(Lists.newArrayList(electronicBook));
@@ -312,10 +312,6 @@ public class DataInitializer {
             bookRepository.save(electronicBook);
 
         };
-    }
-
-    private FileInfo makeAnNewImage(String s) {
-        return null;
     }
 }
 

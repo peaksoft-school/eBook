@@ -4,6 +4,7 @@ import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -14,5 +15,5 @@ import java.util.List;
 public interface PromoService {
     String createPromo(String email, PromoCreate promo);
 
-    List<BookResponse> findPromo(String promo);
+    Set<BookResponse> findPromo(String promo);
 }

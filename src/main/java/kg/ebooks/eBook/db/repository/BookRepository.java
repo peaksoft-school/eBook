@@ -57,19 +57,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     Set<Book> findByGenreId(@Param("genres") Set<Long> genres,
                             @Param("languages") Set<Language> languages);
 
+    Set<Book> findByAuthor(String authorName);
 
-//    @Query("select b from Book b");
-//    List<Book> filter(@Param(value = "languages") List<Integer> languages,
-//                      @Param(value = "genres") List<Long> genres,
-//                      @Param(value = "originPrice") int originPrice,
-//                      @Param(value = "boundPrice") int boundPrice,
-//                      @Param(value = "typeOfBook") int typeOfBook);
-
-//    @Query("select b from Book b " +
-//            " where b.language in :languages or b.language is null and" +
-//            " b.genre.id in :genres or b.genre is null and " +
-//            " b.price > :originPrice or b.price = 0 and " +
-//            " b.price < :boundPrice or b.price = 0 and " +
-//            " b.typeOfBook = :typeOfBook or b.typeOfBook = 0");
-
+    @Query(" select b from Book b where b.typeOfBook in :types")
+    Set<Book> findElectronicAndPaperBooks(@Param("types") List<TypeOfBook> typesOfBooks);
 }

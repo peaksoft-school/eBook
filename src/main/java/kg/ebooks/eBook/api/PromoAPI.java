@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -36,7 +37,6 @@ public class PromoAPI {
 
     private final PromoService promoService;
 
-
     @ResponseStatus(CREATED)
     @PreAuthorize("hasAuthority('VENDOR')")
     @PostMapping("/create")
@@ -51,7 +51,7 @@ public class PromoAPI {
     @GetMapping("/find")
     @Operation(summary = "find promo", description = "this get method to get books of promocode" +
             ", you need to use client token to use this method")
-    public List<BookResponse> findPromo(@RequestParam String promo) {
+    public Set<BookResponse> findPromo(@RequestParam String promo) {
         return promoService.findPromo(promo);
     }
 
