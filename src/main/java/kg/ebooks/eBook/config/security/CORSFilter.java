@@ -12,8 +12,8 @@ import java.io.IOException;
 /**
  * @author Beksultan
  */
-@Configuration
-@Order(Ordered.HIGHEST_PRECEDENCE)
+//@Configuration
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CORSFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
