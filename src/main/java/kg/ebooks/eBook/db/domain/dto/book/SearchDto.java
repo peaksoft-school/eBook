@@ -13,5 +13,5 @@ import lombok.Setter;
 public class SearchDto {
     private Long id;
     private String search;
-    private Type bookOrGenre;
+    private Type type;
 }

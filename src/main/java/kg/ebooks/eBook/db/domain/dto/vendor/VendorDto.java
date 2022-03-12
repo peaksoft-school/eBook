@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.domain.dto.vendor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.istack.NotNull;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,6 +21,6 @@ public class VendorDto {
     private String lastName;
     private String phoneNumber;
     private String email;
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private String password;
 }

@@ -56,7 +56,9 @@ public class ClientAPI {
 
     @GetMapping("/show/info")
     public ClientDtoResponse showInfo(Authentication authentication) {
-        return clientService.getInfo(authentication.getName());
+        String name = authentication.getName();
+        System.out.println(name);
+        return clientService.getInfo(name);
     }
 
     @PutMapping({"/update/{clientId}"})

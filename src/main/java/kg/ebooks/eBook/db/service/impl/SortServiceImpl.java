@@ -5,13 +5,20 @@ import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponseDTOSort;
 import kg.ebooks.eBook.db.domain.dto.sort.*;
 import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.db.domain.model.others.Genre;
 import kg.ebooks.eBook.db.repository.BookRepository;
+import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SortService;
 import kg.ebooks.eBook.exceptions.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -30,6 +37,7 @@ import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 public class SortServiceImpl implements SortService {
 
     private final BookRepository bookRepository;
+    private final GenreRepository genreRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -74,43 +82,29 @@ public class SortServiceImpl implements SortService {
             );
         }
 
-        log.info("filterBy = {}", filter);
+        fillIfNullOrEmpty(filter);
 
-        return bookRepository.findAll().stream()
+        log.info("filterBy = {}", filter);
+        Set<Book> bookSet = bookRepository.findByGenreId(filter.getGenres(), filter.getLanguages());
+        return bookSet.stream()
                 .filter(book -> {
-                    if (filter.getGenres() == null) {
-                        return true;
-                    }
-                    if (filter.getGenres().size() == 0) {
-                        return true;
-                    }
-                    boolean test = filterA.test(book, filter.getGenres());
-                    System.out.println(test);
-                    return test;
+                    assert filter.getPrice() != null;
+                    return filter.getPrice().valid(book.getPrice());
                 })
                 .filter(book -> {
-                    if (filter.getTypeOfBook() == null) {
-                        return true;
-                    }
-                    return book.getTypeOfBook().equals(filter.getTypeOfBook());
+                    if (filter.getTypeOfBook() == null) return true;
+                    return filter.getTypeOfBook().equals(book.getTypeOfBook());
                 })
-                .filter(book -> {
-                    if (filter.getPrice() == null) {
-                        return true;
-                    }
-                    return filterC.test(book, filter.getPrice());
-                })
-                .filter(book -> {
-                    if (filter.getLanguages() == null) {
-                        return true;
-                    }
-                    if (filter.getLanguages().size() == 0) {
-                        return true;
-                    }
-                    return filter.getLanguages().contains(book.getLanguage());
-                })
-                .map(book -> book != null ? modelMapper.map(book, BookResponseDTOSort.class) : null)
+                .map(book -> modelMapper.map(book, BookResponseDTOSort.class))
                 .collect(Collectors.toSet());
+    }
+
+    private void fillIfNullOrEmpty(FilterBy filter) {
+        if (filter.getGenres() == null || filter.getGenres().size() == 0) {
+            filter.setGenres(genreRepository.findAll().stream().map(Genre::getId).collect(Collectors.toSet()));
+        } else if (filter.getLanguages() == null || filter.getLanguages().size() == 0) {
+            filter.setLanguages(new HashSet<>(Arrays.asList(Language.values())));
+        }
     }
 
 }

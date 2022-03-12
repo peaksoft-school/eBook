@@ -22,4 +22,9 @@ public class Price {
         int i = bigDecimal.intValue();
         return i >= from && i <= before;
     }
+
+    @Override
+    public String toString() {
+        return from + " : " + before;
+    }
 }
