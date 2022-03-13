@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.PERSIST;
@@ -35,4 +36,11 @@ public class SelectedBooks {
 
     private int quantityOfBooks;
 
+    public void setBook(Book book) {
+        this.books.add(book);
+    }
+
+    public void removeFromBooksByBookId(Long bookId) {
+        this.books.removeIf(book -> Objects.equals(book.getBookId(), bookId));
+    }
 }

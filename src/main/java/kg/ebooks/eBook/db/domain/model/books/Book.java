@@ -9,6 +9,7 @@ import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.domain.model.others.Promo;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -225,5 +226,9 @@ public class Book implements BookInfoBkt {
     @Override
     public int hashCode() {
         return Objects.hash(bookId, images, bookName, author, genre, language, yearOfIssue, price, bestSeller, discount, typeOfBook, description, storageDate, audioBook, electronicBook, paperBook, requestStatus, likes, inBasket);
+    }
+
+    public void addDiscount(Byte percent) {
+        this.discount += percent;
     }
 }

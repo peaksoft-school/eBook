@@ -20,9 +20,6 @@ import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
- * 2/2/22
- * Wednesday 09:54
- * hello world
  */
 @NoArgsConstructor
 @Getter @Setter

@@ -31,8 +31,8 @@ public class AudioBookDTO implements BookInfo {
     private BigDecimal price;
     private GenreDTO genre;
     private Language language;
+    private int discount;
     private Time duration;
-    private String publishingHouse;
     private int yearOfIssue;
     private String description;
     private FileInfo audioFragment;

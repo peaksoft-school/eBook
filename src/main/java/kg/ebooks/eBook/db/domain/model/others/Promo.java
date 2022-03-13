@@ -48,4 +48,13 @@ public class Promo {
 
     @ManyToOne(cascade = ALL)
     private Vendor promoCreator;
+
+    public Book addPromoToBook(Book book) {
+        if (book.getDiscount() + percent > 100) {
+            book.setDiscount(100);
+            return book;
+        }
+        book.addDiscount(percent);
+        return book;
+    }
 }

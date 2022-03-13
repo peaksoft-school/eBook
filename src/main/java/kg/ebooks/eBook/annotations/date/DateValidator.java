@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class DateValidator implements ConstraintValidator<ValidDate, LocalDate> {
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext constraintValidatorContext) {
-        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now().minusDays(1);
         LocalDate expiredAt = LocalDate.now().plusYears(1L);
 
         return date.isAfter(now) && date.isBefore(expiredAt);

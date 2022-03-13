@@ -83,14 +83,15 @@ public class PromoServiceImpl implements PromoService {
 
     @Override
     public Set<BookResponse> findPromo(String promo) {
-        return promoRepository.findByPromoName(promo)
+        Promo promocode = promoRepository.findByPromoName(promo)
                 .orElseThrow(() -> new PromoNotFoundException(
                         "promo with promo-name = " + promo + " does not exists"
-                )).getPromoCreator().getBooksToSale()
-                .stream()
-                .peek(System.out::println)
+                ));
+
+        return promocode.getPromoCreator()
+                .getBooksToSale()
+                .stream().map(promocode::addPromoToBook)
                 .map(book -> modelMapper.map(book, BookResponse.class))
                 .collect(Collectors.toSet());
-
     }
 }

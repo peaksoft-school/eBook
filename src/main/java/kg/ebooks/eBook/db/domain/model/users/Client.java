@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.domain.model.users;
 
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.others.Basket;
 import kg.ebooks.eBook.db.domain.model.others.SelectedBooks;
 import lombok.AllArgsConstructor;
@@ -62,5 +63,17 @@ public class Client {
 
     public String getPassword() {
         return this.authenticationInfo.getPassword();
+    }
+
+    public void setLikedBook(Book book) {
+        this.selectedBooks.setBook(book);
+    }
+
+    public void removeFromSelectedBooks(Long bookId) {
+        this.selectedBooks.removeFromBooksByBookId(bookId);
+    }
+
+    public boolean isLiked(Book book) {
+        return this.selectedBooks.getBooks().contains(book);
     }
 }
