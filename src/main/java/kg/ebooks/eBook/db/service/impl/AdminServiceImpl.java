@@ -1,6 +1,8 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import kg.ebooks.eBook.db.domain.dto.Response;
 import kg.ebooks.eBook.db.domain.dto.admin.RefuseToBookRequest;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
@@ -33,6 +35,7 @@ public class AdminServiceImpl implements AdminService {
     private final BookRepository bookRepository;
     private final VendorService vendorService;
     private final EmailService emailService;
+    private final Gson gson;
 
     @Override
     public String acceptBookRequest(Long bookId) {
@@ -65,8 +68,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private String response(String message) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("RESPONSE", message);
-        return jsonObject.getAsString();
+        return gson.toJson(new Response(message));
     }
 }

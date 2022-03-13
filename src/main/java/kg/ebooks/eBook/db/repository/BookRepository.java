@@ -1,9 +1,11 @@
 package kg.ebooks.eBook.db.repository;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.sort.Price;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
+import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,4 +63,21 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query(" select b from Book b where b.typeOfBook in :types")
     Set<Book> findElectronicAndPaperBooks(@Param("types") List<TypeOfBook> typesOfBooks);
+
+    @Query("select b from Book b where b.typeOfBook = :bookType and " +
+            " b.requestStatus = :requestStatus and " +
+            " b.bestSeller = true " +
+            " order by b.likes desc ")
+    List<Book> findTheMostPopularBooks(@Param("bookType") TypeOfBook bookType,
+                                                         @Param("requestStatus") RequestStatus requestStatus);
+
+    @Query("select b from Book b where b.requestStatus = :accepted order by b.storageDate desc ")
+    List<Book> findLastPublications(@Param("accepted") RequestStatus accepted);
+
+    @Query("select b from Book b where b.requestStatus = :accepted and b.bestSeller = true order by b.likes desc ")
+    List<Book> findBestSellerBooks(@Param("accepted") RequestStatus accepted);
+
+    @Query("select b from Book b where b.requestStatus = :accepted and " +
+            " b.bestSeller = true order by b.likes desc ")
+    List<Book> findPopularBooks(@Param("accepted") RequestStatus accepted);
 }

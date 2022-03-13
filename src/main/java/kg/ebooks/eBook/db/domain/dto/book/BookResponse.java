@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 @NoArgsConstructor
 @Getter @Setter
-public class BookResponse {
+public class BookResponse implements BookMainPage{
     private Long bookId;
     private FileInfo image;
     private String bookName;
