@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
+import kg.ebooks.eBook.db.domain.dto.basket.TotalAmount;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.service.BasketService;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +64,9 @@ public class BasketAPI {
         basketService.cleanBasketByClientId(authenticationInfo.getEmail());
     }
 
-    // TODO: 25/1/22 total amounts
+    @PreAuthorize("hasAuthority('CLIENT')")
+    @GetMapping("/total/amount")
+    public TotalAmount getTotalAmount(Authentication authentication) {
+        return basketService.getTotalAmount(authentication.getName());
+    }
 }

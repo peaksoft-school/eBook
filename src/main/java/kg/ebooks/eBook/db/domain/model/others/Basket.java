@@ -42,6 +42,9 @@ public class Basket implements BookCase, BasketInfo {
     @ManyToMany(cascade = MERGE)
     private List<Book> books = new ArrayList<>();
 
+    @ManyToMany(cascade = MERGE)
+    private Set<Promo> promocodes = new HashSet<>();
+
     private int quantityOfBooks;
 
     @Override
@@ -62,7 +65,7 @@ public class Basket implements BookCase, BasketInfo {
 
     @Override
     public Set<BasketBook> getBooksBkt() {
-        ModelMapper modelMapper = new ModelMapper();
+        ModelMapper modelMapper = getModelMapper();
         Set<BasketBook> basketBooks = new HashSet<>();
 
         for (Book book : books) {
@@ -84,7 +87,7 @@ public class Basket implements BookCase, BasketInfo {
     }
 
     public BasketInfo makeBasketInfo() {
-        ModelMapper modelMapper = new ModelMapper();
+        ModelMapper modelMapper = getModelMapper();
         Set<BasketBook> basketBooks = new HashSet<>();
 
         for (Book book : books) {
@@ -102,5 +105,17 @@ public class Basket implements BookCase, BasketInfo {
         basketInfo.setBooksBkt(basketBooks);
         basketInfo.setQuantityOfBooks(quantityOfBooks);
         return basketInfo;
+    }
+
+    private ModelMapper getModelMapper() {
+        return new ModelMapper();
+    }
+
+    public void setPromo(Promo promo) {
+        this.promocodes.add(promo);
+    }
+
+    public void removePromo(Promo promo) {
+        this.promocodes.remove(promo);
     }
 }

@@ -231,4 +231,9 @@ public class Book implements BookInfoBkt {
     public void addDiscount(Byte percent) {
         this.discount += percent;
     }
+
+    public FileInfo getPdf() {
+        if (electronicBook != null) return this.electronicBook.getElectronicBook();
+        return null;
+    }
 }

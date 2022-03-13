@@ -8,6 +8,7 @@ import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
@@ -167,5 +168,13 @@ public class VendorServiceImpl implements VendorService {
                 .stream().filter(book -> book.getRequestStatus().equals(RequestStatus.ACCEPTED))
                 .map(book -> modelMapper.map(book, BookResponse.class))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Vendor findByBookId(Book book) {
+        return vendorRepository.findAll()
+                .stream()
+                .filter(vendor -> vendor.getBooksToSale().contains(book))
+                .findFirst().orElse(null);
     }
 }

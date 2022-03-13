@@ -7,6 +7,8 @@ import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
+import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +30,6 @@ public interface VendorService {
     VendorDto showInfo(String name);
 
     Set<BookResponse> getVendorBooks(String name);
+
+    Vendor findByBookId(Book book);
 }

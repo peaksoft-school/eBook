@@ -1,19 +1,28 @@
 package kg.ebooks.eBook.db.service.impl;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
+import kg.ebooks.eBook.db.domain.dto.basket.TotalAmount;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.others.Basket;
+import kg.ebooks.eBook.db.domain.model.others.Promo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.ClientRepository;
+import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.BasketService;
+import kg.ebooks.eBook.db.service.VendorService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -24,8 +33,11 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 public class BasketServiceImpl implements BasketService {
+
     private final BookRepository bookRepository;
     private final ClientRepository clientRepository;
+    private final VendorRepository vendorRepository;
+    private final VendorService vendorService;
 
     @Override
     @Transactional
@@ -88,7 +100,7 @@ public class BasketServiceImpl implements BasketService {
     }
 
     private Client getClientByEmail(String clientEmail) {
-        return clientRepository.findByEmailO(clientEmail)
+        return clientRepository.findByEmail(clientEmail)
                 .orElseThrow(() -> new DoesNotExistsException(
                         "Client with email = " + clientEmail + " does not exists"
                 ));
@@ -99,5 +111,42 @@ public class BasketServiceImpl implements BasketService {
     public void cleanBasketByClientId(String clientEmail) {
         Client client = getClientByEmail(clientEmail);
         client.getBasket().clear();
+    }
+
+    @Override
+    public TotalAmount getTotalAmount(String email) {
+
+        Basket basket = getClientByEmail(email).getBasket();
+
+        List<Book> books = basket.getBooks();
+
+        Set<Promo> promocodes = basket.getPromocodes();
+
+        for (Book book : books) {
+            for (Promo promocode : promocodes) {
+                if (Objects.equals(vendorService.findByBookId(book), promocode.getPromoCreator())) {
+                    promocode.addPromoToBook(book);
+                }
+            }
+        }
+
+        int quantityOfBooks = 0;
+        int discount = 0;
+        int amount = 0;
+        int total = 0;
+
+        for (Book book : books) {
+            quantityOfBooks++;
+            discount += book.getNetPrice().subtract(book.getDiscountedPrice()).intValue();
+            amount += book.getNetPrice().intValue();
+            total += book.getDiscountedPrice().intValue();
+        }
+
+        return TotalAmount.builder()
+                .quantityOfBooks((long) quantityOfBooks)
+                .discount(BigDecimal.valueOf(discount))
+                .amount(BigDecimal.valueOf(amount))
+                .total(BigDecimal.valueOf(total))
+                .build();
     }
 }

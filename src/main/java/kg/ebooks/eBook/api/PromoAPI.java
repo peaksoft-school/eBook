@@ -39,20 +39,27 @@ public class PromoAPI {
 
     @ResponseStatus(CREATED)
     @PreAuthorize("hasAuthority('VENDOR')")
-    @PostMapping("/create")
     @Operation( summary = "create new promo", description = "this POST method to save Promocodes, you should write promo-name" +
             ", starting & finishing days, percent correctly, if you don't write correctly the method returns 400 and message " +
             " AND You can create promo between NOW and NOW + 1 year")
+    @PostMapping("/create")
     public String createPromo(Authentication authentication, @Valid @RequestBody PromoCreate promo) {
         AuthenticationInfo authenticationInfo = (AuthenticationInfo) authentication.getPrincipal();
         return promoService.createPromo(authenticationInfo.getEmail(), promo);
     }
 
-    @GetMapping("/find")
     @Operation(summary = "find promo", description = "this get method to get books of promocode" +
             ", you need to use client token to use this method")
+    @GetMapping("/find")
     public Set<BookResponse> findPromo(@RequestParam String promo) {
         return promoService.findPromo(promo);
+    }
+
+    @PreAuthorize("hasAuthority('CLIENT')")
+    @PostMapping("/activate/{promoId}")
+    public String activatePromo(Authentication authentication,
+                                @PathVariable Long promoId) {
+        return promoService.activatePromo(authentication.getName(), promoId);
     }
 
     @ResponseStatus(BAD_REQUEST)

@@ -1,6 +1,7 @@
 package kg.ebooks.eBook.db.service;
 
 import kg.ebooks.eBook.db.domain.dto.basket.BasketInfo;
+import kg.ebooks.eBook.db.domain.dto.basket.TotalAmount;
 
 /**
  * created by Beksultan Mamatkadyr uulu
@@ -17,4 +18,6 @@ public interface BasketService {
     BasketInfo getBasketByClientId(String clientEmail);
 
     void cleanBasketByClientId(String clientEmail);
+
+    TotalAmount getTotalAmount(String name);
 }

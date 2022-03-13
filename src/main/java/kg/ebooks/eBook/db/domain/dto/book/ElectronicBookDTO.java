@@ -34,8 +34,9 @@ public class ElectronicBookDTO implements BookInfo {
     private String publishingHouse;
     private int yearOfIssue;
     private int pageSize;
+    private int discount;
     private String description;
     private String fragment;
     private boolean isNew;
-
+    private FileInfo pdf;
 }

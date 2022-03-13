@@ -16,4 +16,6 @@ public interface PromoService {
     String createPromo(String email, PromoCreate promo);
 
     Set<BookResponse> findPromo(String promo);
+
+    String activatePromo(String name, Long promoId);
 }

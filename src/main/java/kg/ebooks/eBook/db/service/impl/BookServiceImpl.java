@@ -45,7 +45,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private Client findClientByEmail(String clientEmail) {
-        return clientRepository.findUserByEmail(clientEmail)
+        return clientRepository.findByEmail(clientEmail)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("client with email = %s does not exists", clientEmail)
                 ));

@@ -103,7 +103,7 @@ public class ClientServiceImpl implements ClientService {
                         "client with id = " + id + " does not exists"
                 ));
         if (!clientDto.getEmail().equals(clientFromDatabase.getEmail())) {
-            Optional<Client> clientOptional = clientRepository.findUserByEmail(clientDto.getEmail());
+            Optional<Client> clientOptional = clientRepository.findByEmail(clientDto.getEmail());
 
             if (clientOptional.isPresent()) {
                 log.error("client with email {} has already exists", clientDto.getEmail());
@@ -144,7 +144,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDtoResponse getInfo(String email) {
-        Client client = clientRepository.findUserByEmail(email)
+        Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException(
                         String.format("client with email = %s does not exists", email)
                 ));

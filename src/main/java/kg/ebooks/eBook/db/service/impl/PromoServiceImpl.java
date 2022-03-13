@@ -1,15 +1,21 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import io.swagger.v3.core.util.Json;
+import kg.ebooks.eBook.db.domain.dto.Response;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
+import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.others.Promo;
+import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
+import kg.ebooks.eBook.db.repository.ClientRepository;
 import kg.ebooks.eBook.db.repository.PromoRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.PromoService;
-import kg.ebooks.eBook.exceptions.AlreadyExistsException;
-import kg.ebooks.eBook.exceptions.InvalidDateException;
-import kg.ebooks.eBook.exceptions.PromoNotFoundException;
+import kg.ebooks.eBook.db.service.VendorService;
+import kg.ebooks.eBook.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -22,9 +28,6 @@ import java.util.stream.Collectors;
 
 /**
  * created by Beksultan Mamatkadyr uulu
- * 19/2/22
- * Saturday 02:35
- * hello world
  */
 @Service
 @Slf4j
@@ -34,6 +37,9 @@ public class PromoServiceImpl implements PromoService {
     private final PromoRepository promoRepository;
     private final VendorRepository vendorRepository;
     private final ModelMapper modelMapper;
+    private final ClientRepository clientRepository;
+    private final VendorService vendorService;
+    private final Gson gson;
 
     @Override
     @Transactional
@@ -93,5 +99,43 @@ public class PromoServiceImpl implements PromoService {
                 .stream().map(promocode::addPromoToBook)
                 .map(book -> modelMapper.map(book, BookResponse.class))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional
+    public String activatePromo(String email, Long promoId) {
+        Client client = clientRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("client with email = %s does not exists", email)
+                ));
+
+        Promo promo = promoRepository.findById(promoId)
+                .orElseThrow(() -> new NotFoundException(
+                        String.format("promo with id = %d not found", promoId)
+                ));
+
+        if (!promo.isValid()) {
+            throw new InvalidPromoException(
+                    "promo date expired or not starting yet"
+            );
+        }
+
+        Set<Vendor> vendors = client.getBasket().getBooks()
+                .stream()
+//                .map(Book::getBookId)
+                .map(vendorService::findByBookId)
+                .collect(Collectors.toSet());
+
+        if (!vendors.contains(promo.getPromoCreator())) {
+            throw new InvalidPromoException(
+                    "you don't have any books that qualify for this promocode"
+            );
+        }
+
+        client.getBasket().setPromo(promo);
+
+        log.info("{} successfully added promocode = {} to his basket", client.getName(), promo.getPromoName());
+
+        return gson.toJson(new Response("SUCCESS"));
     }
 }

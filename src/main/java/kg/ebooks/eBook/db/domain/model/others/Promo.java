@@ -2,10 +2,7 @@ package kg.ebooks.eBook.db.domain.model.others;
 
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -19,9 +16,6 @@ import static javax.persistence.FetchType.*;
 
 /**
  * created by Beksultan Mamatkadyr uulu
- * project : eBook
- * 8/1/22
- * Saturday 21:18
  */
 @Entity
 @Table(name = "promo_codes")
@@ -29,6 +23,7 @@ import static javax.persistence.FetchType.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Promo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,5 +51,10 @@ public class Promo {
         }
         book.addDiscount(percent);
         return book;
+    }
+
+    public boolean isValid() {
+        LocalDate now = LocalDate.now();
+        return now.isBefore(finishingDay) && now.isAfter(startingDay);
     }
 }

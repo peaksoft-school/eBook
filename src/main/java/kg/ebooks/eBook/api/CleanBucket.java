@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "basket cleaner", description = "this is temporary")
 @RequiredArgsConstructor
-public class CleanBasket {
+public class CleanBucket {
 
     private final FileService fileService;
 

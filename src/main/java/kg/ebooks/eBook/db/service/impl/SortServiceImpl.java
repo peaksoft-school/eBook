@@ -7,6 +7,7 @@ import kg.ebooks.eBook.db.domain.dto.sort.*;
 import kg.ebooks.eBook.db.domain.model.books.Book;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.others.Genre;
+import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.BookRepository;
 import kg.ebooks.eBook.db.repository.GenreRepository;
 import kg.ebooks.eBook.db.service.SortService;
@@ -16,13 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
+
 import static kg.ebooks.eBook.db.domain.model.enums.TypeOfBook.*;
 
 /**
@@ -74,7 +77,7 @@ public class SortServiceImpl implements SortService {
 
         final FilterBy filter;
         try {
-            log.info("filterBy = {}", filterBy );
+            log.info("filterBy = {}", filterBy);
             filter = gson.fromJson(filterBy, FilterBy.class);
         } catch (Exception exception) {
             throw new InvalidRequestException(
@@ -100,7 +103,15 @@ public class SortServiceImpl implements SortService {
     }
 
     private void fillIfNullOrEmpty(FilterBy filter) {
-        if (filter.getGenres() == null || filter.getGenres().size() == 0) {
+        boolean b = filter.getGenres() == null;
+        boolean b2 = filter.getGenres().size() == 0;
+        boolean b1;
+        try {
+             b1 = new ArrayList<Long>(filter.getGenres()).get(0) == null;
+        } catch (Exception e) {
+            b1 = true;
+        }
+        if (b || b2 || b1) {
             filter.setGenres(genreRepository.findAll().stream().map(Genre::getId).collect(Collectors.toSet()));
         } else if (filter.getLanguages() == null || filter.getLanguages().size() == 0) {
             filter.setLanguages(new HashSet<>(Arrays.asList(Language.values())));
