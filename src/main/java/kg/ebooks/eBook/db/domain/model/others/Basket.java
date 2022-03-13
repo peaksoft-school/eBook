@@ -42,8 +42,8 @@ public class Basket implements BookCase, BasketInfo {
     @ManyToMany(cascade = MERGE)
     private List<Book> books = new ArrayList<>();
 
-    @ManyToMany(cascade = MERGE)
-    private Set<Promo> promocodes = new HashSet<>();
+    @OneToOne(cascade = MERGE)
+    private Promo promocode;
 
     private int quantityOfBooks;
 
@@ -112,10 +112,10 @@ public class Basket implements BookCase, BasketInfo {
     }
 
     public void setPromo(Promo promo) {
-        this.promocodes.add(promo);
+        if (this.promocode == null) this.promocode = promo;
     }
 
     public void removePromo(Promo promo) {
-        this.promocodes.remove(promo);
+        this.promocode = null;
     }
 }

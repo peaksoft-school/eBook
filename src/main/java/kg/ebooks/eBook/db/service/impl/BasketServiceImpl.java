@@ -119,14 +119,11 @@ public class BasketServiceImpl implements BasketService {
         Basket basket = getClientByEmail(email).getBasket();
 
         List<Book> books = basket.getBooks();
-
-        Set<Promo> promocodes = basket.getPromocodes();
+        Vendor promoCreator = basket.getPromocode().getPromoCreator();
 
         for (Book book : books) {
-            for (Promo promocode : promocodes) {
-                if (Objects.equals(vendorService.findByBookId(book), promocode.getPromoCreator())) {
-                    promocode.addPromoToBook(book);
-                }
+            if (promoCreator.getBooksToSale().contains(book)) {
+                basket.getPromocode().addPromoToBook(book);
             }
         }
 

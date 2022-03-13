@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -120,15 +121,18 @@ public class PromoServiceImpl implements PromoService {
             );
         }
 
-        Set<Vendor> vendors = client.getBasket().getBooks()
-                .stream()
-//                .map(Book::getBookId)
-                .map(vendorService::findByBookId)
-                .collect(Collectors.toSet());
+        List<Book> books = client.getBasket().getBooks();
+        for (Book book : books) {
+            if (!promo.getPromoCreator().getBooksToSale().contains(book)) {
+                throw new InvalidPromoException(
+                        "you don't have any books that qualify for this promocode"
+                );
+            }
+        }
 
-        if (!vendors.contains(promo.getPromoCreator())) {
+        if (client.getBasket().getPromocode() != null) {
             throw new InvalidPromoException(
-                    "you don't have any books that qualify for this promocode"
+                    "promo code already exists"
             );
         }
 
