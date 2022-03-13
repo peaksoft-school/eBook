@@ -36,8 +36,8 @@ public class AdminAPI {
     }
 
     @GetMapping("/get/books/accepted")
-    public List<BookResponseDTOFromAdmin> getAllAcceptedBooks() {
-        return bookGetService.getAllAcceptedBooks();
+    public List<BookResponseDTOFromAdmin> getAllAcceptedBooks(@RequestParam(required = false) String filterBy) {
+        return bookGetService.getAllAcceptedBooks(filterBy);
     }
 
     @PostMapping("/accept/book/request/{bookId}")

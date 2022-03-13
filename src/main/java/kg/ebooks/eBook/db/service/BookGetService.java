@@ -12,7 +12,7 @@ import java.util.List;
  * hello world
  */
 public interface BookGetService {
-    List<BookResponseDTOFromAdmin> getAllAcceptedBooks();
+    List<BookResponseDTOFromAdmin> getAllAcceptedBooks(String filterBy);
 
     List<BookResponseDTOFromAdmin> getAllBooksStorageRequests();
 

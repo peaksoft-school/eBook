@@ -39,6 +39,7 @@ public class SortServiceImpl implements SortService {
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
     private final ModelMapper modelMapper;
+    private final Gson gson;
 
     @Override
     public List<BookResponse> findAllByType(String type) {
@@ -73,7 +74,6 @@ public class SortServiceImpl implements SortService {
 
         final FilterBy filter;
         try {
-            Gson gson = new Gson();
             log.info("filterBy = {}", filterBy );
             filter = gson.fromJson(filterBy, FilterBy.class);
         } catch (Exception exception) {

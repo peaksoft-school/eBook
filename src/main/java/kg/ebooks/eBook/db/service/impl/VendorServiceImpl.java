@@ -5,25 +5,27 @@ import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.VendorRepository;
 import kg.ebooks.eBook.db.service.VendorService;
-import kg.ebooks.eBook.exceptions.AlreadyExistsException;
-import kg.ebooks.eBook.exceptions.ClientNotFoundException;
-import kg.ebooks.eBook.exceptions.DoesNotExistsException;
+import kg.ebooks.eBook.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeVendor;
 
 @Service
@@ -90,26 +92,49 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     @Transactional
-    public VendorDto updateVendor(Long id, VendorDto vendorDto) {
-        Vendor vendorFromDataBase = vendorRepository.findById(id)
-                .orElseThrow(() -> new DoesNotExistsException(
-                        "vendor with id = " + id + " does not exists"
+    public VendorDto updateVendor(String email, VendorUpdateDto vendorDto) {
+        Vendor vendorFromDataBase = vendorRepository.findUserByEmail(email)
+                .orElseThrow(() -> new NotFoundException(
+                        "vendor with email = " + email + " does not exists"
                 ));
-        Optional<Vendor> optionalVendor = vendorRepository.findUserByEmail(vendorDto.getEmail());
-        if (optionalVendor.isPresent()) {
-            log.error("vendor with email {} has already exists", vendorDto.getEmail());
-            throw new AlreadyExistsException(
-                    "vendor with email = " + vendorDto.getEmail() + " has already exists"
+
+        String newFirstName = vendorDto.getFirstName();
+        String currentFirstName = vendorFromDataBase.getFirstName();
+        if (!Objects.equals(newFirstName, currentFirstName)) {
+            vendorFromDataBase.setFirstName(newFirstName);
+            log.info("vendor's first name changed from {} to {}", currentFirstName, newFirstName);
+        }
+
+        String newLastName = vendorDto.getLastName();
+        String currentLastName = vendorFromDataBase.getLastName();
+        if (!Objects.equals(newLastName, currentLastName)) {
+            vendorFromDataBase.setLastName(newLastName);
+            log.info("vendor's last name changed from {} to {}", currentLastName, newLastName);
+        }
+
+        String newPhoneNumber = vendorDto.getPhoneNumber();
+        String currentPhoneNumber = vendorFromDataBase.getPhoneNumber();
+        if (!Objects.equals(newPhoneNumber, currentPhoneNumber)) {
+            vendorFromDataBase.setPhoneNumber(newPhoneNumber);
+            log.info("vendor's phone number changed from {} to {}", currentPhoneNumber, newPhoneNumber);
+        }
+
+        String newEmail = vendorDto.getEmail();
+        String currentEmail = vendorFromDataBase.getEmail();
+        if (!Objects.equals(newEmail, currentEmail)) {
+            vendorFromDataBase.setEmail(newEmail);
+            vendorFromDataBase.getAuthenticationInfo().setEmail(newEmail);
+            log.info("vendor's phone number changed from {} to {}", currentEmail, newEmail);
+        }
+
+        if (!passwordEncoder.matches(vendorDto.getCurrentPassword(), vendorFromDataBase.getAuthenticationInfo().getPassword())){
+            throw new InvalidPasswordException(
+                    "you should write correct current password"
             );
         }
-        vendorFromDataBase.setFirstName(vendorDto.getFirstName());
-        vendorFromDataBase.setLastName(vendorDto.getLastName());
-        vendorFromDataBase.setPhoneNumber(vendorDto.getPhoneNumber());
-        vendorFromDataBase.setEmail(vendorDto.getEmail());
-        vendorFromDataBase.getAuthenticationInfo()
-                .setPassword((vendorDto.getPassword()));
 
-        return vendorDto;
+        vendorFromDataBase.getAuthenticationInfo().setPassword(passwordEncoder.encode(vendorDto.getNewPassword()));
+        return modelMapper.map(vendorFromDataBase, VendorDto.class);
     }
 
     @Override
@@ -125,6 +150,6 @@ public class VendorServiceImpl implements VendorService {
     public VendorDto showInfo(String name) {
         return modelMapper.map(vendorRepository.findUserByEmail(name)
                 .orElseThrow(() -> new ClientNotFoundException(
-                "Client with email " + name + " does not exists")), VendorDto.class);
+                        "Client with email " + name + " does not exists")), VendorDto.class);
     }
 }

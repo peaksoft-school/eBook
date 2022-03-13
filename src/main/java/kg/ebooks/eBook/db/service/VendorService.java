@@ -5,7 +5,7 @@ import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
-import kg.ebooks.eBook.db.domain.model.users.Vendor;
+import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface VendorService {
 
     VendorDtoResquest getByIdVendor(Long id);
 
-    VendorDto updateVendor(Long id, VendorDto vendorDto);
+    VendorDto updateVendor(String email, VendorUpdateDto vendorDto);
 
     void deleteVendor(Long id);
 
