@@ -36,5 +36,6 @@ public class AudioBookDTO implements BookInfo {
     private int yearOfIssue;
     private String description;
     private FileInfo audioFragment;
+    private FileInfo audio;
     private boolean isNew;
 }

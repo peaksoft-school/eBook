@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
@@ -9,6 +10,8 @@ import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+
 @Service
 public interface VendorService {
 
@@ -23,4 +26,6 @@ public interface VendorService {
     void deleteVendor(Long id);
 
     VendorDto showInfo(String name);
+
+    Set<BookResponse> getVendorBooks(String name);
 }

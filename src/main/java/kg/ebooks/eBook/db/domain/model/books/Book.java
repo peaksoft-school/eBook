@@ -169,7 +169,6 @@ public class Book implements BookInfoBkt {
         return this.genre;
     }
 
-
     public String getFragment() {
         if (paperBook != null) {
             return paperBook.getFragment();
@@ -208,6 +207,11 @@ public class Book implements BookInfoBkt {
         time.setMinute((byte) audioBook.getDuration().getMinute());
         time.setSecond((byte) audioBook.getDuration().getSecond());
         return time;
+    }
+
+    public FileInfo getAudio() {
+        if (this.audioBook == null) return null;
+        return this.audioBook.getAudioBook();
     }
 
     @Override

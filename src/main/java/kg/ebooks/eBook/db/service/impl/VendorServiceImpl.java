@@ -1,5 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
@@ -7,6 +8,7 @@ import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDtoResquest;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper;
+import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Vendor;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
@@ -24,6 +26,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static kg.ebooks.eBook.db.domain.mapper.SignupRequestVndrMapper.makeVendor;
@@ -148,8 +151,21 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     public VendorDto showInfo(String name) {
-        return modelMapper.map(vendorRepository.findUserByEmail(name)
+        return modelMapper.map(findVendorByEmail(name), VendorDto.class);
+    }
+
+    private Vendor findVendorByEmail(String name) {
+        return vendorRepository.findUserByEmail(name)
                 .orElseThrow(() -> new ClientNotFoundException(
-                        "Client with email " + name + " does not exists")), VendorDto.class);
+                        "Client with email " + name + " does not exists"));
+    }
+
+    @Override
+    public Set<BookResponse> getVendorBooks(String email) {
+        Vendor vendor = findVendorByEmail(email);
+        return vendor.getBooksToSale()
+                .stream().filter(book -> book.getRequestStatus().equals(RequestStatus.ACCEPTED))
+                .map(book -> modelMapper.map(book, BookResponse.class))
+                .collect(Collectors.toSet());
     }
 }

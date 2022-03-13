@@ -11,13 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-/**
- * created by Beksultan Mamatkadyr uulu
- * project : aws_s3_test2
- * 16/1/22
- * Sunday 21:00
- */
 @RestController
 @RequestMapping("/static")
 @RequiredArgsConstructor

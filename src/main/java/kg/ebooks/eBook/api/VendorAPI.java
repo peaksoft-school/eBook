@@ -2,6 +2,7 @@ package kg.ebooks.eBook.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestVndr;
 import kg.ebooks.eBook.db.domain.dto.security.SignupResponseVndr;
 import kg.ebooks.eBook.db.domain.dto.vendor.VendorDto;
@@ -11,10 +12,12 @@ import kg.ebooks.eBook.db.domain.dto.vendor.VendorUpdateDto;
 import kg.ebooks.eBook.db.service.VendorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/vendor")
@@ -34,6 +37,12 @@ public class VendorAPI {
     @GetMapping("/show/info")
     public VendorDto showVendorInfo(Authentication authentication) {
         return vendorService.showInfo(authentication.getName());
+    }
+
+    @GetMapping("/get/books")
+    @PreAuthorize("hasAuthority('VENDOR')")
+    public Set<BookResponse> getAllVendorBooks(Authentication authentication) {
+        return vendorService.getVendorBooks(authentication.getName());
     }
 
     @GetMapping("/getAll")
