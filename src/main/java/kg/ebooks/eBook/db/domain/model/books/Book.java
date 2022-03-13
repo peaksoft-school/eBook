@@ -3,6 +3,7 @@ package kg.ebooks.eBook.db.domain.model.books;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
 import kg.ebooks.eBook.db.domain.dto.book.Date;
+import kg.ebooks.eBook.db.domain.dto.book.Time;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.model.enums.Language;
 import kg.ebooks.eBook.db.domain.model.enums.RequestStatus;
@@ -196,6 +197,17 @@ public class Book implements BookInfoBkt {
 
     public int getQuantityOfBooks() {
         return typeOfBook.equals(PAPER_BOOK) ? paperBook.getQuantityOfBooks() : 0;
+    }
+
+    public Time getDuration() {
+        AudioBook audioBook = this.getAudioBook();
+        if (audioBook == null) return null;
+
+        Time time = new Time();
+        time.setHour((byte) audioBook.getDuration().getHour());
+        time.setMinute((byte) audioBook.getDuration().getMinute());
+        time.setSecond((byte) audioBook.getDuration().getSecond());
+        return time;
     }
 
     @Override
