@@ -2,6 +2,7 @@ package kg.ebooks.eBook.db.domain.model.books;
 
 import kg.ebooks.eBook.aws.model.FileInfo;
 import kg.ebooks.eBook.db.domain.dto.basket.BookInfoBkt;
+import kg.ebooks.eBook.db.domain.dto.basket.TotalAmount;
 import kg.ebooks.eBook.db.domain.dto.book.Date;
 import kg.ebooks.eBook.db.domain.dto.book.Time;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
@@ -235,5 +236,13 @@ public class Book implements BookInfoBkt {
     public FileInfo getPdf() {
         if (electronicBook != null) return this.electronicBook.getElectronicBook();
         return null;
+    }
+
+    public TotalAmount getTotalAmount() {
+        TotalAmount totalAmount = new TotalAmount();
+        totalAmount.setAmount(price);
+        totalAmount.setDiscount(price.subtract(getDiscountedPrice()));
+        totalAmount.setTotal(getDiscountedPrice());
+        return totalAmount;
     }
 }

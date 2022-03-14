@@ -1,13 +1,17 @@
 package kg.ebooks.eBook.api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kg.ebooks.eBook.db.domain.dto.Response;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.FindPromo;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
 import kg.ebooks.eBook.db.domain.model.others.Promo;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.service.PromoService;
+import kg.ebooks.eBook.exceptions.InvalidPromoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,6 +40,7 @@ import static org.springframework.http.HttpStatus.*;
 public class PromoAPI {
 
     private final PromoService promoService;
+    private final Gson gson;
 
     @ResponseStatus(CREATED)
     @PreAuthorize("hasAuthority('VENDOR')")
@@ -56,10 +61,16 @@ public class PromoAPI {
     }
 
     @PreAuthorize("hasAuthority('CLIENT')")
-    @PostMapping("/activate/{promoId}")
+    @PostMapping("/activate")
     public String activatePromo(Authentication authentication,
-                                @PathVariable Long promoId) {
-        return promoService.activatePromo(authentication.getName(), promoId);
+                                @RequestParam String promo) {
+        return promoService.activatePromo(authentication.getName(), promo);
+    }
+
+    @ExceptionHandler(InvalidPromoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleConflict(InvalidPromoException e) {
+        return gson.toJson(new Response(e.getMessage()));
     }
 
     @ResponseStatus(BAD_REQUEST)

@@ -1,8 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import io.swagger.v3.core.util.Json;
 import kg.ebooks.eBook.db.domain.dto.Response;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
@@ -104,16 +102,23 @@ public class PromoServiceImpl implements PromoService {
 
     @Override
     @Transactional
-    public String activatePromo(String email, Long promoId) {
+    public String activatePromo(String email, String promoName) {
         Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(
                         String.format("client with email = %s does not exists", email)
                 ));
 
-        Promo promo = promoRepository.findById(promoId)
+
+        Promo promo = promoRepository.findByPromoName(promoName)
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("promo with id = %d not found", promoId)
+                        String.format("promo with promo name = %s not found", promoName)
                 ));
+
+        if (client.getBasket().getPromocode() != null) {
+            throw new InvalidPromoException(
+                    "promo code already exists"
+            );
+        }
 
         if (!promo.isValid()) {
             throw new InvalidPromoException(
@@ -122,17 +127,9 @@ public class PromoServiceImpl implements PromoService {
         }
 
         List<Book> books = client.getBasket().getBooks();
-        for (Book book : books) {
-            if (!promo.getPromoCreator().getBooksToSale().contains(book)) {
-                throw new InvalidPromoException(
-                        "you don't have any books that qualify for this promocode"
-                );
-            }
-        }
-
-        if (client.getBasket().getPromocode() != null) {
+        if (!isContains(books, promo.getPromoCreator().getBooksToSale())) {
             throw new InvalidPromoException(
-                    "promo code already exists"
+                    "you don't have any books that qualify for this promocode"
             );
         }
 
@@ -141,5 +138,15 @@ public class PromoServiceImpl implements PromoService {
         log.info("{} successfully added promocode = {} to his basket", client.getName(), promo.getPromoName());
 
         return gson.toJson(new Response("SUCCESS"));
+    }
+
+    private boolean isContains(List<Book> clientBooks, Set<Book> vendorBooks) {
+        for (Book clientBook : clientBooks) {
+            System.out.println(clientBook.getBookName());
+            if (vendorBooks.contains(clientBook)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

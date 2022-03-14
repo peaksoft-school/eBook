@@ -1,18 +1,25 @@
 package kg.ebooks.eBook.db.domain.dto.basket;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 /**
  * @author Beksultan
  */
-@Data
-@Builder
+@Getter @Setter
+@ToString
 public class TotalAmount {
-    private Long quantityOfBooks;
-    private BigDecimal discount;
-    private BigDecimal amount;
-    private BigDecimal total;
+    private Long quantityOfBooks = 0L;
+    private BigDecimal amount = new BigDecimal(0);
+    private BigDecimal discount = new BigDecimal(0);
+    private BigDecimal total = new BigDecimal(0);
+    private boolean hasAPromo = false;
+
+    public void setTotalAmount(TotalAmount totalAmount) {
+        this.quantityOfBooks++;
+        discount = discount.add(totalAmount.getDiscount());
+        amount = this.amount.add(totalAmount.getAmount());
+        total = this.total.add(totalAmount.getTotal());
+    }
 }

@@ -7,9 +7,9 @@ import lombok.Data;
  */
 @Data
 public class Response {
-    private String value;
+    private String result;
 
-    public Response(String value) {
-        this.value = value;
+    public Response(String result) {
+        this.result = result;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * @author Beksultan
  */
-@ResponseStatus(HttpStatus.BAD_REQUEST)
+//@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvalidPromoException extends RuntimeException{
 
     public InvalidPromoException() {

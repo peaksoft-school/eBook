@@ -23,13 +23,4 @@ public class GlobalControllerExceptionHandler {
         return e.getMessage();
     }
 
-    @ExceptionHandler(InvalidPromoException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleConflict(InvalidPromoException e) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("message", e.getMessage());
-        String asString = jsonObject.getAsString();
-        System.out.println(asString);
-        return asString;
-    }
 }

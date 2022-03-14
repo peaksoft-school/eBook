@@ -46,13 +46,13 @@ public class BasketServiceImpl implements BasketService {
 
         Client client = getClientByEmail(clientEmail);
 
-        if (!book.getTypeOfBook().equals(TypeOfBook.PAPER_BOOK)) {
-            if (client.getBasket().getBooks().contains(book)) {
-                throw new AlreadyExistsException(
-                        "book [ " + book.getBookName() + " ] is already in a basket"
-                );
-            }
-        }
+//        if (!book.getTypeOfBook().equals(TypeOfBook.PAPER_BOOK)) {
+//            if (client.getBasket().getBooks().contains(book)) {
+//                throw new AlreadyExistsException(
+//                        "book [ " + book.getBookName() + " ] is already in a basket"
+//                );
+//            }
+//        }
 
         if (!client.getBasket().getBooks().contains(book)) {
             book.incrementInBasket();
@@ -119,31 +119,31 @@ public class BasketServiceImpl implements BasketService {
         Basket basket = getClientByEmail(email).getBasket();
 
         List<Book> books = basket.getBooks();
-        Vendor promoCreator = basket.getPromocode().getPromoCreator();
 
-        for (Book book : books) {
-            if (promoCreator.getBooksToSale().contains(book)) {
-                basket.getPromocode().addPromoToBook(book);
+        Promo promocode = basket.getPromocode();
+
+        TotalAmount totalAmount = new TotalAmount();
+
+        if (promocode != null) {
+            totalAmount.setHasAPromo(true);
+            for (Book book : books) {
+                System.out.println("there works");
+                if (promocode.getPromoCreator().getBooksToSale().contains(book)) {
+                    System.out.println(book);
+                    promocode.addPromoToBook(book);
+                    System.out.println(book);
+                }
             }
         }
 
-        int quantityOfBooks = 0;
-        int discount = 0;
-        int amount = 0;
-        int total = 0;
 
         for (Book book : books) {
-            quantityOfBooks++;
-            discount += book.getNetPrice().subtract(book.getDiscountedPrice()).intValue();
-            amount += book.getNetPrice().intValue();
-            total += book.getDiscountedPrice().intValue();
+            TotalAmount amount = book.getTotalAmount();
+            System.out.println(amount);
+            totalAmount.setTotalAmount(amount);
         }
 
-        return TotalAmount.builder()
-                .quantityOfBooks((long) quantityOfBooks)
-                .discount(BigDecimal.valueOf(discount))
-                .amount(BigDecimal.valueOf(amount))
-                .total(BigDecimal.valueOf(total))
-                .build();
+        return totalAmount;
     }
+
 }

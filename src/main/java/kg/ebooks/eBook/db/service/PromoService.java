@@ -3,7 +3,6 @@ package kg.ebooks.eBook.db.service;
 import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
 import kg.ebooks.eBook.db.domain.dto.promo.PromoCreate;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,5 +16,5 @@ public interface PromoService {
 
     Set<BookResponse> findPromo(String promo);
 
-    String activatePromo(String name, Long promoId);
+    String activatePromo(String name, String promoName);
 }
