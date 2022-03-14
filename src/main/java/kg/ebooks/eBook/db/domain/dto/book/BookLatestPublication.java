@@ -12,5 +12,5 @@ import lombok.*;
 @Getter @Setter
 public class BookLatestPublication implements BookMainPage{
     private GenreDTO genre;
-    private BookResponse bookResponse;
+    private BookMainPageBestSellerAndEBookAndLatestDto bookResponse;
 }

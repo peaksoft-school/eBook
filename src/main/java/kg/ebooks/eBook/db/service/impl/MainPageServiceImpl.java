@@ -1,8 +1,6 @@
 package kg.ebooks.eBook.db.service.impl;
 
-import kg.ebooks.eBook.db.domain.dto.book.BookLatestPublication;
-import kg.ebooks.eBook.db.domain.dto.book.BookMainPage;
-import kg.ebooks.eBook.db.domain.dto.book.BookResponse;
+import kg.ebooks.eBook.db.domain.dto.book.*;
 import kg.ebooks.eBook.db.domain.dto.genre.GenreDTO;
 import kg.ebooks.eBook.db.domain.dto.main.MainPageRequest;
 import kg.ebooks.eBook.db.domain.model.books.Book;
@@ -44,32 +42,32 @@ public class MainPageServiceImpl implements MainPageService {
             case ELECTRONIC:
                 return bookRepository.findTheMostPopularBooks(ELECTRONIC_BOOK, ACCEPTED)
                         .stream().limit(5)
-                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .map(book -> modelMapper.map(book, BookMainPageBestSellerAndEBookAndLatestDto.class))
                         .collect(Collectors.toList());
             case AUDIO:
                 return bookRepository.findTheMostPopularBooks(AUDIO_BOOK, ACCEPTED)
                         .stream().limit(3)
-                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .map(book -> modelMapper.map(book, BookMainPageAudioDto.class))
                         .collect(Collectors.toList());
             case LAST:
                 List<Genre> all = genreRepository.findAll();
                 if (all.size() <= 6) {
                     return all.stream().map(genre -> new BookLatestPublication(
                             modelMapper.map(genre, GenreDTO.class),
-                            modelMapper.map(genreRepository.findLastBook(genre.getId()).get(0), BookResponse.class)))
+                            modelMapper.map(genreRepository.findLastBook(genre.getId()).get(0), BookMainPageBestSellerAndEBookAndLatestDto.class)))
                             .collect(Collectors.toList());
                 }
             case BESTSELLER:
                 return bookRepository.findBestSellerBooks(ACCEPTED)
                         .stream().limit(5)
-                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .map(book -> modelMapper.map(book, BookMainPageBestSellerAndEBookAndLatestDto.class))
                         .collect(Collectors.toList());
             case THE_MOST_POPULAR:
                 return bookRepository.findPopularBooks(ACCEPTED)
                         .stream().limit(10)
                         .filter(Book::isNew)
                         .limit(3)
-                        .map(book -> modelMapper.map(book, BookResponse.class))
+                        .map(book -> modelMapper.map(book, BookMainMostPopularDto.class))
                         .collect(Collectors.toList());
         }
         return null;
