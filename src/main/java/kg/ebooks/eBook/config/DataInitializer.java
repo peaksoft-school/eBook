@@ -39,7 +39,7 @@ import static com.amazonaws.util.IOUtils.toByteArray;
 public class DataInitializer {
 
 
-    @Bean
+//    @Bean
 //    @Transactional
     CommandLineRunner commandLineRunner(
             AdminRepository adminRepository,
