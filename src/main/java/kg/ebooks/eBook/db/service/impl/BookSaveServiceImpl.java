@@ -333,22 +333,36 @@ public class BookSaveServiceImpl implements BookSaveService {
     }
 
     @Override
+//    @Transactional
     public Response deleteBook(String email, Authority authority, Long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new NotFoundException(
                         "book with id = " + bookId + " does not exists"
                 ));
+
         removeFromVendor(book);
+
         switch (authority) {
             case ADMIN:
+                log.info("admin");
                 try {
-                    remove(book);
+
+
+                    Long id = book.getOriginalGenre().getId();
+
+                    book.removeGenre();
+                    bookRepository.save(book);
+
+                    genreService.removeFromGenre(id, book);
                     bookRepository.deleteById(bookId);
                     return Response.SUCCESS;
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return Response.FAIL;
                 }
+
             case VENDOR:
+                log.info("vendor");
                 Vendor vendor = vendorRepository.findUserByEmail(email)
                         .orElseThrow(() -> new NotFoundException(
                                 "Vendor with email = " + email + " does not exists!"
@@ -360,10 +374,15 @@ public class BookSaveServiceImpl implements BookSaveService {
                     );
                 }
 
-                remove(book);
+                Long id = book.getOriginalGenre().getId();
+
+                book.removeGenre();
+                bookRepository.save(book);
+
+                genreService.removeFromGenre(id, book);
 
                 try {
-//                    bookRepository.deleteById(bookId);
+                    bookRepository.deleteById(bookId);
                     return Response.SUCCESS;
                 } catch (Exception e) {
                     return Response.FAIL;
@@ -372,11 +391,6 @@ public class BookSaveServiceImpl implements BookSaveService {
         return Response.SUCCESS;
     }
 
-    private void remove(Book book) {
-        Genre originalGenre = book.getOriginalGenre();
-        genreService.removeFromGenre(originalGenre.getId(), book);
-        genreRepository.save(originalGenre);
-    }
     private void removeFromVendor(Book book) {
         Vendor vendor = vendorRepository.findAll()
                 .stream()

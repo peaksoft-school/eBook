@@ -8,7 +8,6 @@ import java.math.BigDecimal;
  * @author Beksultan
  */
 @Getter @Setter
-@ToString
 public class TotalAmount {
     private Long quantityOfBooks = 0L;
     private BigDecimal amount = new BigDecimal(0);
@@ -21,5 +20,10 @@ public class TotalAmount {
         discount = discount.add(totalAmount.getDiscount());
         amount = this.amount.add(totalAmount.getAmount());
         total = this.total.add(totalAmount.getTotal());
+    }
+
+    @Override
+    public String toString() {
+        return "total = " + total + "c ";
     }
 }

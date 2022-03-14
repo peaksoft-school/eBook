@@ -37,7 +37,7 @@ public class Genre {
 
     private String genreName;
 
-    @OneToMany(fetch = EAGER, cascade = MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "genre", fetch = EAGER, cascade = ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<Book> books = new HashSet<>();
 

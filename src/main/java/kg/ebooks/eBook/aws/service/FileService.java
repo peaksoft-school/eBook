@@ -4,6 +4,8 @@ import kg.ebooks.eBook.aws.bucket.FolderName;
 import kg.ebooks.eBook.aws.model.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.DataSource;
+
 
 /**
  * created by Beksultan Mamatkadyr uulu

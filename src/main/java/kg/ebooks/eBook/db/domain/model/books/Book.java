@@ -45,14 +45,14 @@ public class Book implements BookInfoBkt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long bookId;
 
-    @OneToMany(cascade = {MERGE, REFRESH})
+    @OneToMany(cascade = {MERGE, REFRESH, DETACH})
     private Set<FileInfo> images;
 
     private String bookName;
 
     private String author;
 
-    @ManyToOne(cascade = {MERGE, REMOVE})
+    @ManyToOne(cascade = MERGE)
     private Genre genre;
 
     private Language language;

@@ -53,13 +53,16 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new DoesNotExistsException(
                         String.format("book with id = %d does not exists in database", refuseToBookRequest.getBookId())
                 ));
+
         RequestStatus requestStatus = DENIED;
+
         requestStatus.setReason(refuseToBookRequest.getReasonForRejection());
+
         book.setRequestStatus(requestStatus);
 
         Vendor vendor = vendorService.findByBookId(book);
 
-        String message = String.format("Dear %s <br> Your book rejected from Admin <br> There reason: %s", vendor.getFirstName(),
+        String message = String.format("Dear %s </ br> Your book rejected from Admin </ br> There reason: %s", vendor.getFirstName(),
                 refuseToBookRequest.getReasonForRejection());
 
         emailService.send(vendor.getEmail(), message);

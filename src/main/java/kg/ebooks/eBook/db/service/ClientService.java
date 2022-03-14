@@ -7,6 +7,9 @@ import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,4 +26,6 @@ public interface ClientService {
     void deleteClientById(Long id);
 
     ClientDtoResponse getInfo(String name);
+
+    String makeAPurchase(String email) throws MessagingException, IOException;
 }

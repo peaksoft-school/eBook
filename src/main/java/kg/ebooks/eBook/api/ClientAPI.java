@@ -15,11 +15,14 @@ import kg.ebooks.eBook.db.service.ClientService;
 import kg.ebooks.eBook.exceptions.InvalidFieldException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -73,6 +76,12 @@ public class ClientAPI {
     public ResponseEntity<Void> deleteClient(@PathVariable("clientId") Long id) {
         clientService.deleteClientById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/make/purchase")
+    @PreAuthorize("hasAuthority('CLIENT')")
+    public String makeAnOrder(Authentication authentication) throws MessagingException, IOException {
+        return clientService.makeAPurchase(authentication.getName());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

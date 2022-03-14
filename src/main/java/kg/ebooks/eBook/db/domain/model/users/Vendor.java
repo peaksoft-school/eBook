@@ -56,13 +56,13 @@ public class Vendor {
 
     private LocalDate dateOfRegistration;
 
-    @OneToMany(fetch = EAGER, cascade = MERGE, orphanRemoval = true)
+    @OneToMany(fetch = EAGER, cascade = ALL, orphanRemoval = true)
     private Set<Book> booksToSale = new HashSet<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     private AuthenticationInfo authenticationInfo;
 
-    @OneToMany(fetch = LAZY, cascade = MERGE)
+    @OneToMany(fetch = LAZY, cascade = ALL)
     private List<Promo> promoCodes = new ArrayList();
 
     public void setBook(Book save) {

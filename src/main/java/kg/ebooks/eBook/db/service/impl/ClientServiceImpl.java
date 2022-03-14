@@ -1,30 +1,50 @@
 package kg.ebooks.eBook.db.service.impl;
 
 
+import com.amazonaws.AmazonServiceException;
+import com.google.gson.Gson;
+import kg.ebooks.eBook.aws.model.FileInfo;
+import kg.ebooks.eBook.aws.service.FileService;
+import kg.ebooks.eBook.db.domain.dto.Response;
+import kg.ebooks.eBook.db.domain.dto.basket.TotalAmount;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDto;
 import kg.ebooks.eBook.db.domain.dto.client.ClientDtoResponse;
 import kg.ebooks.eBook.db.domain.dto.client.ClientUpdateRequest;
 import kg.ebooks.eBook.db.domain.dto.security.SignupRequestClnt;
 import kg.ebooks.eBook.db.domain.mapper.SignupRequestClntMapper;
+import kg.ebooks.eBook.db.domain.model.books.Book;
+import kg.ebooks.eBook.db.domain.model.enums.TypeOfBook;
 import kg.ebooks.eBook.db.domain.model.users.AuthenticationInfo;
 import kg.ebooks.eBook.db.domain.model.users.Client;
 import kg.ebooks.eBook.db.repository.AuthenticationInfoRepository;
 import kg.ebooks.eBook.db.repository.ClientRepository;
+import kg.ebooks.eBook.db.service.BasketService;
 import kg.ebooks.eBook.db.service.ClientService;
+import kg.ebooks.eBook.db.service.EmailService;
 import kg.ebooks.eBook.exceptions.AlreadyExistsException;
 import kg.ebooks.eBook.exceptions.ClientNotFoundException;
 import kg.ebooks.eBook.exceptions.DoesNotExistsException;
 import kg.ebooks.eBook.exceptions.InvalidPasswordException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.entity.ContentType;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.mail.MessagingException;
+import javax.mail.util.ByteArrayDataSource;
 import javax.transaction.Transactional;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +57,10 @@ public class ClientServiceImpl implements ClientService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final AuthenticationInfoRepository authenticationInfoRepository;
-    private final SignupRequestClntMapper clientMapper;
+    private final EmailService emailService;
+    private final BasketService basketService;
+    private final FileService fileService;
+    private final Gson gson;
 
 
     @Override
@@ -144,11 +167,64 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDtoResponse getInfo(String email) {
-        Client client = clientRepository.findByEmail(email)
+        Client client = getByEmailOrElseThrow(email);
+        return modelMapper.map(client, ClientDtoResponse.class);
+    }
+
+    private Client getByEmailOrElseThrow(String email) {
+        return clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ClientNotFoundException(
                         String.format("client with email = %s does not exists", email)
                 ));
-        return modelMapper.map(client, ClientDtoResponse.class);
+    }
+
+    @Override
+    public String makeAPurchase(String email) throws MessagingException, IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Client client = getByEmailOrElseThrow(email);
+
+        TotalAmount totalAmount = basketService.getTotalAmount(email);
+        stringBuilder.append(totalAmount);
+
+        for (Book book : client.getBasket().getBooks()) {
+            log.info("book name {}", book.getBookName());
+            switch (book.getTypeOfBook()) {
+                case PAPER_BOOK:
+                    log.info("hello");
+                    break;
+                case AUDIO_BOOK:
+                    try {
+                        FileInfo audioBook = book.getAudioBook().getAudioBook();
+
+                        byte[] downloadFile = fileService.downloadFile(audioBook.getId());
+
+                        emailService.send(client.getEmail(), new ByteArrayDataSource(downloadFile, String.valueOf(ContentType.MULTIPART_FORM_DATA)));
+                        break;
+                    } catch (AmazonServiceException amazonServiceException) {
+                        log.info("just can't download file from amazon because it just doesn't exist");
+                    }
+                    break;
+                case ELECTRONIC_BOOK:
+                    try {
+                        FileInfo electronicBook = book.getElectronicBook().getElectronicBook();
+
+                        byte[] downloadFile1 = fileService.downloadFile(electronicBook.getId());
+
+                        System.out.println(Arrays.toString(downloadFile1));
+
+                        emailService.send(client.getEmail(), new ByteArrayDataSource(downloadFile1, String.valueOf(ContentType.MULTIPART_FORM_DATA)));
+                        break;
+                    } catch (AmazonServiceException amazonServiceException) {
+                        log.info("just can't download file from amazon because it just doesn't exist");
+                    }
+                    break;
+            }
+        }
+
+        client.getBasket().clear();
+
+        return gson.toJson(new Response("purchase completed successfully"));
     }
 }
 

@@ -35,9 +35,9 @@ public class MainPageServiceImpl implements MainPageService {
     private final ModelMapper modelMapper;
     private final GenreRepository genreRepository;
 
+    // FIXME: 14/3/22 fixme
     @Override
     public List<BookMainPage> findByRequest(MainPageRequest request) {
-        Random random = new Random();
         switch (request) {
             case ELECTRONIC:
                 return bookRepository.findTheMostPopularBooks(ELECTRONIC_BOOK, ACCEPTED)

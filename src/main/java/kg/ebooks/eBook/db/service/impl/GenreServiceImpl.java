@@ -122,9 +122,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
+    @Transactional
     public void removeFromGenre(Long id, Book book) {
         Genre genre = findById(id);
         genre.remove(book);
-        genreRepository.save(genre);
     }
 }

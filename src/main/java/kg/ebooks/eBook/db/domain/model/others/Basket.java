@@ -61,6 +61,7 @@ public class Basket implements BookCase, BasketInfo {
     @Override
     public void clear() {
         books.removeIf(book -> true);
+        if (promocode != null) promocode = null;
     }
 
     @Override
